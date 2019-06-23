@@ -1,7 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
-
-import { rhythm, scale } from '../utils/typography'
+import { Container, Title, StyledLink, Text, Line, HiddenExternalLink } from "../theme";
 
 class Layout extends React.Component {
   render() {
@@ -11,79 +9,40 @@ class Layout extends React.Component {
 
     if (location.pathname === rootPath) {
       header = (
-        <div>
-        <h1
-          style={{
-            ...scale(1.5),
-            marginBottom: rhythm(1.5),
-            marginTop: 0,
-          }}
-        >
-          <Link
-            style={{
-              boxShadow: 'none',
+        <>
+          <Title>
+            <StyledLink to={'/'}>
+              {title}
+            </StyledLink>
+          </Title>
+          <Line />
+          <Text style={{ marginTop: '5px' }}>
+            <HiddenExternalLink target="_blank" href={'https://www.slideshare.net/jedi4ever/from-serverless-to-service-full-how-the-role-of-devops-is-evolving'} style={{
               textDecoration: 'none',
-              color: 'inherit',
-            }}
-            to={'/'}
-          >
-            {title}
-          </Link>
-        </h1>
-         <h2
-         style={{
-           ...scale(0.2),
-           marginBottom: rhythm(1.5),
-           marginTop: -30,
-         }}
-       >
-         <Link
-           style={{
-             boxShadow: 'none',
-             textDecoration: 'none',
-             color: 'inherit',
-           }}
-           to={'/'}
-         >
-           {description}
-         </Link>
-       </h2>
-       </div>
+              color: 'black'
+            }}>
+              {description}
+            </HiddenExternalLink>
+          </Text>
+        </>
       )
     } else {
       header = (
-        <h3
-          style={{
-            fontFamily: 'Montserrat, sans-serif',
-            marginTop: 0,
-            marginBottom: rhythm(-1),
-          }}
-        >
-          <Link
-            style={{
-              boxShadow: 'none',
-              textDecoration: 'none',
-              color: 'inherit',
-            }}
-            to={'/'}
-          >
-            {title}
-          </Link>
-        </h3>
+        <>
+          <Title>
+            <StyledLink>
+              {title}
+            </StyledLink>
+          </Title>
+          <Line />
+        </>
       )
     }
     return (
-      <div
-        style={{
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          maxWidth: rhythm(24),
-          padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`,
-        }}
-      >
+      <Container>
         {header}
         {children}
-      </div>
+      </Container>
     )
   }
 }

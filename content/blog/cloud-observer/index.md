@@ -1,6 +1,8 @@
 ---
 title: Building Cloud Observer and thoughts on AWS-CDK
 date: "2015-05-01T22:12:03.284Z"
+length: 10 minutes
+categories: "#AWS #Serverless #CDK"
 ---
 
 The [AWS Cloud Development Kit](https://github.com/awslabs/aws-cdk) is one of the newest tools from AWS Labs and I feel like it's not getting enough attention. Why? Let's start with quick quote which explains this tool:
@@ -14,4 +16,4 @@ This definition gives us a few key characteristics:
 3. Offers high level abstractions to make development easier
 4. It's defined using code instead of YAML or JSON
 
-![Schema](./schema.png "Schema")
+![Schema](./schema.jpg "Schema")

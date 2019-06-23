@@ -1,12 +1,20 @@
 import React from 'react'
-import { Link, graphql } from 'gatsby'
+import { graphql } from 'gatsby'
 
 import Bio from '../components/bio'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
-import { rhythm } from '../utils/typography'
+import { Text, Subtitle, StyledLink, Meta } from "../theme";
 
 class BlogIndex extends React.Component {
+  // componentDidMount() {
+  //   WebFont.load({
+  //     typekit: {
+  //       id: 'srd8xkt'
+  //     }
+  //   });
+  // }
+
   render() {
     const { data } = this.props;
     const siteTitle = data.site.siteMetadata.title
@@ -15,23 +23,20 @@ class BlogIndex extends React.Component {
 
     return (
       <Layout location={this.props.location} title={siteTitle} description={siteDescription}>
-        <SEO title="All posts" keywords={['blog', 'gatsby', 'javascript', 'react']} />
+        <link rel="stylesheet" href="https://use.typekit.net/srd8xkt.css" />
+        <SEO title="All posts" keywords={['blog', 'aws', 'javascript', 'react']} />
         <Bio />
         {posts.map(({ node }) => {
           const title = node.frontmatter.title || node.fields.slug
           return (
-            <div key={node.fields.slug}>
-              <h3
-                style={{
-                  marginBottom: rhythm(1 / 4),
-                }}
-              >
-                <Link style={{ boxShadow: 'none' }} to={node.fields.slug}>
+            <div key={node.fields.slug} style={{ marginBottom: '20px' }}>
+              <Meta>{node.frontmatter.date} / {node.frontmatter.length} / {node.frontmatter.categories}</Meta>
+              <Subtitle style={{ marginBottom: '10px' }}>
+                <StyledLink to={node.fields.slug}>
                   {title}
-                </Link>
-              </h3>
-              <small>{node.frontmatter.date}</small>
-              <p dangerouslySetInnerHTML={{ __html: node.excerpt }} />
+                </StyledLink>
+              </Subtitle>
+              <Text dangerouslySetInnerHTML={{ __html: node.excerpt }} style={{ marginTop: 0 }} />
             </div>
           )
         })}
@@ -60,6 +65,8 @@ export const pageQuery = graphql`
           frontmatter {
             date(formatString: "MMMM DD, YYYY")
             title
+            length
+            categories
           }
         }
       }

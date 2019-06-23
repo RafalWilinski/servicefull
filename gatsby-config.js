@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: 'Servicefull',
     author: 'Rafal Wilinski',
-    description: 'Because you know that Serverless has servers, right?',
+    description: 'Because Serverless is a terrible name.',
     siteUrl: 'https://servicefull.cloud/',
     social: {
       twitter: 'RafalWilinski'
@@ -20,6 +20,15 @@ module.exports = {
         siteSpeedSampleRate: 10,
         cookieDomain: "servicefull.cloud",
       },
+    },
+    `gatsby-plugin-styled-components`,
+    {
+      resolve: 'gatsby-plugin-web-font-loader',
+      options: {
+        typekit: {
+          id: 'srd8xkt',
+        }
+      }
     },
     {
       resolve: `gatsby-source-filesystem`,
@@ -59,18 +68,12 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        //trackingId: `ADD YOUR TRACKING ID HERE`,
-      },
-    },
     `gatsby-plugin-feed`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Gatsby Starter Blog`,
-        short_name: `GatsbyJS`,
+        name: `ServiceFull.cloud`,
+        short_name: `Servicefull`,
         start_url: `/`,
         background_color: `#ffffff`,
         theme_color: `#663399`,
@@ -80,11 +83,6 @@ module.exports = {
     },
     `gatsby-plugin-offline`,
     `gatsby-plugin-react-helmet`,
-    {
-      resolve: 'gatsby-plugin-typography',
-      options: {
-        pathToConfigModule: 'src/utils/typography',
-      },
-    },
+
   ],
 }

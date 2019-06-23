@@ -4,7 +4,7 @@ import { Link, graphql } from 'gatsby'
 import Bio from '../components/bio'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
-import { rhythm, scale } from '../utils/typography'
+import { Text, Subtitle, Meta } from "../theme";
 
 class BlogPostTemplate extends React.Component {
   render() {
@@ -15,23 +15,13 @@ class BlogPostTemplate extends React.Component {
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <SEO title={post.frontmatter.title} description={post.excerpt} />
-        <h1>{post.frontmatter.title}</h1>
-        <p
-          style={{
-            ...scale(-1 / 5),
-            display: 'block',
-            marginBottom: rhythm(1),
-            marginTop: rhythm(-1),
-          }}
-        >
-          {post.frontmatter.date}
-        </p>
-        <div dangerouslySetInnerHTML={{ __html: post.html }} />
+        <Meta style={{marginTop: 40}}>
+          {post.frontmatter.date} / {post.frontmatter.length} / {post.frontmatter.categories}
+        </Meta>
+        <Subtitle>{post.frontmatter.title}</Subtitle>
+        <Text dangerouslySetInnerHTML={{ __html: post.html }} />
         <hr
-        
-          style={{
-            marginBottom: rhythm(1),
-          }}
+    
         />
         <Bio />
 
@@ -83,6 +73,8 @@ export const pageQuery = graphql`
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
+        categories
+        length
       }
     }
   }

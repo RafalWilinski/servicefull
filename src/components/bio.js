@@ -1,39 +1,28 @@
 import React from 'react'
 import { StaticQuery, graphql } from 'gatsby'
-import Image from 'gatsby-image'
+import { Text, Avatar, BioWrapper, ColorLink, StyledLink } from "../theme";
 
-import { rhythm } from '../utils/typography'
 
 function Bio() {
   return (
     <StaticQuery
       query={bioQuery}
       render={data => {
-        const { author, social } = data.site.siteMetadata
+        const { author, social } = data.site.siteMetadata;
         return (
-          <div
-            style={{
-              display: 'flex',
-              marginBottom: rhythm(2.5),
-            }}
-          >
-            <Image
+          <BioWrapper>
+            <Avatar
               fixed={data.avatar.childImageSharp.fixed}
               alt={author}
-              style={{
-                marginRight: rhythm(1 / 2),
-                marginBottom: 0,
-                minWidth: 50,
-                borderRadius: '100%'
-              }}
+              style={{ marginLeft: 0 }}
             />
-            <p>
-              Written by <strong>{author}</strong>, a "Serverless", cloud and infrastructure euthusiast and consultant.{' '}
-              <a href={`https://twitter.com/${social.twitter}`}>
-                You may find me on Twitter
-              </a>
-            </p>
-          </div>
+            <Text style={{ fontSize: 16 }}>
+              Written by <a href="https://rwilinski.me" target="_blank" style={{ textDecoration: 'underline', color: 'black' }}><strong>{author}</strong></a>, certified AWS Architect, Serverless euthusiast and consultant.{' '}
+
+              <a href={`https://twitter.com/${social.twitter}`} style={{ color: 'rgb(45, 200, 58)' }}>You may find me on Twitter</a>
+
+            </Text>
+          </BioWrapper>
         )
       }}
     />

@@ -24,13 +24,18 @@ Gatsby-based blog about Serverless inspired by [Patrick Debois](https://www.slid
 ## Install
 
 ```sh
-npm install
+yarn
 ```
 
 ## Usage
 
 ```sh
-gatsby develop
+yarn dev
+```
+
+Deployment:
+```sh
+aws s3 sync ./public s3://servicefull.cloud/
 ```
 
 ## Author
