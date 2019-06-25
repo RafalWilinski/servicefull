@@ -24,11 +24,11 @@ Key points:
 
 For this comparison's sake we'll need a Docker image with a simple Express.js stored in ECR. Simply execute ./build-and-push.sh to create an AWS Elastic Container Registry, build the Docker image and push it to the cloud.
 
-| Tables        |      Are      |   Cool |
-| ------------- | :-----------: | -----: |
-| col 3 is      | right-aligned | \$1600 |
-| col 2 is      |   centered    |   \$12 |
-| zebra stripes |   are neat    |    \$1 |
+|   Terraform   |      CDK      |
+| :-----------: | :-----------: |
+|   col 3 is    | right-aligned |
+|   col 2 is    |   centered    |
+| zebra stripes |   are neat    |
 
 ### Outcomes
 
@@ -39,6 +39,8 @@ For this comparison's sake we'll need a Docker image with a simple Express.js st
 - Feels super nice, all the parts "fit" like lego
 - Some of the constructs are really implicit making you wonder how you should correctly plug all the parts
 - Make sure that CDK and construct libraries are the same version
+
+![Schema](./cdk-dx.gif 'Schema')
 
 ```
 ➜  find ./cdk/lib -name "*.ts" | xargs cat | wc -l
