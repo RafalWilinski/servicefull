@@ -2,6 +2,8 @@ import styled from "styled-components"
 import { Link } from 'gatsby'
 import Image from 'gatsby-image'
 
+const THEME_COLOR = 'rgb(45, 200, 58)';
+
 const Container = styled.div`
   margin: 3rem auto;
   max-width: 680px;
@@ -42,6 +44,7 @@ const Line = styled.hr`
   content: ' ';
   width: 100%;
   margin: 0;
+  border-style: none;
 `;
 
 const StyledLink = styled(Link)`
@@ -54,14 +57,21 @@ const HiddenExternalLink = styled.a`
   text-decoration: none;
   color: black;
   &:hover {
-    background-color: rgb(45, 200, 58);
+    background-color: ${THEME_COLOR};
     color: white !important;
   }
 `;
 
 const ColorLink = styled(Link)`
+  font-family: neue-haas-grotesk-text, sans-serif;
   box-shadow: none;
-  color: rgb(45, 200, 58);
+  color: ${THEME_COLOR};
+`
+
+const ColorExternalLink = styled.a`
+  font-family: neue-haas-grotesk-text, sans-serif;
+  box-shadow: none;
+  color: ${THEME_COLOR};
 `
 
 const Avatar = styled(Image)`
@@ -96,5 +106,6 @@ export {
   Line,
   ColorLink,
   BioWrapper,
-  HiddenExternalLink
+  HiddenExternalLink,
+  ColorExternalLink
 }

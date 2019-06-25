@@ -44,6 +44,7 @@ module.exports = {
         name: 'assets',
       },
     },
+    `gatsby-mdx`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {
@@ -72,7 +73,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `ServiceFull.cloud`,
+        name: `Servicefull.cloud`,
         short_name: `Servicefull`,
         start_url: `/`,
         background_color: `#ffffff`,
