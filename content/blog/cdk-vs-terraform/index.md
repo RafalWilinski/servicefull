@@ -5,11 +5,24 @@ length: 10 minutes
 categories: '#AWS #CDK #Terraform'
 ---
 
+As AWS Architect my day-to-day job includes writing a lot of Terraform.
+
 The [AWS Cloud Development Kit](https://github.com/awslabs/aws-cdk) is one of the newest tools from AWS Labs and I feel like it's not getting enough attention. Why? Let's start with quick quote which explains this tool.
 
-I decided to check it on my own by building a simple 2-tier AWS infra like this:
+I decided get my hands dirty and check it on my own by building a simple 2-tier AWS infra like this:
 
 ![Schema](./2tier.jpg 'Schema')
+
+Key points:
+
+- VPC with two subnets (public and private) in each AZ, IPGW as 0.0.0.0/0 route in public subnet, NAT Gateway as 0.0.0.0/0 route in private subnet
+- ECS Cluster running Fargate cluster with Node.js service and task
+- Application Load Balancer exposed to the public connected to the Fargate service
+- Public S3 bucket with assets
+- IAM Role for task to manipulate S3 Bucket
+- Postgres DB instance in private subnet, accessible only from ECS tasks
+
+For this comparison's sake we'll need a Docker image with a simple Express.js stored in ECR. Simply execute ./build-and-push.sh to create an AWS Elastic Container Registry, build the Docker image and push it to the cloud.
 
 | Tables        |      Are      |   Cool |
 | ------------- | :-----------: | -----: |
@@ -22,6 +35,10 @@ I decided to check it on my own by building a simple 2-tier AWS infra like this:
 - Can be written using not only in Typescript but also using Java or Python (but without the types the benefit is not that big IMHO)
 - Usage of same language for both code and configuration makes whole process of development really seamless
 - Imperative nature of the language used might be counterintuitive for declaring things like infrastructure but pays off in better possibilities to express collection operations. This has been improved greatly in Terraform 0.12, however, it's still far from flexbility and easy of use that we're used from ES6 spec like `Array.filter(...).map(...).reduce(...)` etc.
+- API Changes pretty quickly, examples are outdated and require some adjustments like loadBalancer.loadBalancerDnsName vs loadBalancer.dnsName`
+- Feels super nice, all the parts "fit" like lego
+- Some of the constructs are really implicit making you wonder how you should correctly plug all the parts
+- Make sure that CDK and construct libraries are the same version
 
 ```
 ➜  find ./cdk/lib -name "*.ts" | xargs cat | wc -l
