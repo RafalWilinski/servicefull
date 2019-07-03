@@ -7,19 +7,11 @@ import SEO from '../components/seo'
 import { Text, Subtitle, StyledLink, Meta } from "../theme";
 
 class BlogIndex extends React.Component {
-  // componentDidMount() {
-  //   WebFont.load({
-  //     typekit: {
-  //       id: 'srd8xkt'
-  //     }
-  //   });
-  // }
-
   render() {
     const { data } = this.props;
     const siteTitle = data.site.siteMetadata.title
     const siteDescription = data.site.siteMetadata.description
-    const posts = data.allMarkdownRemark.edges
+    const posts = data.allMdx.edges
 
     return (
       <Layout location={this.props.location} title={siteTitle} description={siteDescription}>
@@ -55,7 +47,7 @@ export const pageQuery = graphql`
         description
       }
     }
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
       edges {
         node {
           excerpt

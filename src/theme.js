@@ -23,6 +23,10 @@ const Subtitle = styled.h2`
   font-family: neue-haas-grotesk-display, sans-serif;
 `;
 
+const Subsubtitle = styled.h3`
+  font-family: neue-haas-grotesk-display, sans-serif;
+`;
+
 const Meta = styled.p`
   font-family: neue-haas-grotesk-display, sans-serif;
   margin: 10px 0 -15px;
@@ -37,6 +41,10 @@ const Text = styled.p`
   color: #303030;
   line-height: 1.4;
 `;
+
+const Point = styled(Text)`
+  display: list-item;
+`
 
 const Line = styled.hr`
   background-color: black;
@@ -99,8 +107,10 @@ export {
   Avatar,
   Container,
   Title,
+  Point,
   StyledLink,
   Subtitle,
+  Subsubtitle,
   Text,
   Meta,
   Line,

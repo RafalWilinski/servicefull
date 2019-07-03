@@ -1,25 +1,18 @@
-const path = require('path')
-const { createFilePath } = require('gatsby-source-filesystem')
-
+const path = require("path");
 exports.createPages = ({ graphql, actions }) => {
-  const { createPage } = actions
-
+  // Destructure the createPage function from the actions object
+  const { createPage } = actions;
   return new Promise((resolve, reject) => {
-    const blogPost = path.resolve('./src/templates/blog-post.js')
     resolve(
       graphql(
         `
           {
-            allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }, limit: 1000) {
+            allMdx {
               edges {
                 node {
+                  id
                   fields {
                     slug
-                  }
-                  frontmatter {
-                    title
-                    length
-                    categories
                   }
                 }
               }
@@ -27,42 +20,39 @@ exports.createPages = ({ graphql, actions }) => {
           }
         `
       ).then(result => {
+        // this is some boilerlate to handle errors
         if (result.errors) {
-          console.log(result.errors)
-          reject(result.errors)
+          console.error(result.errors);
+          reject(result.errors);
         }
-
-        // Create blog posts pages.
-        const posts = result.data.allMarkdownRemark.edges;
-
-        posts.forEach((post, index) => {
-          const previous = index === posts.length - 1 ? null : posts[index + 1].node;
-          const next = index === 0 ? null : posts[index - 1].node;
-
+        // We'll call `createPage` for each result
+        result.data.allMdx.edges.forEach(({ node }) => {
           createPage({
-            path: post.node.fields.slug,
-            component: blogPost,
-            context: {
-              slug: post.node.fields.slug,
-              previous,
-              next,
-            },
-          })
-        })
+            // This is the slug we created before
+            // (or `node.frontmatter.slug`)
+            path: node.fields.slug,
+            // This component will wrap our MDX content
+            component: path.resolve(`./src/templates/blog-post.js`),
+            // We can use the values in this context in
+            // our page layout component
+            context: { id: node.id }
+          });
+        });
       })
-    )
-  })
-}
+    );
+  });
+};
 
+
+const { createFilePath } = require("gatsby-source-filesystem");
 exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
-
-  if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode })
+  const { createNodeField } = actions;
+  if (node.internal.type === "Mdx") {
+    const value = createFilePath({ node, getNode });
     createNodeField({
-      name: `slug`,
+      name: "slug",
       node,
-      value,
-    })
+      value: `/blog${value}`
+    });
   }
-}
+};

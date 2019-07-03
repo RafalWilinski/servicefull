@@ -1,0 +1,32 @@
+---
+title: Bulletproof ECS Cluster - Best practices for creating secure, stable and cost-effective clusters on AWS
+date: "2015-05-01T22:12:03.284Z"
+length: 10 minutes
+categories: "#AWS #Serverless #ECS #EC2 #Docker"
+---
+
+# Host in private, expose as via ALB/ELB
+
+As you would like to have your nodes to be accessed only via internet-facing load balancer, you should make sure that your containers are not accessible directly.
+
+# Use Spot Instances
+
+# Use Parameter Store for environment variables
+
+# Update ECS Agent on instances start
+
+# Scale based on reservations, not usage
+
+# Adjust grace period and cooldowns
+
+# Run in multi-AZ
+
+# Use Target Track Scaling instead of Step Scaling
+
+# Or maybe even try custom scaling strategy with Events
+
+# Use IaaC
+
+# Configure blue-green deployment
+
+# Make sure you have enough resources to deploy
