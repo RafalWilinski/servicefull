@@ -5,3 +5,17 @@
 code {
   line-height: 1;
 }
+
+blockquote {
+  color: #777;
+  position: relative;
+}
+
+blockquote:before {
+  position: absolute;
+  content: ' ';
+  left: -40px;
+  background-color: #aaa;
+  width: 4px;
+  height: 100%;
+}

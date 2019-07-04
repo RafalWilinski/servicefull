@@ -5,28 +5,75 @@ length: 10 minutes
 categories: "#AWS #Serverless #ECS #EC2 #Docker"
 ---
 
+Running ECS Cluster on AWS may be troublesome. After bunch of outages and war stories, I present you a list of lessons learned the hard way to make your cluster secure and antifragile on a budget.
+
 # Host in private, expose as via ALB/ELB
 
-As you would like to have your nodes to be accessed only via internet-facing load balancer, you should make sure that your containers are not accessible directly.
+The Load Balancer should be your gateway to the cluster. When running a web service, make sure you've running your cluster in a private subnet and your containers cannot be accessed directly from the internet. Ideally, your internal container should expose a random, ephemeral port which is bound to a target group. Make sure also that traffic is only allowed from the Load Balancer's Security Group.
 
 # Use Spot Instances
 
+Spot Instances are great way to save money on Compute Heavy/Worker clusters or for dev/staging environments. If you don't know what spot instances are, here's a quote from AWS Docs:
+
+> _Spot Instance is an unused EC2 instance that is available for less than the On-Demand price._
+
+In reality, by using them you can save up to *80%* of costs! But, there's a catch. Spot Instances are based on bid pricing model and AWS can kill them spontaineously so, you should be aware that your instances might be taken down anytime with one minute warning.
+
 # Use Parameter Store for environment variables
 
-# Update ECS Agent on instances start
+In container's task definition you can specify environment variables directly, however, it's not the best way to pass config variables to the container. It's not secure, it couples infrastructure with env variables, changing them requires you to change task definition and perform a new deployment. Instead, environment variables should be rather injected during start from AWS SSM (Simple Systems Manager) Parameter Store. 
+
+It's a secure, encrypted, auditable, scalable and managed central source of truth which might be used not only by ECS but also by Lambda, EC2, CloudFormation and many more. Moreover, it integrates with other AWS services nicely, so once a variable changes, you might react on that event. 
+
+# Update ECS Agent on EC2 instance start
+
+```
+service MY-SERVICE was unable to place a task because no container instance met all of its requirements.
+```
+
+That's the error we saw one day when investigating an outage. "What's wrong?" - we kept asking that question to ourselves. After digging for a while, we found a root cause.
+
+Because we were running our cluster on Spot instances, AWS decided to terminate them. Luckily, our Autoscaling Group re-spawned them to maintain a desired amount of running instances but there was one problem. The AMI had outdated ECS agent installed and it had no capability to pull SSM parameters from the store, so the task refused to start repeatedly.
+
+Solution? Include these two simple lines in your EC2 AutoScaling group user data (script that is ran on boot):
+
+```
+sudo yum update -y ecs-init
+
+# Depending on AMI
+### On ECS-optimized Amazon Linux 2 AMI
+sudo systemctl restart docker
+
+### On ECS-optimized Amazon Linux AMI
+sudo service docker restart && sudo start ecs
+```
 
 # Scale based on reservations, not usage
 
-# Adjust grace period and cooldowns
+Remember `service MY-SERVICE was unable to place a task...` error? The other case for that might be just the fact that your cluster has not enough resources to place it. 
 
-# Run in multi-AZ
+# Adjust healthcheck grace period and scaling cooldowns
+
+Knowing approximately how long does it take for your container to start is a crucial information to adjust healthcheck grace period correctly. If you configure it too agressively, your instances which are still launching might be prematurely marked as unhealthy and killed by scheduler before they even manage to start. This will trigger a neverending cycle of instances begin provisioned and killed. In most cases, increasing this period should solve your problem. 
+
+On the other hand, making grace period too long might lead to slow deployments and make your cluster not scale well. My advice is to start from 60 seconds and check whether that amount is enough.
 
 # Use Target Track Scaling instead of Step Scaling
 
 # Or maybe even try custom scaling strategy with Events
 
-# Use IaaC
+# Go multi-AZ
+
+AZ stands for Availability Zone, you can think of AZ as an independent data center.
 
 # Configure blue-green deployment
 
-# Make sure you have enough resources to deploy
+Blue-Green 
+
+# Use IaaC
+
+Tools like Terraform, Cloudformation or Cloud Development Kit (CDK) are perfect way provision your cluster in reproducible way. This is especially helpful when your client requests from you an additional environment or you need to run dynamic, per-branch staging environments. Moreover, you can find many plug'n'play, really well made modules according to these best practices will which create such cluster with a single click.
+
+
+
+
