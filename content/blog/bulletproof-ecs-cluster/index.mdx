@@ -1,8 +1,8 @@
 ---
 title: Bulletproof ECS Cluster - Best practices for creating secure, stable and cost-effective clusters on AWS
-date: "2015-05-01T22:12:03.284Z"
+date: "2019-07-05T22:12:03.284Z"
 length: 10 minutes
-categories: "#AWS #Serverless #ECS #EC2 #Docker"
+categories: "#AWS #ECS #EC2 #Docker #Containers"
 ---
 
 Running ECS Cluster on AWS may be troublesome. After bunch of outages and war stories, I present you a list of lessons learned the hard way to make your cluster secure and antifragile on a budget.
@@ -64,7 +64,9 @@ On the other hand, making grace period too long might lead to slow deployments a
 
 # Go multi-AZ
 
-AZ stands for Availability Zone, you can think of AZ as an independent data center.
+AZ stands for _Availability Zone_, you can think of AZ as an independent data center. In history, we had some cases when whole AWS AZs went down so it's likely to happen in the future. However, it's quite simple to protect your cluster from similar outage - just distribute your machines in multiple AZs. 
+
+While Auto Scaling group manages the availability of the cluster across multiple AZs to give you resilency and dependability, the ECS scheduler manages task distribution across these underlying machines in different zones effectively making your cluster highly available and independent of single AZ failures. 
 
 # Configure blue-green deployment
 
