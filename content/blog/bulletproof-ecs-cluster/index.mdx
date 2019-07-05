@@ -5,7 +5,7 @@ length: 11 minutes
 categories: "#AWS #ECS #EC2 #Docker #Containers"
 ---
 
-Running ECS Cluster on AWS may be troublesome. After bunch of outages and war stories, I present you a list of lessons learned the hard way to make your cluster secure and antifragile on a budget.
+Running ECS Cluster on AWS may be troublesome. After bunch of outages and war stories, I present you a list of lessons learned the hard way to make your cluster secure and anti-fragile on a budget.
 
 # Host in private, expose as via ALB/ELB
 
@@ -13,11 +13,11 @@ The Load Balancer should be your gateway to the cluster. When running a web serv
 
 # Use Spot Instances
 
-Spot Instances are great way to save money on Compute Heavy/Worker clusters or for dev/staging environments. If you don't know what spot instances are, here's a quote from AWS Docs:
+Spot Instances are a great way to save money on Compute Heavy/Worker clusters or for dev/staging environments. If you don't know what spot instances are, here's a quote from AWS Docs:
 
 > _Spot Instance is an unused EC2 instance that is available for less than the On-Demand price._
 
-In reality, by using them you can save up to *80%* of costs! But, there's a catch. Spot Instances are based on bid pricing model and AWS can kill them spontaineously so, you should be aware that your instances might be taken down anytime with one minute warning.
+In reality, by using them you can save up to *80%* of costs! But, there's a catch. Spot Instances are based on bid pricing model and AWS can kill them spontaneously so, you should be aware that your instances might be taken down anytime with one minute warning.
 
 # Use Parameter Store for environment variables
 
@@ -60,7 +60,7 @@ That's why you want to scale you EC2 machines running your cluster based on Memo
 
 # Adjust healthcheck grace period and scaling cooldowns
 
-Knowing approximately how long does it take for your container to start is a crucial information to adjust healthcheck grace period correctly. If you configure it too agressively, your instances which are still launching might be prematurely marked as unhealthy and killed by scheduler before they even manage to start. This will trigger a neverending cycle of instances begin provisioned and killed. In most cases, increasing this period should solve your problem. 
+Knowing approximately how long does it take for your container to start is a crucial information to adjust healthcheck grace period correctly. If you configure it too aggressively, your instances which are still launching might be prematurely marked as unhealthy and killed by scheduler before they even manage to start. This will trigger a never-ending cycle of instances being provisioned and killed. In most cases, increasing this period should solve your problem. 
 
 On the other hand, making grace period too long might lead to slow deployments and make your cluster not scale well. My advice is to start from 60 seconds and check whether that amount is enough.
 
@@ -76,23 +76,23 @@ If autoscaling options provided by AWS are not sufficient for your needs, you ca
 
 AZ stands for _Availability Zone_, you can think of AZ as an independent data center. In history, we had some cases when [whole AWS AZs went down](https://www.vox.com/2017/3/2/14792636/amazon-aws-internet-outage-cause-human-error-incorrect-command) so it's likely to happen in the future. However, it's quite simple to protect your cluster from similar outage - just distribute your machines in multiple AZs. 
 
-While Auto Scaling group manages the availability of the cluster across multiple AZs to give you resilency and dependability, the ECS scheduler manages task distribution across these underlying machines in different zones effectively making your cluster highly available and independent of single AZ failures. 
+While Auto Scaling group manages the availability of the cluster across multiple AZs to give you resiliency and dependability, the ECS scheduler manages task distribution across these underlying machines in different zones effectively making your cluster highly available and independent of single AZ failures. 
 
 ![Multi AZ Cluster](./multi-az-cluster.png "Multi AZ Cluster")
 
 # Configure blue-green deployment
 
-One challenge of achieving full agility in engineering is allowing engineers to make deployments a breeze, rather than a task requiring downtime and whole team keeping a finger on a pulse. What's were _Blue-Green Deploment_ comes to play. 
+One challenge of achieving full agility in engineering is allowing engineers to make deployments a breeze, rather than a task requiring downtime and whole team keeping a finger on a pulse. That's where _Blue-Green Deploment_ comes to play. 
 
 ![Blue Green](./blue-green.png "Blue Green")
 
-When performing a deployment, exact same copy of current environment/service is spawned and the traffic gradually becomes routed to the new target, increasing by few percent each minute eventually reaching 100% on a new unit. Once all the traffic goes to the new target and it's stable, green unit becomes decomissioned and the new version aka _"blue"_ becomes the new standard aka _"green"_. When new version is malfunctioning by for example responding with too big amount of `400`s, the procedure is stopped and traffic gets rolled back to green fully. 
+When performing a deployment, exact same copy of current environment/service is spawned and the traffic gradually becomes routed to the new target, increasing by few percent each minute eventually reaching 100% on a new unit. Once all the traffic goes to the new target and it's stable, green unit becomes decommissioned and the new version aka _"blue"_ becomes the new standard aka _"green"_. When new version is malfunctioning by for example responding with too big amount of `400`s, the procedure is stopped and traffic gets rolled back to green fully. 
 
 This method allows your dev team to push new version of the code few times a day without worrying about downtime and pushing faulty code to the production. You can read more about it [on official AWS blog](https://aws.amazon.com/blogs/devops/use-aws-codedeploy-to-implement-blue-green-deployments-for-aws-fargate-and-amazon-ecs/).
 
 # Use IaaC
 
-Tools like Terraform, Cloudformation or Cloud Development Kit (CDK) are perfect way provision your cluster in reproducible way. This is especially helpful when your client requests from you an additional environment or you need to run dynamic, per-branch staging environments. Moreover, you can find many plug'n'play, really well made modules according to these best practices will which create such cluster with a single click.
+Tools like Terraform, Cloudformation or Cloud Development Kit (CDK) are a perfect way provision your cluster in reproducible way. This is especially helpful when your client requests from you an additional environment or you need to run dynamic, per-branch staging environments. Moreover, you can find many plug'n'play, really well made modules according to these best practices will which create such cluster with a single click.
 
 
 
