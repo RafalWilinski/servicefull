@@ -35,6 +35,7 @@ const Meta = styled.p`
 `;
 
 const Text = styled.p`
+  width: 100%;
   font-family: neue-haas-grotesk-text, sans-serif;
   font-size: 18px;
   font-weight: 400;
@@ -102,7 +103,13 @@ const BioWrapper = styled.div`
   margin-bottom: 30px;
 `
 
+const Code = styled.div`
+  background-color: #eee;
+  padding: 10px;
+`;
+
 export {
+  Code,
   Description,
   Avatar,
   Container,

@@ -1,9 +1,6 @@
-.gatsby-resp-image-wrapper {
-  margin: 30px auto;
-}
-
 code {
   line-height: 1;
+  white-space: pre-line;
 }
 
 blockquote {
@@ -18,4 +15,8 @@ blockquote:before {
   background-color: #aaa;
   width: 4px;
   height: 100%;
+}
+
+.gatsby-highlight {
+  width: 100%;
 }
