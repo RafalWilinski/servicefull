@@ -23,7 +23,7 @@ In reality, by using them you can save up to *80%* of costs! But, there's a catc
 
 In container's task definition you can specify environment variables directly, however, it's not the best way to pass config variables to the container. It's not secure, it couples infrastructure with env variables, changing them requires you to change task definition and perform a new deployment. Instead, environment variables should be rather injected during start from AWS SSM (Simple Systems Manager) Parameter Store. 
 
-It's a secure, encrypted, auditable, scalable and managed central source of truth which might be used not only by ECS but also by Lambda, EC2, CloudFormation and many more. Moreover, it integrates with other AWS services nicely, so once a variable changes, you might react on that event. 
+It's a secure, encrypted, auditable, scalable and managed central source of truth which might be used not only by ECS but also by Lambda, EC2, CloudFormation and many more. Moreover, it integrates with other AWS services nicely, so once a variable changes, you might react on that event. More on that [on official AWS blog](https://aws.amazon.com/blogs/compute/managing-secrets-for-amazon-ecs-applications-using-parameter-store-and-iam-roles-for-tasks/).
 
 # Update ECS Agent on EC2 instance start
 
@@ -35,7 +35,7 @@ That's the error we saw one day when investigating an outage. "What's wrong?" - 
 
 Because we were running our cluster on Spot instances, AWS decided to terminate them. Luckily, our Autoscaling Group re-spawned them to maintain a desired amount of running instances but there was one problem. The AMI had outdated ECS agent installed and it had no capability to pull SSM parameters from the store, so the task refused to start repeatedly.
 
-Solution? Include these two simple lines in your EC2 AutoScaling group user data (script that is ran on boot):
+Solution? Include these two simple lines in your EC2 Auto Scaling Group _user data_ ensuring ECS agent is up-to-date on launched instances:
 
 ```
 sudo yum update -y ecs-init
@@ -54,7 +54,9 @@ Remember `service MY-SERVICE was unable to place a task...` error? The other cas
 
 ![Typical Scale Up problem](./scale-problem.png "Typical Scale Up problem")
 
-That's why you want to scale you EC2 machines running your cluster based on Memory or CPU *reservations* instead of usage. Your *services* should scale based on usage and as the amount of them grows, the amount of reserved resources also which will effectively trigger AutoScaling group operation.
+Typical scaling operation problem. Usage very low but reservations quite high.
+
+That's why you want to scale you EC2 machines running your cluster based on Memory or CPU *reservations* instead of usage. Your *services* should scale based on usage and as the amount of them grows, the amount of reserved resources also, which will effectively trigger AutoScaling group operation on underlying EC2s.
 
 # Adjust healthcheck grace period and scaling cooldowns
 
@@ -64,7 +66,11 @@ On the other hand, making grace period too long might lead to slow deployments a
 
 # Use Target Track Scaling instead of Step Scaling
 
-# Or maybe even try custom scaling strategy with Events
+Unlike step scaling where you set up a two thresholds for scale up or down operations, in _target track scaling_ service automatically calculates the amount of services/instances to keep the metric at, or close to specified value. This is not only easier to set up as requires much less configuration but also more effective from my experience. 
+
+# Or maybe even try custom scaling strategy with Events inside Lambda
+
+If autoscaling options provided by AWS are not sufficient for your needs, you can always include custom scaling logic inside Lambda function which reacts to ECS Events, Metrics and Alarms. You can find more on that [here](https://www.miketheman.net/2017/01/09/extending-ecs-auto-scaling-for-under-2month-with-lambda/).
 
 # Go multi-AZ
 
@@ -76,7 +82,13 @@ While Auto Scaling group manages the availability of the cluster across multiple
 
 # Configure blue-green deployment
 
-Blue-Green 
+One challenge of achieving full agility in engineering is allowing engineers to make deployments a breeze, rather than a task requiring downtime and whole team keeping a finger on a pulse. What's were _Blue-Green Deploment_ comes to play. 
+
+![Blue Green](./blue-green.png "Blue Green")
+
+When performing a deployment, exact same copy of current environment/service is spawned and the traffic gradually becomes routed to the new target, increasing by few percent each minute eventually reaching 100% on a new unit. Once all the traffic goes to the new target and it's stable, green unit becomes decomissioned and the new version aka _"blue"_ becomes the new standard aka _"green"_. When new version is malfunctioning by for example responding with too big amount of `400`s, the procedure is stopped and traffic gets rolled back to green fully. 
+
+This method allows your dev team to push new version of the code few times a day without worrying about downtime and pushing faulty code to the production. You can read more about it [on official AWS blog](https://aws.amazon.com/blogs/devops/use-aws-codedeploy-to-implement-blue-green-deployments-for-aws-fargate-and-amazon-ecs/).
 
 # Use IaaC
 

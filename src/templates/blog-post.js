@@ -6,7 +6,7 @@ import { MDXProvider } from "@mdx-js/react";
 import Bio from '../components/bio'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
-import { Text, Subtitle, Meta, Point, Subsubtitle, Code } from "../theme";
+import { Text, Subtitle, Meta, Point, Subsubtitle, Code, ColorExternalLink } from "../theme";
 import PrevNextNav from "../components/prevNextNav";
 import Discuss from "../components/discuss";
 
@@ -15,6 +15,7 @@ const components = {
   p: Text,
   li: Point,
   pre: Code,
+  a: ColorExternalLink,
 }
 
 class BlogPostTemplate extends React.Component {
