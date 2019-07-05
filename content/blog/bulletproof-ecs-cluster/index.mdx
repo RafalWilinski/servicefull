@@ -94,6 +94,24 @@ This method allows your dev team to push new version of the code few times a day
 
 Tools like Terraform, Cloudformation or Cloud Development Kit (CDK) are a perfect way provision your cluster in reproducible way. This is especially helpful when your client requests from you an additional environment or you need to run dynamic, per-branch staging environments. Moreover, you can find many plug'n'play, really well made modules according to these best practices will which create such cluster with a single click.
 
+# Use CloudWatch logs
 
+To make troubleshooting of your applications much easier, always push containers `STDOUT` logs to CloudWatch. You can do that simply by adding following lines to `containerDefinitions`:
 
+```
+"logConfiguration": {
+  "logDriver": "awslogs",
+  "options": {
+    "awslogs-group": "awslogs",
+    "awslogs-region": "us-west-2",
+    "awslogs-stream-prefix": "awslogs-example"
+  }
+}
+```
+
+Don't forget about attaching necessary IAM permissions: `logs:CreateLogGroup, logs:CreateLogStream, logs:PutLogEvents, logs:DescribeLogStreams`
+
+As soon as they are in CloudWatch, you can very easily find relevant information using [Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html).
+
+Also, in your application code remember to change log line endings from `\n` to `\r` to save multiline strings as one entry. This will not only save your money, but also make them greppable.
 
