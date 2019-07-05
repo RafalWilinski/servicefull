@@ -17,7 +17,7 @@ Imagine following scenario: your company wants to migrate from ECS/EC2 to Lambda
 
 # How to do that?
 
-1. Provision [VPC](https://github.com/RafalWilinski/hybrid-load-balancing/blob/master/infra/vpc.yml), [EC2](https://github.com/RafalWilinski/hybrid-load-balancing/blob/master/infra/ec2.yml), [ALB](https://github.com/RafalWilinski/hybrid-load-balancing/blob/master/infra/alb.yml), prefereably in separate files to keep it simple and clean
+1. If you don't have existing infra, provision [VPC](https://github.com/RafalWilinski/hybrid-load-balancing/blob/master/infra/vpc.yml), [EC2](https://github.com/RafalWilinski/hybrid-load-balancing/blob/master/infra/ec2.yml) and [ALB](https://github.com/RafalWilinski/hybrid-load-balancing/blob/master/infra/alb.yml), prefereably in separate files to keep it simple and clean. Otherwise, use existing ALB ARN.
 
 2. Reference supplement CloudFormation files in main `serverless.yml` file:
 
@@ -42,6 +42,10 @@ functions:
           conditions:
             path: /lambda
 ```
+
+One thing worth noting here is that Lambda priority should be bigger than server's, so it should look something like this:
+
+![Loading Priorities](./priorities.png 'Priorities')
 
 If you want to check fully working example, the source code can be found [here](https://github.com/RafalWilinski/hybrid-load-balancing)
 

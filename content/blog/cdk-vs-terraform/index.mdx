@@ -15,7 +15,7 @@ I decided get my hands dirty and check it on my own by building a simple 2-tier 
 
 ![Schema](./2tier.jpg 'Schema')
 
-Key points:
+# Key points
 
 - VPC with two subnets (public and private) in each AZ, IPGW as 0.0.0.0/0 route in public subnet, NAT Gateway as 0.0.0.0/0 route in private subnet
 - ECS Cluster running Fargate cluster with Node.js service and task
@@ -24,11 +24,13 @@ Key points:
 - IAM Role for task to manipulate S3 Bucket
 - Postgres DB instance in private subnet, accessible only from ECS tasks
 
-For this comparison's sake we'll need a Docker image with a simple Express.js stored in ECR. Simply execute ./build-and-push.sh to create an AWS Elastic Container Registry, build the Docker image and push it to the cloud.
+For this comparison's sake we'll need a [Docker image with a simple Express.js](https://github.com/RafalWilinski/terraform-vs-cdk/tree/master/server) stored in ECR. After pulling [this repo](https://github.com/RafalWilinski/terraform-vs-cdk), simply execute `./build-and-push.sh` to create an AWS Elastic Container Registry, build the Docker image and push it to the cloud.
+
+Now you can play and deploy with both solutions on your own. But, before even doing that, here's a simple comparison of obvious differences between these two:
 
 <ComparisonTable items={[{title: "Terraform", points: ["asdb"]}, {title: "CDK", points: ["asdb"]}]}/>
 
-### Outcomes
+# My Outcomes
 
 - Can be written using not only in Typescript but also using Java or Python (but without the types the benefit is not that big IMHO)
 - Usage of same language for both code and configuration makes whole process of development really seamless

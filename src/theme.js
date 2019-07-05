@@ -24,6 +24,8 @@ const Subtitle = styled.h2`
 `;
 
 const Subsubtitle = styled.h3`
+  margin-block-start: 1.2em;
+  margin-block-end: 0.8em;
   font-family: neue-haas-grotesk-display, sans-serif;
 `;
 

@@ -20,3 +20,8 @@ blockquote:before {
 .gatsby-highlight {
   width: 100%;
 }
+
+p {
+  font-family: neue-haas-grotesk-text, sans-serif;
+  font-size: 18px;
+}

@@ -32,13 +32,12 @@ class BlogPostTemplate extends React.Component {
         </Meta>
         <Subtitle>{post.frontmatter.title}</Subtitle>
         <MDXProvider components={components}><MDXRenderer>{post.code.body}</MDXRenderer></MDXProvider>
-        <hr/>
-        <Discuss url={this.props.data.mdx.fields.slug}/>
-        <hr/>
-        <hr/>
+        <p/>
+        <p>Agree? Disa̶g̶r̶e̶e̶? <Discuss url={this.props.data.mdx.fields.slug}/></p>
+        <p/>
         <Bio />
         <PrevNextNav next={next} previous={previous} />
-        <hr/>
+        <p/>
       </Layout>
     )
   }
