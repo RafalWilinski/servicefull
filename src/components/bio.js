@@ -17,7 +17,7 @@ function Bio() {
               style={{ marginLeft: 0 }}
             />
             <Text style={{ fontSize: 16 }}>
-              Written by <a href="https://rwilinski.me" target="_blank" style={{ textDecoration: 'underline', color: 'black' }}><strong>{author}</strong></a>, certified AWS Architect, Serverless euthusiast and consultant.{' '}
+              Written by <a href="https://rwilinski.me" target="_blank" style={{ textDecoration: 'underline', color: 'black' }}><strong>{author}</strong></a>, certified AWS Architect, Serverless enthusiast and consultant.{' '}
 
               <a href={`https://twitter.com/${social.twitter}`} style={{ color: 'rgb(45, 200, 58)' }}>You may find me on Twitter</a>
 

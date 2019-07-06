@@ -28,7 +28,7 @@ Before getting into actions I've listed a couple of obvious differences which di
 <ComparisonTable
   items={[
     { title: "Terraform",
-      points: ["Written in HCL", "Declarative", "Supports multiple providers", "SDK calll under the hood", "Modules"]
+      points: ["Written in HCL", "Declarative", "Supports multiple providers", "SDK calls under the hood", "Modules"]
     },
     { title: "CDK",
       points: ["Written in TS, Java or Python", "Imperative", "AWS Only", "Cloudformation under the hood", "Constructs"]
@@ -40,7 +40,7 @@ After result of few hours fight with both tools, I present you...
 
 # My Outcomes
 
-Imperative nature of the language used in CDK might be counterintuitive for declaring things like infrastructure where the end state is the most important thing. This might be even tricky due to async nature of JS (e.g. `for` loop with `async`) but when used correctly pays off in better possibilities to express collection operations. This has been improved greatly in Terraform 0.12, however, it's still far from flexbility and easy of use that we're used from ES6 spec like `Array.filter(...).map(...).reduce(...)` etc.
+Imperative nature of the language used in CDK might be counterintuitive for declaring things like infrastructure where the end state is the most important thing. This might be even tricky due to async nature of JS (e.g. `for` loop with `async`) but when used correctly pays off in better possibilities to express collection operations. This has been improved greatly in Terraform 0.12, however, it's still far from flexibility and easy of use that we're used from ES6 spec like `Array.filter(...).map(...).reduce(...)` etc.
 
 CDK API changes pretty quickly, some of the examples are outdated and require some adjustments like `loadBalancer.loadBalancerDnsName` vs `loadBalancer.dnsName`. 
 
