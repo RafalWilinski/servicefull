@@ -21,6 +21,15 @@ blockquote:before {
   width: 100%;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: neue-haas-grotesk-display, sans-serif;
+}
+
 p {
   font-family: neue-haas-grotesk-text, sans-serif;
   font-size: 18px;

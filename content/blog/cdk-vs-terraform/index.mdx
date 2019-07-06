@@ -1,46 +1,64 @@
 ---
 title: Comparison of AWS Cloud Development Kit with Terraform by building 2-tier Web App
-date: '2015-05-01T22:12:03.284Z'
-length: 10 minutes
-categories: '#AWS #CDK #Terraform'
+date: '2019-06-30T22:12:03.284Z'
+length: 8 minutes
+categories: '#AWS #CDK #Terraform #Cloud'
 ---
 
 import ComparisonTable from "../../../src/components/comparisonTable.js";
+import Gif from "../../../src/components/gif.js";
 
-As AWS Architect my day-to-day job includes writing a lot of Terraform.
+As AWS Architect my day-to-day job includes writing a lot of Terraform code in HCL.
 
-The [AWS Cloud Development Kit](https://github.com/awslabs/aws-cdk) is one of the newest tools from AWS Labs and I feel like it's not getting enough attention. Why? Let's start with quick quote which explains this tool.
-
-I decided get my hands dirty and check it on my own by building a simple 2-tier AWS infra like this:
+While I really like TF, in few places it's really verbose and some quirks of HCL are frustrating. So, I decided to take [AWS Cloud Development Kit](https://github.com/awslabs/aws-cdk) for a spin and get my hands dirty by building a simple 2-tier AWS infra like this:
 
 ![Schema](./2tier.jpg 'Schema')
 
 # Key points
 
-- VPC with two subnets (public and private) in each AZ, IPGW as 0.0.0.0/0 route in public subnet, NAT Gateway as 0.0.0.0/0 route in private subnet
+- VPC with two subnets (public and private) in each AZ, IPGW as `0.0.0.0/0` route in public subnet, NAT Gateway as `0.0.0.0/0` route in private subnet
 - ECS Cluster running Fargate cluster with Node.js service and task
 - Application Load Balancer exposed to the public connected to the Fargate service
 - Public S3 bucket with assets
 - IAM Role for task to manipulate S3 Bucket
 - Postgres DB instance in private subnet, accessible only from ECS tasks
 
-For this comparison's sake we'll need a [Docker image with a simple Express.js](https://github.com/RafalWilinski/terraform-vs-cdk/tree/master/server) stored in ECR. After pulling [this repo](https://github.com/RafalWilinski/terraform-vs-cdk), simply execute `./build-and-push.sh` to create an AWS Elastic Container Registry, build the Docker image and push it to the cloud.
+Before getting into actions I've listed a couple of obvious differences which didn't require any practice from me:
 
-Now you can play and deploy with both solutions on your own. But, before even doing that, here's a simple comparison of obvious differences between these two:
+<ComparisonTable
+  items={[
+    { title: "Terraform",
+      points: ["Written in HCL", "Declarative", "Supports multiple providers", "SDK calll under the hood", "Modules"]
+    },
+    { title: "CDK",
+      points: ["Written in TS, Java or Python", "Imperative", "AWS Only", "Cloudformation under the hood", "Constructs"]
+    }
+  ]}
+/>
 
-<ComparisonTable items={[{title: "Terraform", points: ["asdb"]}, {title: "CDK", points: ["asdb"]}]}/>
+After result of few hours fight with both tools, I present you...
 
 # My Outcomes
 
-- Can be written using not only in Typescript but also using Java or Python (but without the types the benefit is not that big IMHO)
-- Usage of same language for both code and configuration makes whole process of development really seamless
-- Imperative nature of the language used might be counterintuitive for declaring things like infrastructure but pays off in better possibilities to express collection operations. This has been improved greatly in Terraform 0.12, however, it's still far from flexbility and easy of use that we're used from ES6 spec like `Array.filter(...).map(...).reduce(...)` etc.
-- API Changes pretty quickly, examples are outdated and require some adjustments like loadBalancer.loadBalancerDnsName vs loadBalancer.dnsName`
-- Feels super nice, all the parts "fit" like lego
-- Some of the constructs are really implicit making you wonder how you should correctly plug all the parts
-- Make sure that CDK and construct libraries are the same version
+Imperative nature of the language used in CDK might be counterintuitive for declaring things like infrastructure where the end state is the most important thing. This might be even tricky due to async nature of JS (e.g. `for` loop with `async`) but when used correctly pays off in better possibilities to express collection operations. This has been improved greatly in Terraform 0.12, however, it's still far from flexbility and easy of use that we're used from ES6 spec like `Array.filter(...).map(...).reduce(...)` etc.
 
-![Schema](./cdk-dx.gif 'Schema')
+CDK API changes pretty quickly, some of the examples are outdated and require some adjustments like `loadBalancer.loadBalancerDnsName` vs `loadBalancer.dnsName`. 
+
+When bootstrapping a project make sure you're running the same version of CLI and all the modules. Otherwise you might face some cryptic errors and lose unnecesary amount of time debugging them.
+
+In CDK nomenclature "Modules" are called "Constructs". Unlike Terraform, CDK comes with a bunch of really robust constructs like `ecs.LoadBalancedFargateService` which encapsulate hundreds of CloudFormation or Terraform code in just 10 or even less. While this is really useful this tradeoff is not without any compromises. Some of these modules are really implicit and you end up digging in the source code wondering what are the required params, what's included and how it should plug to the rest of your infra.
+
+Using the same language for both code, configuration and infrastructure makes whole process of development really seamless. Also, when writing in a language with type completion and properly configurated IDE, it just feels super nice, all the parts "fit" like lego.
+
+<br/>
+<Gif src="https://media.giphy.com/media/KeE15IBkvmhQff8A05/giphy.gif"/>
+<br/>
+
+Really refreshing comparing to writing huge YAML or JSON files. However, going with Python where there is no static typing I couldn't see big benefit. Plus, Troposphere is with us already for a moment.
+
+<br/>
+
+Also the amount of code is much less in CDK:
 
 ```
 ➜  find ./cdk/lib -name "*.ts" | xargs cat | wc -l
@@ -49,4 +67,7 @@ Now you can play and deploy with both solutions on your own. But, before even do
 516
 ```
 
-If you're interested in final result, [you can find the repo with code here!](https://github.com/RafalWilinski/terraform-vs-cdk)
+<br/>
+<br/>
+
+If you're interested in final result, [you can find the repo with code here!](https://github.com/RafalWilinski/terraform-vs-cdk). After pulling it, simply execute `./build-and-push.sh` to create an AWS Elastic Container Registry, build the Docker image and push it to the cloud. It will be used by both infras.

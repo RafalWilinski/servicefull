@@ -5,10 +5,11 @@ const Table = styled.div`
 display: flex;
 padding: 20px
 `;
-const Title = styled.div`
+const Title = styled.h3`
+text-align: center;
 
 `;
-const Point = styled.div`
+const Point = styled.p`
 
 `;
 
@@ -18,8 +19,8 @@ const ComparisonTable = ({ items }) => (
       <Title>
         {item.title}
       </Title>
-      <div>
-        {item.points.map((point) => (<Point>
+      <div style={{padding: 10}}>
+        {item.points.map((point) => (<Point key={point}>
           {point}
         </Point>))}
       </div>
