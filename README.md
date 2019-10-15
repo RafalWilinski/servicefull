@@ -34,8 +34,9 @@ yarn dev
 ```
 
 Deployment:
+
 ```sh
-aws s3 sync ./public s3://servicefull.cloud/
+yarn deploy
 ```
 
 ## Author
