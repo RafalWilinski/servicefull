@@ -97,7 +97,7 @@ You might also consider adding `.gitignore` file add exclude all `*.js` files th
 
 ## Putting it all together
 
-Lastly, we need to install `typescript` as `devDependency` at the root of our project and tell Amplify what to do with our TS-based function. Fortunately, recently Amplify added [Build Options for Functions]([https://aws-amplify.github.io/docs/cli-toolchain/usage#functions](https://aws-amplify.github.io/docs/cli-toolchain/usage#functions)). With that in mind, we can add following command to `package.json`:
+Lastly, we need to install `typescript` as `devDependency` at the root of our project and tell Amplify what to do with our TS-based function. Fortunately, recently Amplify added [Build Options for Functions](https://aws-amplify.github.io/docs/cli-toolchain/usage#functions). With that in mind, we can add following command to `package.json`:
 ```
 "scripts":  {
   "amplify:<YOUR_FN_NAME>":  "cd amplify/backend/function/<YOUR_FN_NAME>/src && yarn && tsc ./*.ts"
