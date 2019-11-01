@@ -3,6 +3,7 @@ title: Hybrid Load Balancing traffic between EC2 and Lambda functions - useful A
 date: '2019-07-06T22:12:03.284Z'
 length: 4 minutes
 categories: '#AWS #Serverless #ELB #EC2 #ALB'
+keywords: serverless,aws,load balancer,elastic load balancer,application load balancer,alb,elb,migration
 ---
 
 With [this](https://github.com/serverless/serverless/pull/6073) particular PR included in version `1.45`, the Serverless Framework team has finally enabled a possibility of using Application Load Balancers as event source instead of using API Gateway.

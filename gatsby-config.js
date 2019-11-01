@@ -2,30 +2,33 @@ module.exports = {
   siteMetadata: {
     title: 'Servicefull',
     author: 'Rafal Wilinski',
-    description: 'Because Serverless is a terrible name.',
+    description:
+      'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more',
     siteUrl: 'https://servicefull.cloud/',
     social: {
-      twitter: 'RafalWilinski'
-    }
+      twitter: 'RafalWilinski',
+    },
   },
   plugins: [
+    `gatsby-plugin-advanced-sitemap`,
     {
       resolve: 'gatsby-plugin-robots-txt',
       options: {
         host: 'https://servicefull.cloud',
-        policy: [{ userAgent: '*', allow: '/' }]
-      }
+        sitemap: 'https://servicefull.cloud/sitemap.xml',
+        policy: [{ userAgent: '*', allow: '/' }],
+      },
     },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: "UA-66843658-7",
+        trackingId: 'UA-66843658-7',
         head: false,
         anonymize: false,
         respectDNT: true,
         sampleRate: 100,
         siteSpeedSampleRate: 10,
-        cookieDomain: "servicefull.cloud",
+        cookieDomain: 'servicefull.cloud',
       },
     },
     `gatsby-plugin-styled-components`,
@@ -34,8 +37,8 @@ module.exports = {
       options: {
         typekit: {
           id: 'srd8xkt',
-        }
-      }
+        },
+      },
     },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
@@ -53,10 +56,10 @@ module.exports = {
         extensions: ['.mdx', '.md'],
         gatsbyRemarkPlugins: [
           {
-            resolve: "gatsby-remark-images",
+            resolve: 'gatsby-remark-images',
             options: {
               maxWidth: 1035,
-            }
+            },
           },
           {
             resolve: `gatsby-remark-prismjs`,
@@ -88,7 +91,6 @@ module.exports = {
         icon: `content/assets/gatsby-icon.png`,
       },
     },
-    `gatsby-plugin-offline`,
     `gatsby-plugin-react-helmet`,
   ],
 }

@@ -1,8 +1,9 @@
 ---
 title: Creating AWS Amplify Functions in Typescript
-date: "2019-10-15T22:12:03.284Z"
+date: '2019-10-15T22:12:03.284Z'
 length: 3 minutes
-categories: "#AWS #Serverless #Amplify #Typescript"
+categories: '#AWS #Serverless #Amplify #Typescript'
+keywords: aws,amazon web services,amplify,appsync,typescript,serverless,react,amplify with typescript
 ---
 
 AWS Amplify gives a great power to the developers. With just a few commands you can unlock true power of Cloud and provision whole APIs, add some Lambda functions and host in on S3 with CloudFront CDN in front of it. However, right now Amplify supports creating only Javascript-powered functions. In this article I'll explain how you can create your functions in Typescript. Moreover, following method should work for other languages such as Kotlin, ReasonML or ClojureScript!
@@ -10,11 +11,13 @@ AWS Amplify gives a great power to the developers. With just a few commands you 
 ## Let's start with creating Amplify project and custom function
 
 1. Create base project using React or any other boilerplate generator.
+
 ```
 npx create-react-app amplify-typescript-functions
 ```
 
 2. Initialise Amplify project
+
 ```
 amplify init
 ```
@@ -22,13 +25,15 @@ amplify init
 and proceed through Amplify project creation wizard...
 
 3. After you created project, go ahead and add a function with following command
+
 ```
 amplify function add
 ```
 
 And once again proceed through guided creation process.
 
-4. After that you should see a new folder `amplify/backend/function/<YOUR FUNCTION NAME>` appear in your project structure. 
+4. After that you should see a new folder `amplify/backend/function/<YOUR FUNCTION NAME>` appear in your project structure.
+
 ```
 > amplify-typescript-demo/amplify/backend $ tree
 .
@@ -46,10 +51,10 @@ And once again proceed through guided creation process.
             └── package.json
 ```
 
-
-
 ## Adding Typescript function
+
 We have our desired function but it's in Javascript and we want to add some types to it. So, go ahead and remove `index.js` and replace it with `index.ts`. Paste following code inside:
+
 ```
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
@@ -67,6 +72,7 @@ export const handler: APIGatewayProxyHandler = async (event,  _context) => {
 ```
 
 Typescript also need some instructions what to do with following code and how to compile it so we'll need `tsconfig.json` file too. Here's what should be inside:
+
 ```
 {
   "compilerOptions":  {
@@ -83,6 +89,7 @@ Typescript also need some instructions what to do with following code and how to
 ```
 
 `package.json` will also need some adjustments:
+
 ```
 "dependencies":  {
   "source-map-support": "0.5.10"
@@ -98,16 +105,15 @@ You might also consider adding `.gitignore` file add exclude all `*.js` files th
 ## Putting it all together
 
 Lastly, we need to install `typescript` as `devDependency` at the root of our project and tell Amplify what to do with our TS-based function. Fortunately, recently Amplify added [Build Options for Functions](https://aws-amplify.github.io/docs/cli-toolchain/usage#functions). With that in mind, we can add following command to `package.json`:
+
 ```
 "scripts":  {
   "amplify:<YOUR_FN_NAME>":  "cd amplify/backend/function/<YOUR_FN_NAME>/src && yarn && tsc ./*.ts"
 }
 ```
 
-With this little piece, once you execute `amplify push` following script will be executed and build TS source files before deploying anything. 
+With this little piece, once you execute `amplify push` following script will be executed and build TS source files before deploying anything.
 
 You can test it locally using `amplify function invoke <YOUR_FN_NAME>` (make sure it's built first!). Final result is also available as Github Repository [here](https://github.com/RafalWilinski/amplify-typescript-demo)
 
-
-
-Following example works really well if number of functions is quite low (because each function converts directly to extra command in `package.json` and there is no shared code between them. In the upcoming article I'll explore different ways to do that more efficiently, stay tuned! 
+Following example works really well if number of functions is quite low (because each function converts directly to extra command in `package.json` and there is no shared code between them. In the upcoming article I'll explore different ways to do that more efficiently, stay tuned!

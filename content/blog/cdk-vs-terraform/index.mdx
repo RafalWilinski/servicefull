@@ -3,10 +3,11 @@ title: Comparison of AWS Cloud Development Kit with Terraform by building 2-tier
 date: '2019-06-30T22:12:03.284Z'
 length: 8 minutes
 categories: '#AWS #CDK #Terraform #Cloud'
+keywords: aws,cdk,terraform,cdk vs terraform,cloud,amazon web service,iac,iaac,infrastructure as a code,ecs,cluster,docker
 ---
 
-import ComparisonTable from "../../../src/components/comparisonTable.js";
-import Gif from "../../../src/components/gif.js";
+import ComparisonTable from '../../../src/components/comparisonTable.js'
+import Gif from '../../../src/components/gif.js'
 
 As AWS Architect my day-to-day job includes writing a lot of Terraform code in HCL.
 
@@ -27,12 +28,26 @@ Before getting into actions I've listed a couple of obvious differences which di
 
 <ComparisonTable
   items={[
-    { title: "Terraform",
-      points: ["Written in HCL", "Declarative", "Supports multiple providers", "SDK calls under the hood", "Modules"]
+    {
+      title: 'Terraform',
+      points: [
+        'Written in HCL',
+        'Declarative',
+        'Supports multiple providers',
+        'SDK calls under the hood',
+        'Modules',
+      ],
     },
-    { title: "CDK",
-      points: ["Written in TS, Java or Python", "Imperative", "AWS Only", "Cloudformation under the hood", "Constructs"]
-    }
+    {
+      title: 'CDK',
+      points: [
+        'Written in TS, Java or Python',
+        'Imperative',
+        'AWS Only',
+        'Cloudformation under the hood',
+        'Constructs',
+      ],
+    },
   ]}
 />
 
@@ -42,7 +57,7 @@ After result of few hours fight with both tools, I present you...
 
 Imperative nature of the language used in CDK might be counterintuitive for declaring things like infrastructure where the end state is the most important thing. This might be even tricky due to async nature of JS (e.g. `for` loop with `async`) but when used correctly pays off in better possibilities to express collection operations. This has been improved greatly in Terraform 0.12, however, it's still far from flexibility and easy of use that we're used from ES6 spec like `Array.filter(...).map(...).reduce(...)` etc.
 
-CDK API changes pretty quickly, some of the examples are outdated and require some adjustments like `loadBalancer.loadBalancerDnsName` vs `loadBalancer.dnsName`. 
+CDK API changes pretty quickly, some of the examples are outdated and require some adjustments like `loadBalancer.loadBalancerDnsName` vs `loadBalancer.dnsName`.
 
 When bootstrapping a project make sure you're running the same version of CLI and all the modules. Otherwise you might face some cryptic errors and lose unnecesary amount of time debugging them.
 
@@ -56,7 +71,7 @@ Using the same language for both code, configuration and infrastructure makes wh
 
 Really refreshing comparing to writing huge YAML or JSON files. However, going with Python where there is no static typing I couldn't see big benefit. Plus, Troposphere is with us already for a moment.
 
-<br/>
+<br />
 
 Also the amount of code is much less in CDK:
 
