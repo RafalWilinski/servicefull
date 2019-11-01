@@ -1,5 +1,12 @@
 import React from 'react'
-import { Container, Title, StyledLink, Text, Line, HiddenExternalLink } from "../theme";
+import {
+  Container,
+  Title,
+  StyledLink,
+  Text,
+  Line,
+  HiddenExternalLink,
+} from '../theme'
 
 class Layout extends React.Component {
   render() {
@@ -11,16 +18,21 @@ class Layout extends React.Component {
       header = (
         <>
           <Title>
-            <StyledLink to={'/'}>
-              {title}
-            </StyledLink>
+            <StyledLink to={'/'}>{title}</StyledLink>
           </Title>
           <Line />
           <Text style={{ marginTop: '5px' }}>
-            <HiddenExternalLink target="_blank" href={'https://www.slideshare.net/jedi4ever/from-serverless-to-service-full-how-the-role-of-devops-is-evolving'} style={{
-              textDecoration: 'none',
-              color: 'black'
-            }}>
+            <HiddenExternalLink
+              target="_blank"
+              rel="noopener"
+              href={
+                'https://www.slideshare.net/jedi4ever/from-serverless-to-service-full-how-the-role-of-devops-is-evolving'
+              }
+              style={{
+                textDecoration: 'none',
+                color: 'black',
+              }}
+            >
               {description}
             </HiddenExternalLink>
           </Text>
@@ -30,9 +42,7 @@ class Layout extends React.Component {
       header = (
         <>
           <Title>
-            <StyledLink>
-              {title}
-            </StyledLink>
+            <StyledLink>{title}</StyledLink>
           </Title>
           <Line />
         </>
