@@ -1,0 +1,20 @@
+title: Using AWS Lambda and SQS to perform distributed async batch updates on DynamoDB Tables
+description: #AWS #SQS #DynamoDB #NoSQL
+keywords: aws,dynamodb,aws lambda,sqs,dynamodb table,nosql,update where nosql,update where dynamodb,mass update dynamodb,cloud
+date: '2019-11-05T22:12:03.284Z'
+length: 8 minutes
+----
+
+`UPDATE X WHERE X` in NoSQL is non-trivial task to do as opposed to other SQL databases. 
+
+In SQL it's just one operation while on NoSQL you have to run `PUT` operation against each selected record.
+
+That's not only time consuming task but it's also taking a lot of write throughput so might be expensive. 
+
+Throttling can also prevent from some updates happening at all.
+
+So, there are few challenges to solve:
+
+1. Make sure all records were updated, no throttling rejections
+2. Make sure it was cost effective when using Autoscaling - do not provision enormous capacity - buffer updates, keep it reasonable
+3. Keep track of the progress and be notified when it ends
