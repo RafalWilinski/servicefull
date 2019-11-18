@@ -76,6 +76,8 @@ So only a small change in our diagram is needed:
 
 <br />
 
+You might also ask, what if source table is to big to be processed at once by "Get" function? My solution is to call `context.getRemainingTimeInMillis()` function after each page to check how much time is remaining. If there's less than a second, this particular Lambda invocation should end processing and rather re-invoke another instance passing argument of `LastProcessedKey` as `ExclusiveStartKey`.
+
 ## Checking the progress
 
 To meet the last requirement and know when the process has ended, we need to basically count the number of rows that need to be updated and number of update operations which succeeded. My proposal is to gather these two metrics in separate DynamoDB table with a stream attached to the Lambda function which compares them and sends a notification as soon as they are equal.
@@ -95,5 +97,7 @@ As soon as new record gets inserted, DynamoDB would stream the update to "orches
 ## Is it really a good idea?
 
 As you might have noticed, something that is very easy and often seen in SQL world, requires a quite complex solution in NoSQL landscape. That's one of the reasons why 1-to-1 conversions from relational data design don't work well with DynamoDB. Always before making migration to DynamoDB, check your [query access patterns](https://www.trek10.com/blog/dynamodb-single-table-relational-modeling/) and evaluate if it fits your needs.
+
+Nevertheless, this pattern with slight modifications can be also used to migrate data from SQL to DynamoDB or just perform massive and reliable data inserts.
 
 If you need DynamoDB or Serverless expertise, don't hesitate to [contact with me](mailto:raf.wilinski@gmail.com).
