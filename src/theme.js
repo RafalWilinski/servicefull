@@ -1,49 +1,49 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import { Link } from 'gatsby'
 import Image from 'gatsby-image'
 
-const THEME_COLOR = 'rgb(45, 200, 58)';
+const THEME_COLOR = 'rgb(45, 200, 58)'
 
 const Container = styled.div`
   margin: 3rem auto;
-  max-width: 680px;
+  max-width: 700px;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: center;
   padding: 0 10px;
-`;
+`
 
 const Title = styled.h1`
   font-family: neue-haas-grotesk-display, sans-serif;
   margin-bottom: 0;
-`;
+`
 
 const Subtitle = styled.h2`
   font-family: neue-haas-grotesk-display, sans-serif;
-`;
+`
 
 const Subsubtitle = styled.h3`
   margin-block-start: 1.2em;
   margin-block-end: 0.8em;
   font-family: neue-haas-grotesk-display, sans-serif;
-`;
+`
 
 const Meta = styled.p`
   font-family: neue-haas-grotesk-display, sans-serif;
   margin: 10px 0 -15px;
   color: #666;
   font-size: 0.8em;
-`;
+`
 
 const Text = styled.p`
   width: 100%;
   font-family: neue-haas-grotesk-text, sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   color: #303030;
-  line-height: 1.4;
-`;
+  line-height: 1.6;
+`
 
 const Point = styled(Text)`
   display: list-item;
@@ -56,7 +56,7 @@ const Line = styled.hr`
   width: 100%;
   margin: 0;
   border-style: none;
-`;
+`
 
 const StyledLink = styled(Link)`
   box-shadow: none;
@@ -71,7 +71,7 @@ const HiddenExternalLink = styled.a`
     background-color: ${THEME_COLOR};
     color: white !important;
   }
-`;
+`
 
 const ColorLink = styled(Link)`
   font-family: neue-haas-grotesk-text, sans-serif;
@@ -108,7 +108,7 @@ const BioWrapper = styled.div`
 const Code = styled.div`
   background-color: #eee;
   padding: 10px;
-`;
+`
 
 export {
   Code,
@@ -126,5 +126,5 @@ export {
   ColorLink,
   BioWrapper,
   HiddenExternalLink,
-  ColorExternalLink
+  ColorExternalLink,
 }

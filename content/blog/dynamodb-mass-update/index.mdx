@@ -1,0 +1,103 @@
+---
+title: Using AWS Lambda and SQS to perform mass, distributed and asynchronous updates on DynamoDB Tables
+categories: '#AWS #SQS #DynamoDB #NoSQL'
+keywords: aws,dynamodb,aws lambda,sqs,dynamodb table,nosql,update where nosql,update where dynamodb,mass update dynamodb,cloud
+date: '2019-11-16T22:12:03.284Z'
+length: 8 minutes
+---
+
+`UPDATE X WHERE Y;` is non-trivial task to do in NoSQL landscape as opposed to other SQL-based databases. In SQL it's just one operation while on NoSQL you have to run `PUT` operation against each record.
+
+Apparently, that's not an easy task. It's not only time consuming, because we have to run N write operations, but it's also taking a lot of write throughput and it's very fragile - throttling can prevent from some updates happening at all so you may end up with data inconsistencies.
+
+Theoretically, there are just three requirements that need to be met:
+
+1. Make sure all records were updated.
+2. Make sure it was cost effective.
+3. Because it's a distributed process, we also need to know when it has ended. Or ideally, track the progress.
+
+Let's go through of some possible examples how it can be done.
+
+## One big synchronous update and why it's bad
+
+First thing that might go to your head is just perform `query` operation to get all the desired records and run `update` inside the same function on all fetched rows.
+
+<br />
+
+![Simple NoSQL update design](./1.png 'Simple NoSQL update design')
+
+<br />
+
+While this solution might be perfectly fine for small operations. However, once you hit bigger number of rows this solution will might timeout because of Lambda's maximum duration. This is unacceptable. So, we can just divide the process into two parts and decouple query from updates.
+
+## Decouple and parallelize updates
+
+Idea is simple. One function gets all the rows that need to be updated, divides the set into batches and launches `N` invocations of "updater" Lambda function.
+
+<br />
+
+![Decoupled update](./2.png 'Decoupled update')
+
+<br />
+
+Better. But, the previous problem might still be not elimiated and moreover, we might hit the write capacity limit of our table effectively rejecting some of our calls making the data corrupted. This also unacceptable.
+
+## Use SQS to buffer
+
+To prevent rejected updates, we can introduce SQS queue as a buffer in the middle. All the operations that need to be performed are not directly passed to invoked functions but rather put in the queue which is then consumed by a "updater" lambda function.
+
+<br />
+
+![Buffered decoupled update](./3.png 'Buffered decoupled update')
+
+<br />
+
+This design has one big advantage. It allows putting rejected jobs back in the queue and retrying them until every update request is finally processed. Our first requirement is met.
+
+Note that this design requires some fine-tuning to get the best performance by finding out the best batch size for SQS jobs. Coverting each update operation into separate job in queue would make it not cost-effective because of count of Lambda invocations and SQS items, while dividing it into big batches might block the system and make it not flexible. My suggestion is to [batch update calls into batches of 25 items using BatchWriteItem](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html) and trying to set the SQS job to contain a multiple of 25.
+
+Moreover, it's not optimal. With one simple change we can make it better.
+
+## Update while streaming results from table
+
+In our previous design, we wait until all the results from source table are fetched. This delayed our updates and made the process slower in overall.
+
+![Blocking update design](./timeline_1.png 'Blocking update design')
+
+Due to DynamoDB API nature, [we get results in pages](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html#Query.Pagination). We can use this fact to stream results page by page directly to the queue instead of waiting to fetch all the data and then put X batches there.
+
+![Non-Blocking update design](./timeline_2.png 'Non-Blocking update design')
+
+So only a small change in our diagram is needed:
+
+<br />
+
+![Buffered streamed decoupled update](./4.png 'Buffered streamed decoupled update')
+
+<br />
+
+You might also ask, what if source table is to big to be processed at once by "Get" function? My solution is to call `context.getRemainingTimeInMillis()` function after each page to check how much time is remaining. If there's less than a second, this particular Lambda invocation should end processing and rather re-invoke another instance passing argument of `LastProcessedKey` as `ExclusiveStartKey`.
+
+## Checking the progress
+
+To meet the last requirement and know when the process has ended, we need to basically count the number of rows that need to be updated and number of update operations which succeeded. My proposal is to gather these two metrics in separate DynamoDB table with a stream attached to the Lambda function which compares them and sends a notification as soon as they are equal.
+
+First number we can get as soon as our get function reaches to the point where there are no more items aka `LastEvaluatedKey` equals to `null`.
+
+Getting the second number is a little bit trickier. Because DynamoDB model is eventually consistent, updating same row by multiple "updater" functions might result it having incorrect number at the end. Instead, we should rather let every function invocation put a separate new record and then aggregate a sum of all of them. To prevent `SCAN`s, our table should have a compound key consisting of partition key, which in our case will be always the same, and range key which will be unique UUID.
+
+As soon as new record gets inserted, DynamoDB would stream the update to "orchestrator" Lambda function which would query all the done operations, sum up the count and compare with "first number" - number of rows that need to be updated.
+
+<br />
+
+![Buffered streamed decoupled observable update](./5.png 'Buffered streamed decoupled observable update')
+
+<br />
+
+## Is it really a good idea?
+
+As you might have noticed, something that is very easy and often seen in SQL world, requires a quite complex solution in NoSQL landscape. That's one of the reasons why 1-to-1 conversions from relational data design don't work well with DynamoDB. Always before making migration to DynamoDB, check your [query access patterns](https://www.trek10.com/blog/dynamodb-single-table-relational-modeling/) and evaluate if it fits your needs.
+
+Nevertheless, this pattern with slight modifications can be also used to migrate data from SQL to DynamoDB or just perform massive and reliable data inserts.
+
+If you need DynamoDB or Serverless expertise, don't hesitate to [contact with me](mailto:raf.wilinski@gmail.com).
