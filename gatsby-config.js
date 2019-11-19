@@ -79,18 +79,6 @@ module.exports = {
         name: 'assets',
       },
     },
-    {
-      resolve: `gatsby-plugin-manifest`,
-      options: {
-        name: `Servicefull.cloud`,
-        short_name: `Servicefull`,
-        start_url: `/`,
-        background_color: `#ffffff`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        icon: `content/assets/gatsby-icon.png`,
-      },
-    },
     `gatsby-plugin-react-helmet`,
   ],
 }

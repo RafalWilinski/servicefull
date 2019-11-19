@@ -10,13 +10,19 @@ function SEO({ description, lang, meta, keywords, title }) {
       render={data => {
         const metaDescription =
           description || data.site.siteMetadata.description
+
+        let titleTemplate =
+          title === 'Servicefull'
+            ? 'Servicefull - AWS, Serverless, FaaS, Containers and Services Blog'
+            : '%s | ${data.site.siteMetadata.title}'
+
         return (
           <Helmet
             htmlAttributes={{
               lang,
             }}
             title={title}
-            titleTemplate={`%s | ${data.site.siteMetadata.title}`}
+            titleTemplate={titleTemplate}
             meta={[
               {
                 name: 'description',
@@ -70,7 +76,17 @@ function SEO({ description, lang, meta, keywords, title }) {
 SEO.defaultProps = {
   lang: 'en',
   meta: [],
-  keywords: [],
+  keywords: [
+    'aws',
+    'serverless',
+    'amazon web services',
+    'faas',
+    'function as a service',
+    'serverless framework',
+    'nosql',
+    'dynamodb',
+    'aws lambda',
+  ],
 }
 
 SEO.propTypes = {
