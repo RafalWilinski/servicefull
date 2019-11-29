@@ -42,7 +42,7 @@ const Text = styled.p`
   font-size: 16px;
   font-weight: 400;
   color: #303030;
-  line-height: 1.6;
+  line-height: 1.7;
 `
 
 const Point = styled(Text)`
