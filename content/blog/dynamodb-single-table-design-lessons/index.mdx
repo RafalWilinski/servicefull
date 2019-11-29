@@ -6,23 +6,48 @@ date: '2019-11-29T22:12:03.284Z'
 length: 8 minutes
 ---
 
-## Plan well query patterns
+DynamoDB is powerful yet tricky beast. While it enables [insane scalability](https://aws.amazon.com/blogs/aws/amazon-prime-day-2019-powered-by-aws/) it has some very strict limitations that you need to be aware of. It is also impossible to go with such NoSQL database with RDBMS mindset. Change in thinking is necessary and that process is hard. After almost a year of developing a fully serverless GraphQL API and shipping it to the production with thousands of users, I present you my learnings from this endeavour.
+
+## Planning your query access patterns is crucial
+
+I can't stress enough how important it is. Because you cannot change primary indexes or LSIs, the only option is to create a new one, migrate the data with some transformations, and delete old table. This process is very painful, especially after you're in the production and you want it to avoid it at all costs. If you don't know how to do that, I highly recommend two articles: [One by Jeremy Daly](https://www.jeremydaly.com/how-to-switch-from-rdbms-to-dynamodb-in-20-easy-steps/) and second one [by Forrest Brazeal](https://www.trek10.com/blog/dynamodb-single-table-relational-modeling/).
+
+Actually, this step is not just purely engineering task, but it blends with business and product competences. That's why I think you should definitely participate in planning session as soon as possible to understand business use cases better and propose developer-friendly solutions. Clear requirements equals happy developer equals product delivered and deadline met.
 
 ## Attribute `model` is very useful to distinct entity types
 
-## Sometimes business adds requirements in the middle of the development
+In our use case, having attribute `model` as primary key in one of the GSIs (Global Secondary Index) which always indicated the type of row was very helpful. With simple query where `model` was a `hashKey` we could get all Members, Channels, Roles, Audiences, etc.
 
-SO you need to add a query access pattern
+## Sometimes business adds requirements in the middle of the development...
 
-- migrations
-  - small
-  - big
+So you need to add or change a query access pattern. Basically there are three options is such scenario:
+
+1. Your table structure is sufficient and data allows querying it in such way
+2. Your table structure is sufficient but some records don't have required data
+3. Your table structure is insufficient
+
+While first scenario is painless and third requires remodeling your table, second scenario is not that bad, it just requires migrating a portion of your data in the table.
 
 ## Invest some time in proper abstractions and create your own opinionated ORM
 
-## Use DynamoDB optimization trick from Yan Cui
+## Use `keepAlive` HTTP optimization trick from Matt Lavin
+
+By default, each time you make an operation with DynamoDB, a new three-way handshake is established. That takes unnecessary time. You can fix this by replacing `httpOptions.agent` with custom one in AWS SDK options like so:
+
+```
+const agent = new https.Agent({
+    keepAlive: true,
+    maxSockets: 50,
+    rejectUnauthorized: true
+});
+AWS.config.update({ httpOptions: { agent }});
+```
+
+You can see the difference in this [blogpost by Yan Cui](https://theburningmonk.com/2019/02/lambda-optimization-tip-enable-http-keep-alive/).
 
 ## Blacklist IAM action `dynamodb:Scan` in developers roles
+
+This one I got from [Jared Short](https://twitter.com/ShortJared/status/1184028703862472704). If you want to prevent your developers from writing Scans, just deny `dynamodb:Scan` IAM action in developers and application IAM roles. Brutal yet super simple and effective technique leveraging IAM not only for security but also to enforce best practices.
 
 ## Use X-Ray to find bottlenecks and problematic access patterns
 
@@ -41,7 +66,17 @@ then reiterate on designs, use contrubitor insights to identify hot partitions
 
 ## Use VPC endpoints if possible
 
+[VPC Endpoints](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html) are powerful small things that allow resources inside your VPC interact with other AWS' Services without leaving the Amazon network. This trick not only increases security but also makes the interactions with DynamoDB faster. Oh, and your instances don't need Public IP. Keep in mind that just like DynamoDB itself, this also has some limitations which include:
+
+- You cannot access DynamoDB streams
+- You cannot create an endpoint between a VPC and a service in a different region.
+- There's limit of VPC endpoints per VPC
+
+You can read more about [VPC Gateway Endpoints for DynamoDB here](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints-ddb.html).
+
 ## Store big items in S3 and only reference them via URL instead of storying them directly in table
+
+We've made this mistake - we started storing avatar blobs inside `Member.avatar` attribute.
 
 ## Always use `Limit` in queries and paginate
 
@@ -49,10 +84,9 @@ then reiterate on designs, use contrubitor insights to identify hot partitions
 - Faster responses
 - Less data but more relevant, older might not be needed
 
-## Favor `FilterExpressions` over native `filter` functions
+## Favor `FilterExpressions` over native `Array.filter` functions
 
-- Less data gets returned, less compute power and memory you need
-- Less RCU consumed
+While it's tempting to use native `Array.filter` capabilities because it's more elegant, favor using `FilterExpressions` despite being it a little bit cumbersome. I know it requires creating a string which maps to `ExpressionAttributeValues` and `ExpressionAttributeNames` but it pays of in performance. Because the filtering is done on DB level, less data is consumed and less data is returned. This converts directly to less money spent on data transfer, compute and memory neede to process it.
 
 ## Be aware of DynamoDB Limits
 
@@ -65,8 +99,12 @@ then reiterate on designs, use contrubitor insights to identify hot partitions
 
 ## TTL does not guarantee that your items will be removed immediately
 
-- Use FilterExpression with date compare to make sure records are not returned
+I've stumbled upon this information [while browsing Twitter one day](https://twitter.com/prestomation/status/1146473166228692998). Time-to-live attribute does not guarantee that the item will be removed immediately after selected time. It will be removed with a delay, sometimes taking up to 48h. This might lead you to return incorrect results if you rely only on this mechanism.
+
+In order to prevent that, as [official note states](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/howitworks-ttl.html): "use a Filter Expression that returns only items where the Time-to-Live expiration value is greater than the current time"
 
 ## Use SQS to buffer large Write, Update and Delete operations
 
-Haven't used DAX so cannot tell.
+A common trick to prevent from your table from consuming too much WCU (Write Capacity Units) or having your requests throttled because of too much data coming in, is to buffer write operations and perform them asynchronously if it's possible. It is official AWS' recommendation and I've also [wrote a blogpost about it earlier](https://servicefull.cloud/blog/dynamodb-mass-update/).
+
+If you need DynamoDB or Serverless expertise, don't hesitate to contact with me.
