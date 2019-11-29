@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
 
-function SEO({ description, lang, meta, keywords, title }) {
+function SEO({ description, lang, meta, keywords, title, image, url }) {
   return (
     <StaticQuery
       query={detailsQuery}
@@ -15,6 +15,8 @@ function SEO({ description, lang, meta, keywords, title }) {
           title === 'Servicefull'
             ? 'Servicefull - AWS, Serverless, FaaS, Containers and Services Blog'
             : '%s | ${data.site.siteMetadata.title}'
+
+        console.log(data, meta)
 
         return (
           <Helmet
@@ -41,12 +43,36 @@ function SEO({ description, lang, meta, keywords, title }) {
                 content: 'website',
               },
               {
+                property: 'og:url',
+                content: `https://servicefull.cloud${url}`,
+              },
+              {
+                property: 'og:image',
+                content: image,
+              },
+              {
+                property: 'twitter:image',
+                content: image,
+              },
+              {
+                property: 'og:image:width',
+                content: '1366',
+              },
+              {
+                property: 'og:image:height',
+                content: '786',
+              },
+              {
                 name: 'twitter:card',
-                content: 'summary',
+                content: 'summary_large_image',
               },
               {
                 name: 'twitter:creator',
-                content: data.site.siteMetadata.author,
+                content: '@RafalWilinski',
+              },
+              {
+                name: 'twitter:site',
+                content: '@RafalWilinski',
               },
               {
                 name: 'twitter:title',

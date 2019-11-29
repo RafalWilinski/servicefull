@@ -32,12 +32,16 @@ class BlogPostTemplate extends React.Component {
     const siteTitle = this.props.data.site.siteMetadata.title
     const { previous, next } = this.props.pageContext
 
+    console.log(post)
+
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <SEO
           title={post.frontmatter.title}
           description={post.excerpt}
           keywords={post.frontmatter.keywords.split(',')}
+          image={post.frontmatter.image}
+          url={this.props.data.mdx.fields.slug}
         />
         <Meta style={{ marginTop: 40 }}>
           {post.frontmatter.date} / {post.frontmatter.length} /{' '}
@@ -85,6 +89,7 @@ export const pageQuery = graphql`
         categories
         length
         keywords
+        image
       }
     }
   }
