@@ -7,29 +7,29 @@ length: 8 minutes
 image: https://s3.amazonaws.com/servicefull.cloud/images/template-servicefull.png
 ---
 
-DynamoDB is powerful yet tricky beast. While it enables [insane scalability](https://aws.amazon.com/blogs/aws/amazon-prime-day-2019-powered-by-aws/) it has some very strict limitations that you need to be aware of. It is also impossible to go with such NoSQL database with RDBMS mindset. Change in thinking is necessary and that process is hard. After almost a year of developing a fully serverless GraphQL API and shipping it to the production with thousands of users, I present you my learnings from this endeavour.
+DynamoDB is a powerful yet tricky beast. While it enables [insane scalability](https://aws.amazon.com/blogs/aws/amazon-prime-day-2019-powered-by-aws/) it has some very strict limitations that you need to be aware of. It is also impossible to go with such NoSQL database with RDBMS mindset. Change in thinking is necessary and that process is hard. After almost a year of developing a fully serverless GraphQL API and shipping it to the production with thousands of users, I present you my learnings from this endeavor.
 
 ## Planning your query access patterns is absolutely essential
 
-I can't stress enough how important it is. Because you cannot change primary indexes or LSIs, the only option is to create a new one, migrate the data with some transformations, and delete old table. This process is very painful, especially after you're in the production and you want it to avoid it at all costs. If you don't know how to do that, I highly recommend two articles: [One by Jeremy Daly](https://www.jeremydaly.com/how-to-switch-from-rdbms-to-dynamodb-in-20-easy-steps/) and second one [by Forrest Brazeal](https://www.trek10.com/blog/dynamodb-single-table-relational-modeling/).
+I can't stress enough how important it is. Because you cannot change primary indexes or LSIs, the only option is to create a new one, migrate the data with some transformations, and delete the old table. This process is very painful, especially after you're in the production and you want it to avoid it at all costs. If you don't know how to do that, I highly recommend two articles: [One by Jeremy Daly](https://www.jeremydaly.com/how-to-switch-from-rdbms-to-dynamodb-in-20-easy-steps/) and the second one [by Forrest Brazeal](https://www.trek10.com/blog/dynamodb-single-table-relational-modeling/).
 
-Actually, this step is not just purely engineering task, but it blends with business and product competences. That's why I think you should definitely participate in planning session as soon as possible to understand business use cases better and propose developer-friendly solutions. Clear requirements equals happy developer equals product delivered and deadline met.
+Actually, this step is not just purely engineering task, but it blends with business and product competences. That's why I think you should definitely participate in the planning session as soon as possible to understand business use cases better and propose developer-friendly solutions. Clear requirements equal happy developer equals product delivered and deadline met.
 
 ## Attribute `model` is very useful to distinct entity types
 
-In our use case, having attribute `model` as primary key in one of the GSIs (Global Secondary Index) which always indicated the type of row was very helpful. With simple query where `model` was a `hashKey` we could get all Members, Channels, Roles, Audiences, etc.
+In our use case, having attribute `model` as the primary key in one of the GSIs (Global Secondary Index) which always indicated the type of row was very helpful. With a simple query where `model` was a `hashKey` we could get all Members, Channels, Roles, Audiences, etc.
 
 ## Sometimes business adds requirements in the middle of the development...
 
-So you need to add or change a query access pattern. Basically there are three options is such scenario:
+So you need to add or change a query access pattern. Basically, there are three options is such a scenario:
 
-1. Your table structure is sufficient and data allows querying it in such way
+1. Your table structure is sufficient and data allows querying it in such a way
 2. Your table structure is sufficient but some records don't have required data
 3. Your table structure is insufficient
 
-While first scenario is painless and third requires remodeling your table, second scenario is not that bad. It just requires migrating a portion of your data in the table. For example, some records need to be queried in different way but these records do not have the HashKey of desired Index set. What probably you need to do, is only copy the other attribute in place of desired attribute or aggregate it from other record parameters.
+While the first scenario is painless and the third requires remodeling your table, the second scenario is not that bad. It just requires migrating a portion of your data in the table. For example, some records need to be queried in a different way but these records do not have the HashKey of the desired Index set. What probably you need to do, is only copy the other attribute in place of desired attribute or aggregate it from other record parameters.
 
-If you're still in development, writing a simple _get and for each record run update_ script might be sufficient, for production databases or larger datasets consider using [mass update pattern](https://servicefull.cloud/blog/dynamodb-mass-update/) which I've described in my other blogpost.
+If you're still in development, writing a simple _get and for each record run, update_ script might be sufficient, for production databases or larger datasets consider using [mass update pattern](https://servicefull.cloud/blog/dynamodb-mass-update/) which I've described in my other blogpost.
 
 ## Invest some time in proper abstractions and create your own opinionated ORM
 
@@ -40,7 +40,7 @@ Here are some ideas:
 - Each call will require `TableName` (exactly the same with single-table design) and `IndexName`. Writing that into each call is unnecessary duplication
 - You should always use `Limit` (more on that later) and probably you should also restrict that number to some upper bound like 1000. Something like `Math.max(params.limit, 1000)` could be also there
 - Constructing `FilterExpressions` is cumbersome. Invest some time in writing abstraction for that like [builder pattern](https://www.journaldev.com/1425/builder-design-pattern-in-java)
-- Your records in database probably include `pk`, `sk`, `data` while your models probably have attributes like `id`, `productId` etc. Some mapping function here was really helpful for us.
+- Your records in the database probably include `pk`, `sk`, `data` while your models probably have attributes like `id`, `productId` etc. Some mapping function here was really helpful for us.
 
 If you're not sure what you need, consider using [DynamoDB Toolbox](https://github.com/jeremydaly/dynamodb-toolbox), an excellent _not-an-ORM_ library by Jeremy Daly. Unfortunately, this wasn't available year ago when my project started but if I were to start a project today, this would be a no-brainer for me.
 
@@ -69,7 +69,7 @@ Even though I haven't used [Contributor Insights](https://docs.aws.amazon.com/am
 
 However, what we do use actively in our production application in AWS X-Ray. With [subsegments](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-dotnet-subsegments.html) we managed to find which subqueries of our complex GraphQL queries were causing our responses to slow down and try to rewrite these parts of the application.
 
-What's been also helpful was [Service Map](https://docs.aws.amazon.com/xray/latest/devguide/xray-console.html#xray-console-servicemap). Just a glance at it showed us that our problem lies in custom authorizer function which fetched too much data and caused whole API to slow down.
+What's been also helpful was [Service Map](https://docs.aws.amazon.com/xray/latest/devguide/xray-console.html#xray-console-servicemap). Just a glance at it showed us that our problem lies in custom authorizer function which fetched too much data and caused whole the API to slow down.
 
 ## Be aware of lack of referential integrity and it's consequences
 
@@ -81,7 +81,7 @@ Lesson learned: _always_ assume that some data might be missing.
 
 ## Consider removing orphaned records and weak entities asynchronously
 
-Imagine a scenario where you have a system with entity `Group` which can have many `Members`. Members are linked to the group using separate records where `pk: Group-ID` and `sk: Member-ID`. In such scenario in SQL world, `FOREIGN KEYS` and `ON DELETE CASCADE` would guarantee that once "Group" is deleted, all "membership" records would be deleted to.
+Imagine a scenario where you have a system with entity `Group` which can have many `Members`. Members are linked to the group using separate records where `pk: Group-ID` and `sk: Member-ID`. In such a scenario in SQL world, `FOREIGN KEYS` and `ON DELETE CASCADE` would guarantee that once "Group" is deleted, all "membership" records would be deleted too.
 
 Unfortunately, that's not the case in Dynamo.
 
@@ -91,40 +91,40 @@ But you might ask, Why remove at all? Isn't DynamoDB _infinitely scalable_? What
 
 - Saves space which means less money spent. Remember that it costs 0.25USD per GB-month
 - Queries consume less read capacity
-- Less garbage in the table and less referential integity issues
+- Less garbage in the table and less referential integrity issues
 
 ## Use VPC endpoints if possible
 
-[VPC Endpoints](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html) are powerful small things that allow resources inside your VPC interact with other AWS' Services without leaving the Amazon network. This trick not only increases security but also makes the interactions with DynamoDB faster. Oh, and your instances don't need Public IP. Keep in mind that just like DynamoDB itself, this also has some limitations which include:
+[VPC Endpoints](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html) are powerful small things that allow resources inside your VPC interact with other AWS' Services without leaving the Amazon network. This trick not only increases security but also makes interactions with DynamoDB faster. Oh, and your instances don't need Public IP. Keep in mind that just like DynamoDB itself, this also has some limitations which include:
 
 - You cannot access DynamoDB streams
 - You cannot create an endpoint between a VPC and a service in a different region.
-- There's limit of VPC endpoints per VPC
+- There's a limit of VPC endpoints per VPC
 
 You can read more about [VPC Gateway Endpoints for DynamoDB here](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints-ddb.html).
 
 ## Avoid storing big items
 
-At the beginning we've made this mistake - we started storing avatar blobs inside `avatar` attribute. This wasn't a good idea. As single query only returns a result set that fits within the 1 MB size limit, we sometimes saw some calls returning only 3 items effectively making everything slower than it should be. Solving this problem was fortunately quite easy - we uploaded all blobs to S3 and just saved the link referencing it in the table.
+At the beginning we've made this mistake - we started storing avatar blobs inside `avatar` attribute. This wasn't a good idea. As a single query only returns a result set that fits within the 1 MB size limit, we sometimes saw some calls returning only 3 items effectively making everything slower than it should be. Solving this problem was fortunately quite easy - we uploaded all blobs to S3 and just saved the link referencing it in the table.
 
 ## Always use `Limit` in queries and paginate
 
-In our case, DynamoDB served the purpose of persistence layer for community platform API. In use case like that, according to our analyses, users are most likely to be interested in latest 10 announcements or message in channel. If they would like to see more, they could just request it and application would get them these using pagination. This approach of returning minimal amount of data at first gave us a range of benefits:
+In our case, DynamoDB served the purpose of the persistence layer for community platform API. In use cases like that, according to our analyses, users are most likely to be interested in the latest 10 announcements or messages in a channel. If they would like to see more, they could just request it and the application would get them these using pagination. This approach of returning a minimal amount of data at first gave us a range of benefits:
 
-- Database returned less data so our API returned less data too making everything faster and more responsive
-- Because there was less data returned, our Lambdas also needed less time to process it so we paid even less for the compute part of Serverless stack
+- Database returned fewer data so our API returned fewer data too, making everything faster and more responsive
+- Because there were fewer data returned, our Lambdas also needed less time to process it so we paid even less for the compute part of Serverless stack
 - Moreover, less read capacity was consumed - even less money spent 💸
 
 ## Favor `FilterExpressions` over native `Array.filter` functions
 
-While it's tempting to use native `Array.filter` capabilities because it's more elegant, favor using `FilterExpressions` despite being it a little bit cumbersome. I know it requires creating a string which maps to `ExpressionAttributeValues` and `ExpressionAttributeNames` but it pays of in performance. Because the filtering is done on DB level, less data is consumed and less data is returned. This converts directly to less money spent on data transfer, compute and memory neede to process it.
+While it's tempting to use native `Array.filter` capabilities because it's more elegant, favor using `FilterExpressions` despite being it a little bit cumbersome. I know it requires creating a string that maps to `ExpressionAttributeValues` and `ExpressionAttributeNames` but it pays of in performance. Because the filtering is done on a DB level, less data is consumed and less data is returned. This converts directly to less money spent on data transfer, compute and memory needed to process it.
 
 ## Be aware of DynamoDB Limits
 
 Spent some time [reading the docs about limitations](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html), seriously. It would save us many frustrations. Some things that were surprising to us include:
 
 - `BatchWriteItem` supports up to 25 items. This means that if you'd like to write 100 items you have to _chunkify_ your array into 4 parts and run BatchWriteItem four times wrapped with `await Promise.all`
-- Attribute value cannot be an empty string
+- The attribute value cannot be an empty string
 - Maximum item size is 400 KB
 
 ## Always use `ExpressionAttributeNames`
@@ -133,7 +133,7 @@ There are so many [reserved keywords](https://docs.aws.amazon.com/amazondynamodb
 
 ## TTL does not guarantee that your items will be removed immediately
 
-I've stumbled upon this information [while browsing Twitter one day](https://twitter.com/prestomation/status/1146473166228692998). Time-to-live attribute does not guarantee that the item will be removed immediately after selected time. It will be removed with a delay, sometimes taking up to 48h. This might lead you to return incorrect results if you rely only on this mechanism.
+I've stumbled upon this information [while browsing Twitter one day](https://twitter.com/prestomation/status/1146473166228692998). Time-to-live attribute does not guarantee that the item will be removed immediately after the selected time. It will be removed with a delay, sometimes taking up to 48h. This might lead you to return incorrect results if you rely only on this mechanism.
 
 In order to prevent that, as [official note states](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/howitworks-ttl.html): "use a Filter Expression that returns only items where the Time-to-Live expiration value is greater than the current time"
 
