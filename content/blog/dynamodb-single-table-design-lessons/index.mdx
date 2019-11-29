@@ -1,0 +1,72 @@
+---
+title: Lessons learned using Single-table design with DynamoDB and GraphQL in production
+categories: '#AWS #DynamoDB #NoSQL #GraphQL'
+keywords: aws,dynamodb,aws lambda,graphql,dynamodb table,nosql,cloud,amazon web services,dynamodb with graphql,serverless dynamodb
+date: '2019-11-29T22:12:03.284Z'
+length: 8 minutes
+---
+
+## Plan well query patterns
+
+## Attribute `model` is very useful to distinct entity types
+
+## Sometimes business adds requirements in the middle of the development
+
+SO you need to add a query access pattern
+
+- migrations
+  - small
+  - big
+
+## Invest some time in proper abstractions and create your own opinionated ORM
+
+## Use DynamoDB optimization trick from Yan Cui
+
+## Blacklist IAM action `dynamodb:Scan` in developers roles
+
+## Use X-Ray to find bottlenecks and problematic access patterns
+
+then reiterate on designs, use contrubitor insights to identify hot partitions
+
+## Be aware of lack of referential integrity and it's consequences
+
+- Especially `!` in GraphQL
+
+## Consider removing orphaned records and weak entities asynchronously
+
+- save space which means less money spent
+- queries consume less RCU
+- sanity
+- less referential integity issues
+
+## Use VPC endpoints if possible
+
+## Store big items in S3 and only reference them via URL instead of storying them directly in table
+
+## Always use `Limit` in queries and paginate
+
+- Less RCU
+- Faster responses
+- Less data but more relevant, older might not be needed
+
+## Favor `FilterExpressions` over native `filter` functions
+
+- Less data gets returned, less compute power and memory you need
+- Less RCU consumed
+
+## Be aware of DynamoDB Limits
+
+- Partition Limits
+- Indexes limits
+
+## Always use `ExpressionAttributeNames`
+
+- There are so many reserved keywords [link], that instead of guessing if it's reserved, assume everything is reserved
+
+## TTL does not guarantee that your items will be removed immediately
+
+- Use FilterExpression with date compare to make sure records are not returned
+
+## Use SQS to buffer large Write, Update and Delete operations
+
+Haven't used DAX so cannot tell.
