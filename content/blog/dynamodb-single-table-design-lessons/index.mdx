@@ -28,7 +28,11 @@ So you need to add or change a query access pattern. Basically there are three o
 
 While first scenario is painless and third requires remodeling your table, second scenario is not that bad, it just requires migrating a portion of your data in the table.
 
+to be added
+
 ## Invest some time in proper abstractions and create your own opinionated ORM
+
+to be added
 
 ## Use `keepAlive` HTTP optimization trick from Matt Lavin
 
@@ -51,13 +55,19 @@ This one I got from [Jared Short](https://twitter.com/ShortJared/status/11840287
 
 ## Use X-Ray to find bottlenecks and problematic access patterns
 
+to be added
+
 then reiterate on designs, use contrubitor insights to identify hot partitions
 
 ## Be aware of lack of referential integrity and it's consequences
 
+to be added
+
 - Especially `!` in GraphQL
 
 ## Consider removing orphaned records and weak entities asynchronously
+
+to be added
 
 - save space which means less money spent
 - queries consume less RCU
@@ -76,9 +86,13 @@ You can read more about [VPC Gateway Endpoints for DynamoDB here](https://docs.a
 
 ## Store big items in S3 and only reference them via URL instead of storying them directly in table
 
+to be added
+
 We've made this mistake - we started storing avatar blobs inside `Member.avatar` attribute.
 
 ## Always use `Limit` in queries and paginate
+
+to be added
 
 - Less RCU
 - Faster responses
@@ -90,12 +104,14 @@ While it's tempting to use native `Array.filter` capabilities because it's more 
 
 ## Be aware of DynamoDB Limits
 
+to be added
+
 - Partition Limits
 - Indexes limits
 
 ## Always use `ExpressionAttributeNames`
 
-- There are so many reserved keywords [link], that instead of guessing if it's reserved, assume everything is reserved
+There are so many [reserved keywords](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html) in DynamoDB, that instead of guessing if it's reserved, assume everything is reserved.
 
 ## TTL does not guarantee that your items will be removed immediately
 
