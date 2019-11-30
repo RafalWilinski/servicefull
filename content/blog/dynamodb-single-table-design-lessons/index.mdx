@@ -13,7 +13,7 @@ DynamoDB is a powerful yet tricky beast. While it enables [insane scalability](h
 
 I can't stress enough how important it is. Because you cannot change primary indexes or LSIs, the only option is to create a new one, migrate the data with some transformations, and delete the old table. This process is very painful, especially after you're in the production and you want it to avoid it at all costs. If you don't know how to do that, I highly recommend two articles: [One by Jeremy Daly](https://www.jeremydaly.com/how-to-switch-from-rdbms-to-dynamodb-in-20-easy-steps/) and the second one [by Forrest Brazeal](https://www.trek10.com/blog/dynamodb-single-table-relational-modeling/).
 
-Actually, this step is not just purely engineering task, but it blends with business and product competences. That's why I think you should definitely participate in the planning session as soon as possible to understand business use cases better and propose developer-friendly solutions. Clear requirements equal happy developer equals product delivered and deadline met.
+Actually, this step is not just purely engineering task, but it blends with business and product competences. That's why I think you should definitely participate in the planning session as soon as possible to understand business use cases better and propose developer-friendly solutions. Clear requirements equals to happy developer(s) equals product delivered and deadline met.
 
 ## Attribute `model` is very useful to distinct entity types
 
@@ -57,7 +57,7 @@ Even though we haven't used [Contributor Insights](https://docs.aws.amazon.com/a
 
 However, what we do use actively in our production application in AWS X-Ray. With [subsegments](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-dotnet-subsegments.html) we managed to find which subqueries of our complex GraphQL queries were causing our responses to slow down and try to rewrite these parts of the application.
 
-What's been also helpful was [Service Map](https://docs.aws.amazon.com/xray/latest/devguide/xray-console.html#xray-console-servicemap). Just a glance at it showed us that our problem lies in custom authorizer function which fetched too much data and caused whole the API to slow down.
+What's been also helpful was [Service Map](https://docs.aws.amazon.com/xray/latest/devguide/xray-console.html#xray-console-servicemap). Just a glance at it showed us that our problem lies in custom authorizer function which fetched too much data and caused slowdown to the whole API.
 
 ## Be aware of lack of referential integrity and it's consequences
 
