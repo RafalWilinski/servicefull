@@ -19,18 +19,6 @@ Actually, this step is not just purely engineering task, but it blends with busi
 
 In our use case, having attribute `model` as the primary key in one of the GSIs (Global Secondary Index) which always indicated the type of row was very helpful. With a simple query where `model` was a `hashKey` we could get all Members, Channels, Roles, Audiences, etc.
 
-## Sometimes business adds requirements in the middle of the development...
-
-So you need to add or change a query access pattern. Basically, there are three options is such a scenario:
-
-1. Your table structure is sufficient and data allows querying it in such a way
-2. Your table structure is sufficient but some records don't have required data
-3. Your table structure is insufficient
-
-While the first scenario is painless and the third requires remodeling your table, the second scenario is not that bad. It just requires migrating a portion of your data in the table. For example, some records need to be queried in a different way but these records do not have the HashKey of the desired Index set. What probably you need to do, is only copy the other attribute in place of desired attribute or aggregate it from other record parameters.
-
-If you're still in development, writing a simple _get and for each record run, update_ script might be sufficient, for production databases or larger datasets consider using [mass update pattern](https://servicefull.cloud/blog/dynamodb-mass-update/) which I've described in my other blogpost.
-
 ## Invest some time in proper abstractions and create your own opinionated ORM
 
 As you start writing some code persistence layer code, you'll immediately notice that many things are repeating and most API calls require complex parameters like `UpdateExpression` or `ExpressionAttributeValues`. These should be definitely abstracted away into simpler function signatures.
@@ -59,9 +47,9 @@ AWS.config.update({ httpOptions: { agent }});
 
 You can see the difference in this [blogpost by Yan Cui](https://theburningmonk.com/2019/02/lambda-optimization-tip-enable-http-keep-alive/).
 
-## Blacklist IAM action `dynamodb:Scan` in developers roles
+## Blacklist action `dynamodb:Scan` in IAM roles/policies
 
-This one I got from [Jared Short](https://twitter.com/ShortJared/status/1184028703862472704). If you want to prevent your developers from writing Scans, just deny `dynamodb:Scan` IAM action in developers and application IAM roles. Brutal yet super simple and effective technique leveraging IAM not only for security but also to enforce best practices.
+This one I got from [Jared Short](https://twitter.com/ShortJared/status/1184028703862472704). If you want to prevent your developers from writing Scans (which is a bad practice), just deny `dynamodb:Scan` IAM action in developers and application IAM roles. Brutal yet super simple and effective technique leveraging IAM not only for security but also to enforce best practices.
 
 ## Use X-Ray and Contributor Insights to find bottlenecks and problematic access patterns
 
@@ -129,7 +117,7 @@ Spent some time [reading the docs about limitations](https://docs.aws.amazon.com
 
 ## Always use `ExpressionAttributeNames`
 
-There are so many [reserved keywords](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html) in DynamoDB, that instead of guessing if it's reserved and what's not, assume every attribute name is reserved. Of course, I would not recommend doing that manually with each database call. Instead, this should be hidden from developers by your _something-like-ORM_ abstraction.
+There are so many [reserved keywords](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html) in DynamoDB, that instead of guessing if it's reserved and what's not, assume every attribute name is reserved. This should be hidden from developers by your _something-like-ORM_ abstraction which I've mentioned earlier.
 
 ## TTL does not guarantee that your items will be removed immediately
 
