@@ -65,7 +65,7 @@ This one I got from [Jared Short](https://twitter.com/ShortJared/status/11840287
 
 ## Use X-Ray and Contributor Insights to find bottlenecks and problematic access patterns
 
-Even though I haven't used [Contributor Insights](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/contributorinsights_HowItWorks.html) in the mentioned project, I gave it a shot in my side-project. This diagnostic tool is definitely helpful in performance tuning and finding bottlenecks.
+Even though I haven't used [Contributor Insights](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/contributorinsights_HowItWorks.html) in the mentioned project because it has been just announcement as a part of pre re:Invent release hype train, I gave it a shot in my side-project. This diagnostic tool is definitely helpful in performance tuning and finding bottlenecks by finding the most frequently accessed partiton keys.
 
 However, what we do use actively in our production application in AWS X-Ray. With [subsegments](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-dotnet-subsegments.html) we managed to find which subqueries of our complex GraphQL queries were causing our responses to slow down and try to rewrite these parts of the application.
 
@@ -81,11 +81,11 @@ Lesson learned: _always_ assume that some data might be missing.
 
 ## Consider removing orphaned records and weak entities asynchronously
 
-Imagine a scenario where you have a system with entity `Group` which can have many `Members`. Members are linked to the group using separate records where `pk: Group-ID` and `sk: Member-ID`. In such a scenario in SQL world, `FOREIGN KEYS` and `ON DELETE CASCADE` would guarantee that once "Group" is deleted, all "membership" records would be deleted too.
+Imagine a scenario where you have a system with entity `Group` which can have many `Members`. Members are linked to the group using separate records where `pk: Group-ID` and `sk: Member-ID`. In such a scenario in SQL world, features like `FOREIGN KEYS` and `ON DELETE CASCADE` would guarantee that once "Group" is deleted, all "membership" records would be deleted too.
 
 Unfortunately, that's not the case in Dynamo.
 
-You might say - let's do that synchronically. That's not a good idea. First, each
+You might say - let's do that synchronically. That's not a good idea. This probably would take too much time inside Lambda and [should be rather distributed](https://servicefull.cloud/blog/dynamodb-mass-update/).
 
 But you might ask, Why remove at all? Isn't DynamoDB _infinitely scalable_? What are the cons of removing?
 
