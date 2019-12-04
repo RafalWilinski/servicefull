@@ -38,11 +38,14 @@ With AWS Lambda Destinations all of that I've mentioned above is already handled
 
 ## Provisioned Concurrency for Lambda functions
 
+This one is a little bit controversial. While it solves the cold starts problem, the pricing model is odd and my opinion _anti-serverless_. The whole point of Lambda was to "pay for what you use", this statement is no longer true with hourly pricing of the provisioned concurrency. Seems like others are also [sharing this view](https://www.trek10.com/blog/provisioned-lambda-concurrency/). 
+
+Nevertheless, it's nice to see one of the key problems of the serverless to be _kind of addressed_.
+
 You can read more about it here: https://aws.amazon.com/blogs/aws/new-provisioned-concurrency-for-lambda-functions/
 
-For details go here: https://lumigo.io/blog/the-end-of-the-cold-start-as-we-know-it/
+_As re:Invent is not over yet, this article is a subject to change, stay tuned for updates..._
 
 <hr />
 
-_As re:Invent is not over yet, this article is a subject to change, stay tuned for updates..._
 
