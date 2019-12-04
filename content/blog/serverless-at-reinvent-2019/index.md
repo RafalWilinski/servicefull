@@ -4,6 +4,7 @@ date: '2019-12-06T22:12:03.284Z'
 length: 4 minutes
 categories: '#AWS #Serverless #reInvent #VPC #ColdStarts #FaaS'
 keywords: serverless,aws,reinvent,lambda coldstart problem,lambda concurrency,aws lambda,lambda in vpc,lambda rds,lambda destinations,faas
+image: https://servicefull.cloud/images/reinvent-2019-serverless.png
 ---
 
 Cold Starts, even longer cold starts in VPC, SQL connections limit and complexity. These were the most mentioned problems of the Serverless throughout 2019.
