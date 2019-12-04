@@ -1,5 +1,5 @@
 ---
-title: Serverless in 2020 gets even better with recent and re:Invent improvements for AWS Lambda - cold starts are finally gone
+title: Serverless in 2020 gets even better with re:Invent improvements for AWS Lambda - cold starts are "finally gone"
 date: '2019-12-06T22:12:03.284Z'
 length: 4 minutes
 categories: '#AWS #Serverless #reInvent #VPC #ColdStarts #FaaS'
