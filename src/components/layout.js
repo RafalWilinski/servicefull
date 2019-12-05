@@ -6,6 +6,7 @@ import {
   Text,
   Line,
   HiddenExternalLink,
+  ColorLink,
 } from '../theme'
 
 class Layout extends React.Component {
@@ -52,6 +53,14 @@ class Layout extends React.Component {
       <Container>
         {header}
         {children}
+        <ColorLink
+          to={'/rss.xml'}
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          RSS
+        </ColorLink>
       </Container>
     )
   }
