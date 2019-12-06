@@ -32,8 +32,6 @@ class BlogPostTemplate extends React.Component {
     const siteTitle = this.props.data.site.siteMetadata.title
     const { previous, next } = this.props.pageContext
 
-    console.log(post)
-
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <SEO
@@ -51,11 +49,12 @@ class BlogPostTemplate extends React.Component {
         <MDXProvider components={components}>
           <MDXRenderer>{post.code.body}</MDXRenderer>
         </MDXProvider>
-        <p />
-        <p>
-          Agree? Disa̶g̶r̶e̶e̶? <Discuss url={this.props.data.mdx.fields.slug} />
-        </p>
-        <p />
+        {/* <p />
+
+        <Discuss url={this.props.data.mdx.fields.slug} />
+
+        <p /> */}
+        <hr />
         <Bio />
         <PrevNextNav next={next} previous={previous} />
         <p />

@@ -21,19 +21,19 @@ function Bio() {
                 href="https://rwilinski.me"
                 target="_blank"
                 rel="noopener"
-                style={{ textDecoration: 'underline', color: 'black' }}
+                style={{ textDecoration: 'underline', color: 'rgb(45,200,58)' }}
               >
-                <strong>{author}</strong>
+                {author}
               </a>
               , certified AWS Architect, Serverless enthusiast and consultant.{' '}
-              <a
+              {/* <a
                 target="_blank"
                 rel="noopener"
                 href={`https://twitter.com/${social.twitter}`}
                 style={{ color: 'rgb(45, 200, 58)' }}
               >
                 You may find me on Twitter
-              </a>
+              </a> */}
             </Text>
           </BioWrapper>
         )

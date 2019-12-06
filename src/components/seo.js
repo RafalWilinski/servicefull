@@ -16,8 +16,6 @@ function SEO({ description, lang, meta, keywords, title, image, url }) {
             ? 'Servicefull - AWS, Serverless, FaaS, Containers and Services Blog'
             : '%s | ${data.site.siteMetadata.title}'
 
-        console.log(data, meta)
-
         return (
           <Helmet
             htmlAttributes={{
