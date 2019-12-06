@@ -8,6 +8,7 @@ import {
   HiddenExternalLink,
   ColorLink,
 } from '../theme'
+import Footer from './footer'
 
 class Layout extends React.Component {
   render() {
@@ -53,14 +54,7 @@ class Layout extends React.Component {
       <Container>
         {header}
         {children}
-        <ColorLink
-          to={'/rss.xml'}
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          RSS
-        </ColorLink>
+        <Footer />
       </Container>
     )
   }
