@@ -43,7 +43,5 @@ This one is a little bit controversial. While it solves the cold starts problem,
 
 Nevertheless, it's nice to see one of the critical problems of the serverless to be _kind of addressed_. [Provisioned Concurrency for Lambda functions on AWS Blog](https://aws.amazon.com/blogs/aws/new-provisioned-concurrency-for-lambda-functions/).
 
-_As re:Invent is not over yet, this article is subject to change, stay tuned for updates..._
-
 <hr />
 
