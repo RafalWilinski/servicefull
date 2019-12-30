@@ -1,9 +1,10 @@
 ---
-title: How I became AWS Certified Architect Professional - my tips and tricks on passing the exam
+title: t
 date: '2019-12-30T22:12:03.284Z'
 length: 5 minutes
 categories: '#AWS #Architecture #Certification'
 keywords: serverless,aws,aws caa,aws cap,aws certified architect,aws certified architect guide,how to pass aws certified architect exam,aws exam,how to pass aws exam,aws certified architect professional guide,aws exam guide
+image: https://servicefull.cloud/images/architect-pro-exam.png
 ---
 
 AWS Certifications are one of the [most wanted on the market right now](https://www.jeffersonfrank.com/aws-blog/aws-certifications-2019-is-it-worth-it/). Many studies suggest that you can earn a decent amount of money by becoming a certified AWS expert. Recently I've managed to [pass AWS Certified Architect - Professional exam](https://twitter.com/rafalwilinski/status/1205113262343409664?s=20), and I have to say it wasn't easy. As many friends have been asking me how to learn, what is most important, etc. I've decided to put down a list of tips that I've used to pass it successfully. Even though this guide is mostly written with AWS SAP exam in mind, most of these pieces of advice also apply to other types of IT exams.
@@ -40,7 +41,7 @@ Even some services are not likely to appear. SWF? Mostly deprecated, replaced in
 
 ### Focus on things AWS likes to ask about in your exam
 
-Recently, in the CAP exam, AWS likes to ask a lot of questions about AWS Organizations and the multi-account setup. Be prepared for that. I've also noticed a significant amount of questions about Hybrid Cloud, which mostly means mixing your on-premise datacenter with VPC. That includes migrations, operating storage gateways, connecting your office with AWS using VPNs/Direct Connect/Hub & Spoke VPC, and provisioning SAML access to the AWS for your company.
+Recently, in the CAP exam, AWS likes to ask a lot of questions about AWS Organizations and the multi-account setup. Be prepared for that. I've also noticed a significant amount of questions about Hybrid Cloud, which mostly means mixing your on-premise datacenter with VPC. That includes migrations, operating storage gateways, connecting your office with AWS using VPNs/[Direct Connect](https://aws.amazon.com/directconnect/)/[Hub-and-Spoke VPC](https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-vpn-cloudhub-network-to-amazon.html), and provisioning SAML access to the AWS for your company.
 
 ### Learn by doing
 
