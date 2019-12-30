@@ -49,7 +49,7 @@ From my experience, nothing is better than practice. I always have a hard time m
 
 ### Take notes by hand and use "Feynman Technique"
 
-Alfred Einstein once said _"if you can't explain it simply, you don't understand it well enough"_. [Feynman technique](https://nesslabs.com/feynman-technique) is a mental model that aims to help you _understanding it well enough_ and memorize it as a concept, not as bunch of sophisticated words. It boils down to re-writing things you're learning in a simple language that you understand. Moreover, it is proven that [we tend to remember things betten when take notes by hand](http://pss.sagepub.com/content/early/2014/04/22/0956797614524581.abstract).
+Alfred Einstein once said _"if you can't explain it simply, you don't understand it well enough"_. [Feynman technique](https://nesslabs.com/feynman-technique) is a mental model that aims to help you _understanding it well enough_ and memorize it as a concept, not as a bunch of sophisticated words. It boils down to re-writing things you're learning in a simple language that you understand. Moreover, it is proven that [we tend to remember things better when taking notes by hand](http://pss.sagepub.com/content/early/2014/04/22/0956797614524581.abstract).
 
 ## Solving an exam
 
@@ -67,7 +67,7 @@ Moreover, If you've previously passed any other AWS exam, you probably also have
 
 ### Take practice exams in the same hour as the scheduled one
 
-Solving an exam for me was different on 9PM than on 9AM. I decided to schedule an exam on 9AM because, from my observations, my cognitive abilities are the best around this hour. Practice around the same hour to accustom yourself to this feeling.
+Solving an exam for me was different at 9PM than at 9AM. I decided to schedule an exam at 9AM because, from my observations, my cognitive abilities are the best around this hour. Practice around the same hour to accustom yourself to this feeling.
 
 ### Review results
 
@@ -91,8 +91,8 @@ Example: Anytime you spot a word _"clickstream"_ or _"realtime analytics"_ you b
 
 ### Eliminate contradicting answers
 
-Some questions might be solved by pure logic without even knowing what the hell IAM or VPC is. Let me give you an example: The question is to choose three correct answers out of four, but two questions contradict the third one. This automatically eliminates the third one.
+Some questions might be solved by pure logic without even knowing what the hell IAM or VPC is. Let me give you an example: The problem is to choose three correct answers out of four, but two questions contradict the third one. This automatically eliminates the third one.
 
 ### Control the time
 
-Depending on the exam you're taking, calculate how much time per question you have and check your pace once every 5 questions. This will give you a sense of controlling the situation. Depending if you're behind or ahead, you can skip complicated questions and come back to them later or allow yourself to spend more time on them.
+Depending on the exam you're taking, calculate how much time per question you have and check your pace once every 5 questions. This will give you a sense of controlling the situation and confidence. Depending if you're behind or ahead, you can skip complicated questions and come back to them later or allow yourself to spend more time on them.
