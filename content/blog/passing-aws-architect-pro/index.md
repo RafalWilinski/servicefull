@@ -1,5 +1,5 @@
 ---
-title: t
+title: How I became AWS Certified Architect Professional - my tips and tricks on passing the exam
 date: '2019-12-30T22:12:03.284Z'
 length: 5 minutes
 categories: '#AWS #Architecture #Certification'

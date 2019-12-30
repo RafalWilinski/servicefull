@@ -14,7 +14,7 @@ function SEO({ description, lang, meta, keywords, title, image, url }) {
         let titleTemplate =
           title === 'Servicefull'
             ? 'Servicefull - AWS, Serverless, FaaS, Containers and Services Blog'
-            : '%s | ${data.site.siteMetadata.title}'
+            : `%s | ${data.site.siteMetadata.title}`
 
         return (
           <Helmet
