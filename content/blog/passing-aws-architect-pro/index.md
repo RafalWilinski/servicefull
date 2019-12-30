@@ -49,7 +49,7 @@ From my experience, nothing is better than practice. I always have a hard time m
 
 ### Take notes by hand and use "Feynman Technique"
 
-Alfred Einstein once said _"if you can't explain it simply, you don't understand it well enough"_. [Feynman technique](https://mattyford.com/blog/2014/1/23/the-feynman-technique-model) is a mental model that aims to help you _understanding it well enough_ and memorize it as a concept, not as bunch of sophisticated words. It boils down to re-writing things you're learning in a simple language that you understand. Moreover, it is proven that [we tend to remember things betten when take notes by hand](http://pss.sagepub.com/content/early/2014/04/22/0956797614524581.abstract).
+Alfred Einstein once said _"if you can't explain it simply, you don't understand it well enough"_. [Feynman technique](https://nesslabs.com/feynman-technique) is a mental model that aims to help you _understanding it well enough_ and memorize it as a concept, not as bunch of sophisticated words. It boils down to re-writing things you're learning in a simple language that you understand. Moreover, it is proven that [we tend to remember things betten when take notes by hand](http://pss.sagepub.com/content/early/2014/04/22/0956797614524581.abstract).
 
 ## Solving an exam
 
