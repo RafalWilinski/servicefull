@@ -129,4 +129,8 @@ To prevent that, as [official note states](https://docs.aws.amazon.com/amazondyn
 
 A common trick to prevent from your table from consuming too much WCU (Write Capacity Units) or having your requests throttled because of too much data coming in, is to buffer-write operations and perform them asynchronously if it's possible. It is the official AWS' recommendation, and I've also [wrote a blog post about it earlier](https://servicefull.cloud/blog/dynamodb-mass-update/).
 
+## Use better GUI for DynamoDB
+
+During the development, we found working with AWS Console for DynamoDB quite cumbersome. Because of this frustration, I decided to start my own project which aims to solve all the problems I had: lack of bookmarks, multiple tabs, code generation and so on. The result of that effort is [Dynobase](https://dynobase.dev/) - modern, flexible and fast DynamoDB editor.
+
 If you need DynamoDB or Serverless expertise, don't hesitate to contact with me.
