@@ -26,7 +26,7 @@ As you start writing some code persistence layer code, you'll immediately notice
 Here are some ideas:
 
 - Each call will require `TableName` (precisely the same with single-table design) and `IndexName`. Writing that into each call is unnecessary duplication
-- You should always use `Limit` (more on that later), and probably you should also restrict that number to some upper bound like 1000. Something like `Math.max(params.limit, 1000)` could also be there
+- You should always use `Limit` (more on that later), and probably you should also restrict that number to some upper bound like 1000. Something like `Math.min(params.limit, 1000)` could also be there
 - Constructing `FilterExpressions` is cumbersome. Invest some time in writing abstraction for that like [builder pattern](https://www.journaldev.com/1425/builder-design-pattern-in-java)
 - Your records in the database probably include `pk`, `sk`, `data` while your models probably have attributes like `id`, `productId` etc. Some mapping function here was beneficial for us.
 
