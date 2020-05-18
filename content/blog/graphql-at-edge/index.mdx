@@ -1,5 +1,5 @@
 ---
-title: GraphQL-at-Edge with globally replicated DynamoDB
+title: GraphQL@Edge with globally replicated DynamoDB, AWS Lambda and Cloudfront CDN
 categories: '#AWS #DynamoDB #NoSQL #GraphQL #Serverless'
 keywords: aws,dynamodb,aws lambda,graphql,dynamodb table,nosql,cloud,amazon web services,dynamodb with graphql,serverless dynamodb
 date: '2020-05-29T22:12:03.284Z'
@@ -7,9 +7,9 @@ length: 5 minutes
 image: https://servicefull.cloud/images/template-servicefull.png
 ---
 
-I'm seeing an interesting juxtaposition lately. While many people claim we're seeing a [downfall of the software quality and speed](https://tonsky.me/blog/disenchantment/), it is also a well known fact that optimizing your website speed is crucial for your business' success. Just a second of delay [affects user engagement](https://blog.pusher.com/how-latency-affects-user-engagement/) and lowers your business KPIs significantly. There's a big contrast between what's delivered and what's expected. Bridging the gap is not only a challenge in politics, but also in software world. 
+I'm seeing an interesting juxtaposition lately. While many people claim we're seeing a [downfall of the software quality and speed](https://tonsky.me/blog/disenchantment/), it is also a well known fact that optimizing your website speed is crucial for your business' success. Just a second of delay [affects user engagement](https://blog.pusher.com/how-latency-affects-user-engagement/) and lowers your business KPIs significantly. There's a big contrast between what's delivered and what's expected. 
 
-While we are using solutions like [Vercel](https://vercel.com/), [Netlify](https://netlify.com/) or [CloudFlare](https://cloudflare.com/) to deploy our websites to the globally available CDNs and fix the latency problem, but often times speed of these websites is limited by the slowness of related APIs or specifically, how far our requests have to travel through the internet. Paradigms like [JAMStack](https://jamstack.org/), which try to eliminate the need of interacting with APIs, are definitely step in a right direction. However, they are not a remedy. Some use cases just [won't fit that model](https://medium.com/front-end-weekly/the-issues-with-jamstack-you-might-need-a-backend-d101791de36a), you might still need a classical backend.
+We are trying to bridge this gap by ~~throwing money~~ using solutions like [Vercel](https://vercel.com/), [Netlify](https://netlify.com/) or [CloudFlare](https://cloudflare.com/), which deploy our websites to the globally available CDNs to fix the latency problem, but often times speed of these websites is limited by the slowness of related APIs or specifically, how far our requests have to travel through the internet to reach the public endpoint. Paradigms like [JAMStack](https://jamstack.org/), which try to eliminate the need of interacting with APIs, are definitely step in a right direction. However, they are not a remedy. Some use cases just [won't fit that model](https://medium.com/front-end-weekly/the-issues-with-jamstack-you-might-need-a-backend-d101791de36a), you might still need a classical backend.
 
 I wanted to explore that problem and see if I can reduce the latency between the end user and API by deploying a Serverless GraphQL _"server"_ to the each of the [CloudFront CDN edge locations](https://aws.amazon.com/cloudfront/features/) using [Lambda@Edge](https://aws.amazon.com/lambda/edge/) and make that work with [globally replicated DynamoDB](https://aws.amazon.com/dynamodb/global-tables/) table.
 
@@ -20,3 +20,5 @@ Here's how I imagined it:
 Essentially, each user around the globe instead of hitting that one central endpoint in `us-east-1` would be routed to the one of the closest GraphQL _"servers"_ and that _"server"_ would fetch the data from closest globally replicated DynamoDB table using optimized route.
 
 Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to take use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit](https://aws.amazon.com/cdk/).
+
+_In progress.._
