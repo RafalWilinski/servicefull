@@ -19,6 +19,92 @@ Here's how I imagined it:
 
 Essentially, each user around the globe instead of hitting that one central endpoint in `us-east-1` would be routed to the one of the closest GraphQL _"servers"_ and that _"server"_ would fetch the data from closest globally replicated DynamoDB table using optimized route.
 
-Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to take use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit](https://aws.amazon.com/cdk/).
+Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to take use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/). 
+
+With CDK, provisioning something which might seem really complicated like this example, can actually with in less than 100 lines of code, here's complete infrastructure code proof of concept:
+
+<br/>
+
+```
+export class ServerlessGlobalGraphqlApiDynamodbStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const table = new Table(this, 'globdynamodb', {
+      partitionKey: { name: 'hashKey', type: AttributeType.STRING },
+      replicationRegions,
+    });
+
+    const bucket = new Bucket(this, 'bucket', {
+      publicReadAccess: true,
+      websiteIndexDocument: 'playground.html',
+    });
+
+    const graphql = new NodejsFunction(this, 'yourlambda', {
+      entry: './src/graphql-server/dist/function.js',
+      handler: 'handler',
+      memorySize: 128, // Max
+      minify: true, // To fit below 1MB code limit
+      timeout: Duration.millis(5000), // Max
+      role: new Role(this, 'AllowLambdaServiceToAssumeRole', {
+        assumedBy: new CompositePrincipal(
+          new ServicePrincipal('lambda.amazonaws.com'),
+          new ServicePrincipal('edgelambda.amazonaws.com')
+        ),
+        managedPolicies: [
+          ManagedPolicy.fromManagedPolicyArn(
+            this,
+            'gql-server-managed-policy',
+            'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+          ),
+        ],
+      }),
+    });
+
+    table.grantFullAccess(graphql);
+
+    const graphqlVersion = graphql.addVersion(
+      ':sha256:' + sha256('./src/graphql-server/function.ts')
+    );
+
+    const distribution = new CloudFrontWebDistribution(this, 'MyDistribution', {
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: bucket,
+            originAccessIdentity: new OriginAccessIdentity(this, 'cloudfront-oai'),
+          },
+          behaviors: [
+            {
+              isDefaultBehavior: true,
+              allowedMethods: CloudFrontAllowedMethods.ALL,
+              lambdaFunctionAssociations: [
+                {
+                  eventType: LambdaEdgeEventType.VIEWER_REQUEST,
+                  lambdaFunction: graphqlVersion,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    new CfnOutput(this, 'apiUrl', { value: distribution.domainName });
+  }
+}
+```
+
+<br/>
+<br/>
+
+What happens here is quite simple:
+
+1. Provision DynamoDB table with `replicationRegions`. This creates a multi-master NoSQL database with tables located in regions listed.
+2. Provision S3 bucket which will be an origin for CloudFront and will host [GraphQL Playground](https://github.com/prisma-labs/graphql-playground), web-IDE which makes interaction with GraphQL easier
+3. Provision Serverless function with [maximum limits](https://twitter.com/AwsTricks/status/1261950071760916486) for a Lambda@Edge with `VIEWER_REQUEST` type. We also grant full access to the table created in step 1. using IAM. To make deploying faster, we're deploying the function only if `sha256` of the code has changed.
+4. Provision CloudFront CDN taking S3 bucket as an origin and a function from the previous step as an interceptor of viewer requests.
+
+Full source code can be found at [Github](https://github.com/RafalWilinski/edge-graphql-dynamodb-api).
 
 _In progress.._

@@ -18,22 +18,22 @@ function Bio() {
             <Text style={{ fontSize: 16 }}>
               Written by{' '}
               <a
-                href="https://rwilinski.me"
+                href="https://twitter.com/RafalWilinski"
                 target="_blank"
                 rel="noopener"
                 style={{ textDecoration: 'underline', color: 'rgb(45,200,58)' }}
               >
                 {author}
-              </a>
-              , certified AWS Architect, Serverless enthusiast and consultant.{' '}
-              {/* <a
+              </a>{' '}
+              - Serverless Consultant and Founder of{' '}
+              <a
                 target="_blank"
                 rel="noopener"
                 href={`https://twitter.com/${social.twitter}`}
                 style={{ color: 'rgb(45, 200, 58)' }}
               >
-                You may find me on Twitter
-              </a> */}
+                Dynobase
+              </a>
             </Text>
           </BioWrapper>
         )
