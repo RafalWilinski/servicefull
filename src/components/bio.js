@@ -33,7 +33,8 @@ function Bio() {
                 style={{ color: 'rgb(45, 200, 58)' }}
               >
                 Dynobase
-              </a>
+              </a>{' '}
+              and Certified AWS Architect
             </Text>
           </BioWrapper>
         )
