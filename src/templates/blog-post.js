@@ -16,13 +16,12 @@ import {
   ColorExternalLink,
 } from '../theme'
 import PrevNextNav from '../components/prevNextNav'
-import Discuss from '../components/discuss'
 
 const components = {
   h1: Subsubtitle,
   p: Text,
   li: Point,
-  pre: Code,
+  // pre: Code,
   a: ColorExternalLink,
 }
 

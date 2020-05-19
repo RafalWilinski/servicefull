@@ -29,7 +29,7 @@ function Bio() {
               <a
                 target="_blank"
                 rel="noopener"
-                href={`https://twitter.com/${social.twitter}`}
+                href={`https://dynobase.dev`}
                 style={{ color: 'rgb(45, 200, 58)' }}
               >
                 Dynobase

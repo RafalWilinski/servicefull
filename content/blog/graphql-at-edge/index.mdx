@@ -7,6 +7,8 @@ length: 5 minutes
 image: https://servicefull.cloud/images/template-servicefull.png
 ---
 
+import { CodeWave } from "gatsby-theme-waves"
+
 I'm seeing an interesting juxtaposition lately. While many people claim we're seeing a [downfall of the software quality and speed](https://tonsky.me/blog/disenchantment/), it is also a well known fact that optimizing your website speed is crucial for your business' success. Just a second of delay [affects user engagement](https://blog.pusher.com/how-latency-affects-user-engagement/) and lowers your business KPIs significantly. There's a big contrast between what's delivered and what's expected. 
 
 We are trying to bridge this gap by ~~throwing money~~ using solutions like [Vercel](https://vercel.com/), [Netlify](https://netlify.com/) or [CloudFlare](https://cloudflare.com/), which deploy our websites to the globally available CDNs to fix the latency problem, but often times speed of these websites is limited by the slowness of related APIs or specifically, how far our requests have to travel through the internet to reach the public endpoint. Paradigms like [JAMStack](https://jamstack.org/), which try to eliminate the need of interacting with APIs, are definitely step in a right direction. However, they are not a remedy. Some use cases just [won't fit that model](https://medium.com/front-end-weekly/the-issues-with-jamstack-you-might-need-a-backend-d101791de36a), you might still need a classical backend.
@@ -21,12 +23,49 @@ Essentially, each user around the globe instead of hitting that one central endp
 
 Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to take use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/). 
 
-With CDK, provisioning something which might seem really complicated like this example, can actually be done with less than 100 lines of code. Here's the complete infrastructure code proof of concept:
+With CDK, provisioning something which might seem really complicated like this example, can actually be done with less than 100 lines of code. Here's the complete infrastructure code proof of concept explained step by step:
 
 <br/>
 
+<CodeWave>
+
+```ts
+export class GraphQLAtEdge extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const table = new Table(this, 'globdynamodb', {
+      partitionKey: { name: 'hashKey', type: AttributeType.STRING },
+      replicationRegions,
+    });
+  }
+}
 ```
-export class ServerlessGlobalGraphqlApiDynamodbStack extends cdk.Stack {
+
+First, we provision a DynamoDB table with `replicationRegions` parameter. This creates a multi-master NoSQL database with replicas located in desired regions. For the sake of example, I will be using table with simple `string` partition key called just `hashKey`.
+
+```ts
+export class GraphQLAtEdge extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const table = new Table(this, 'globdynamodb', {
+      partitionKey: { name: 'hashKey', type: AttributeType.STRING },
+      replicationRegions,
+    });
+
+    const bucket = new Bucket(this, 'bucket', {
+      publicReadAccess: true,
+      websiteIndexDocument: 'playground.html',
+    });
+  }
+}
+```
+
+Then, provision an S3 bucket which will be an origin for CloudFront distribution and will host [GraphQL Playground](https://github.com/prisma-labs/graphql-playground), a web-IDE which makes interaction with GraphQL APIs much easier.
+
+```jsx
+export class GraphQLAtEdge extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -40,7 +79,139 @@ export class ServerlessGlobalGraphqlApiDynamodbStack extends cdk.Stack {
       websiteIndexDocument: 'playground.html',
     });
 
-    const graphql = new NodejsFunction(this, 'yourlambda', {
+    const graphql = new NodejsFunction(this, 'lambda', {
+      entry: './src/graphql-server/dist/function.js',
+      handler: 'handler',
+      memorySize: 128, // Max
+      minify: true, // To fit below 1MB code limit
+      timeout: Duration.millis(5000), // Max
+      role: new Role(this, 'AllowLambdaServiceToAssumeRole', {
+        assumedBy: new CompositePrincipal(
+          new ServicePrincipal('lambda.amazonaws.com'),
+          new ServicePrincipal('edgelambda.amazonaws.com')
+        ),
+        managedPolicies: [
+          ManagedPolicy.fromManagedPolicyArn(
+            this,
+            'gql-server-managed-policy',
+            'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+          ),
+        ],
+      }),
+    });
+  }
+}
+```
+
+Next, add a Serverless function with [maximum limits](https://twitter.com/AwsTricks/status/1261950071760916486) for a Lambda@Edge with `VIEWER_REQUEST` type. Code for this Lambda will be stored inside [/src/graphql-server/]() directory. We also attach a [standard managed IAM policy](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) which allows uploading logs to CloudWatch.
+
+```jsx
+export class GraphQLAtEdge extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const table = new Table(this, 'globdynamodb', {
+      partitionKey: { name: 'hashKey', type: AttributeType.STRING },
+      replicationRegions,
+    });
+
+    const bucket = new Bucket(this, 'bucket', {
+      publicReadAccess: true,
+      websiteIndexDocument: 'playground.html',
+    });
+
+    const graphql = new NodejsFunction(this, 'lambda', {
+      entry: './src/graphql-server/dist/function.js',
+      handler: 'handler',
+      memorySize: 128, // Max
+      minify: true, // To fit below 1MB code limit
+      timeout: Duration.millis(5000), // Max
+      role: new Role(this, 'AllowLambdaServiceToAssumeRole', {
+        assumedBy: new CompositePrincipal(
+          new ServicePrincipal('lambda.amazonaws.com'),
+          new ServicePrincipal('edgelambda.amazonaws.com')
+        ),
+        managedPolicies: [
+          ManagedPolicy.fromManagedPolicyArn(
+            this,
+            'gql-server-managed-policy',
+            'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+          ),
+        ],
+      }),
+    });
+
+    table.grantFullAccess(graphql);
+  }
+}
+```
+
+We also grant full access to the table created in step 1.
+
+```jsx
+export class GraphQLAtEdge extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const table = new Table(this, 'globdynamodb', {
+      partitionKey: { name: 'hashKey', type: AttributeType.STRING },
+      replicationRegions,
+    });
+
+    const bucket = new Bucket(this, 'bucket', {
+      publicReadAccess: true,
+      websiteIndexDocument: 'playground.html',
+    });
+
+    const graphql = new NodejsFunction(this, 'lambda', {
+      entry: './src/graphql-server/dist/function.js',
+      handler: 'handler',
+      memorySize: 128, // Max
+      minify: true, // To fit below 1MB code limit
+      timeout: Duration.millis(5000), // Max
+      role: new Role(this, 'AllowLambdaServiceToAssumeRole', {
+        assumedBy: new CompositePrincipal(
+          new ServicePrincipal('lambda.amazonaws.com'),
+          new ServicePrincipal('edgelambda.amazonaws.com')
+        ),
+        managedPolicies: [
+          ManagedPolicy.fromManagedPolicyArn(
+            this,
+            'gql-server-managed-policy',
+            'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+          ),
+        ],
+      }),
+    });
+
+    table.grantFullAccess(graphql);
+
+    const graphqlVersion = graphql.addVersion(
+      ':sha256:' + sha256('./src/graphql-server/function.ts')
+    );
+  }
+}
+```
+
+
+To make deploying faster, we're deploying the function only if `sha256` of the code has changed.
+
+```jsx
+export class GraphQLAtEdge extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const table = new Table(this, 'globdynamodb', {
+      partitionKey: { name: 'hashKey', type: AttributeType.STRING },
+      replicationRegions,
+    });
+
+    const bucket = new Bucket(this, 'bucket', {
+      publicReadAccess: true,
+      websiteIndexDocument: 'playground.html',
+    });
+
+    const graphql = new NodejsFunction(this, 'lambda', {
       entry: './src/graphql-server/dist/function.js',
       handler: 'handler',
       memorySize: 128, // Max
@@ -89,22 +260,20 @@ export class ServerlessGlobalGraphqlApiDynamodbStack extends cdk.Stack {
         },
       ],
     });
-
-    new CfnOutput(this, 'apiUrl', { value: distribution.domainName });
   }
 }
 ```
 
-<br/>
-<br/>
+Provision CloudFront CDN taking S3 bucket as an origin and a function from the previous step as an interceptor of viewer requests.
 
-What happens here is quite simple:
+</CodeWave>
 
-1. Provision DynamoDB table with `replicationRegions`. This creates a multi-master NoSQL database with tables located in regions listed.
-2. Provision S3 bucket which will be an origin for CloudFront and will host [GraphQL Playground](https://github.com/prisma-labs/graphql-playground), web-IDE which makes interaction with GraphQL easier
-3. Provision Serverless function with [maximum limits](https://twitter.com/AwsTricks/status/1261950071760916486) for a Lambda@Edge with `VIEWER_REQUEST` type. We also grant full access to the table created in step 1. using IAM. To make deploying faster, we're deploying the function only if `sha256` of the code has changed.
-4. Provision CloudFront CDN taking S3 bucket as an origin and a function from the previous step as an interceptor of viewer requests.
+<br />
 
-Full source code can be found at [Github](https://github.com/RafalWilinski/edge-graphql-dynamodb-api).
+If you don't like this animation, checkout full source at [Github](https://github.com/RafalWilinski/edge-graphql-dynamodb-api/blob/master/lib/serverless-global-graphql-api-dynamodb-stack.ts).
+
+<br />
 
 _In progress.._
+
+<br />

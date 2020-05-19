@@ -1,6 +1,5 @@
 code {
-  line-height: 1;
-  white-space: pre-wrap;
+
 }
 
 blockquote {
@@ -33,4 +32,29 @@ h6 {
 p {
   font-family: neue-haas-grotesk-text, sans-serif;
   font-size: 18px;
+}
+
+/* .token-number,
+.token-boolean {
+  color: #005cc5 !important;
+}
+
+.token-string {
+  color: #032f62 !important;
+}
+
+.token-keyword {
+  color: #d73a49 !important;
+}
+
+.token-comment {
+  color: #6a737db6 !important;
+}
+
+.token-function {
+  color: #6f42c1 !important;
+} */
+
+code.cs-scaled-content > div {
+  /* transition: height 0.1s linear; */
 }
