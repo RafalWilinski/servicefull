@@ -34,7 +34,15 @@ function Bio() {
               >
                 Dynobase
               </a>{' '}
-              and Certified AWS Architect
+              and Certified AWS Architect.{' '}
+              <a
+                target="_blank"
+                rel="noopener"
+                href={`https://rwilinski.me/consulting/`}
+                style={{ color: 'rgb(45, 200, 58)' }}
+              >
+                Hire me!
+              </a>
             </Text>
           </BioWrapper>
         )

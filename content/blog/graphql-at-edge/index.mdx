@@ -9,21 +9,21 @@ image: https://servicefull.cloud/images/template-servicefull.png
 
 import { CodeWave } from "gatsby-theme-waves"
 
-I'm seeing an interesting juxtaposition lately. While many people claim we're seeing a [downfall of the software quality and speed](https://tonsky.me/blog/disenchantment/), it is also a well known fact that optimizing your website speed is crucial for your business' success. Just a second of delay [affects user engagement](https://blog.pusher.com/how-latency-affects-user-engagement/) and lowers your business KPIs significantly. There's a big contrast between what's delivered and what's expected. 
+I'm see an interesting juxtaposition lately. While many people claim we're observing a [downfall of the software quality and speed](https://tonsky.me/blog/disenchantment/), it is also a well-known fact that optimizing your website speed is crucial for your business' success. Just a second of delay [affects user engagement](https://blog.pusher.com/how-latency-affects-user-engagement/) and lowers your business KPIs significantly. There's a big contrast between what's delivered and what's expected. 
 
-We are trying to bridge this gap by ~~throwing money~~ using solutions like [Vercel](https://vercel.com/), [Netlify](https://netlify.com/) or [CloudFlare](https://cloudflare.com/), which deploy our websites to the globally available CDNs to fix the latency problem, but often times speed of these websites is limited by the slowness of related APIs or specifically, how far our requests have to travel through the internet to reach the public endpoint. Paradigms like [JAMStack](https://jamstack.org/), which try to eliminate the need of interacting with APIs, are definitely step in a right direction. However, they are not a remedy. Some use cases just [won't fit that model](https://medium.com/front-end-weekly/the-issues-with-jamstack-you-might-need-a-backend-d101791de36a), you might still need a classical backend.
+We are trying to bridge this gap by ~~throwing money~~ using solutions like [Vercel](https://vercel.com/), [Netlify](https://netlify.com/) or [CloudFlare](https://cloudflare.com/), which deploys our websites to the globally available CDNs to fix the latency problem, but oftentimes speed of these websites is limited by the slowness of related APIs or specifically, how far our requests have to travel through the internet to reach the public endpoint. Paradigms like [JAMStack](https://jamstack.org/), which try to eliminate the need to interact with APIs, are definitely step in the right direction. However, they are not a remedy. Some use cases just [won't fit that model](https://medium.com/front-end-weekly/the-issues-with-jamstack-you-might-need-a-backend-d101791de36a), you might still need a classical backend.
 
-I wanted to explore that problem and see if I can reduce the latency between the end user and API by deploying a Serverless GraphQL _"server"_ to the each of the [CloudFront CDN edge locations](https://aws.amazon.com/cloudfront/features/) using [Lambda@Edge](https://aws.amazon.com/lambda/edge/) and make that work with [globally replicated DynamoDB](https://aws.amazon.com/dynamodb/global-tables/) table.
+I wanted to explore that problem and see if I can reduce the latency between the end-user and API by deploying a Serverless GraphQL _"server"_ to the each of the [CloudFront CDN edge locations](https://aws.amazon.com/cloudfront/features/) using [Lambda@Edge](https://aws.amazon.com/lambda/edge/) and make that work with [globally replicated DynamoDB](https://dynobase.dev/dynamodb/) table.
 
 Here's how I imagined it:
 
 ![GraphQL@Edge infrastructure](./overview.png 'Overview')
 
-Essentially, each user around the globe instead of hitting that one central endpoint in `us-east-1` would be routed to the one of the closest GraphQL _"servers"_ and that _"server"_ would fetch the data from closest globally replicated DynamoDB table using optimized route.
+Essentially, each user around the globe instead of hitting that one central endpoint in `us-east-1` would be routed to the one of the closest GraphQL _"servers"_ and that _"server"_ would fetch the data from closest globally replicated DynamoDB table using the optimized route.
 
-Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to take use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/). 
+Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to make use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/). 
 
-With CDK, provisioning something which might seem really complicated like this example, can actually be done with _less than 100 lines of code_. Here's the complete infrastructure code proof of concept explained step by step:
+With CDK, provisioning something which might seem complicated like this example, can actually be done with _less than 100 lines of code_. Here's the complete infrastructure code proof of concept explained step by step:
 
 <br/>
 
@@ -62,7 +62,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-Then, provision an S3 bucket which will be an origin for CloudFront distribution and will host [GraphQL Playground](https://github.com/prisma-labs/graphql-playground), a web-IDE which makes interaction with GraphQL APIs much easier.
+Then, provision an , which will be an origin for CloudFront distribution and will host [GraphQL Playground](https://github.com/prisma-labs/graphql-playground), a web-IDE which makes interaction with GraphQL APIs much easier.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
@@ -144,7 +144,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-One weird thing that you may notice here is that I'm using `dist/function.js` as the the `entry` parameter of the function. This is because as the time I'm writing this, there's a [bug in `NodejsFunction` construct](https://github.com/aws/aws-cdk/issues/8031) which packages dependencies incorrectly.
+One weird thing that you may notice here is that I'm using `dist/function.js` as the `entry` parameter of the function. This is because when I'm writing this, there's a [bug in `NodejsFunction` construct](https://github.com/aws/aws-cdk/issues/8031) which packages dependencies incorrectly.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
@@ -187,7 +187,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-Out of the box, our Lambda function does not have sufficient permissions to read and write from DynamoDB table. To fix that, we can use `grantFullAccess` which permits all DynamoDB operations (`"dynamodb:*"`) to an IAM principal. This one liner is much more convinient than specifying a custom IAM Role/Policy which interates through the list of provisioned tables.
+Out of the box, our Lambda function does not have sufficient permissions to read and write from DynamoDB table. To fix that, we can use `grantFullAccess`, which permits all DynamoDB operations (`"dynamodb:*"`) to an IAM principal. This one-liner is much more convenient than specifying a custom IAM Role/Policy which iterates through the list of provisioned tables.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
@@ -235,7 +235,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 ```
 
 
-To make deploying faster, we're can tell CDK to update the function only if `sha256` of its source code has changed.
+To make deploying faster, we can tell CDK to update the function only if `sha256` of its source code has changed.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
@@ -305,7 +305,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-The last step is to provision CloudFront CDN with S3 bucket as an origin and a function from the previous step as an interceptor of viewer requests.
+The last step is to provision CloudFront CDN with an S3 bucket as an origin and a function from the previous step as an interceptor of viewer requests.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
@@ -380,7 +380,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-Actually, there's _one more thing_. Because as I'm writing this, `LambdaFunctionAssociation` does not support `includeBody` parameter. We need to use CDK's [escape hatch](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html) to modify synthesized CloudFormation template manually. This is really useful if we want to use some CFN functionality which hasn't been added to the CDK yet.
+Actually, there's _one more thing_. Because as I'm writing this, `LambdaFunctionAssociation` does not support `includeBody` parameter. We need to use CDK's [escape hatch](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html) to modify synthesized CloudFormation template manually. This is really useful if we want to use some CFN functionality that hasn't been added to the CDK yet.
 
 </CodeWave>
 
@@ -389,18 +389,19 @@ Actually, there's _one more thing_. Because as I'm writing this, `LambdaFunction
 What's great about this solution is:
 
 - It's completely _Serverless_. Costs me nothing if it's not used. I'm billed on data stored, read and transferred basis
+- It's highly available on all levels, from data layer up to the public endpoint(s)
 - It's fast, apart from [cold-starts](https://lumigo.io/blog/how-to-improve-aws-lambda-cold-start-performance/)
-- Thanks to CDK and [jsii](https://github.com/aws/jsii), application code and infrastructure definition is written in one language. This reduces amount of context shifts and reduces cognitive load on devs. You can do that with C#, Java and Python too because [CDK supports all of them](https://docs.aws.amazon.com/cdk/latest/guide/multiple_languages.html) 
+- Thanks to CDK and [jsii](https://github.com/aws/jsii), application code and infrastructure definition is written in one language. This reduces the amount of context shifts and reduces the cognitive load on devs. You can do that with C#, Java, and Python too, because [CDK supports all of them](https://docs.aws.amazon.com/cdk/latest/guide/multiple_languages.html)
+- Maintaining or modifying it is a _breeze_. Creating the same solution using CloudFormation or Terraform would take x5 amount of code
 
 
 But not it's definitely **not** ideal, there are some very important cons:
 
 - Your ~~server~~ GraphQL endpoint must be lightweight. Minified Lambda@Edge code must be less than 1 MB. Moreover, it is restricted to `128MB` of memory and `5000ms` of execution time for `VIEWER_REQUEST` integration type. Definitely not usable for heavy computation because [Lambda computing power is scaling with allocated memory](https://engineering.opsgenie.com/how-does-proportional-cpu-allocation-work-with-aws-lambda-41cd44da3cac?gi=9a8c6fdb9ff0)
 - Cannot use environment variables with Lambda@Edge
-- It's using low-level GraphQL.js library where schema creation is tedious, I wasn't able to deploy fully featured [Apollo Server](https://www.apollographql.com/docs/apollo-server/), which is standard in Node.js world. It's hard to keep it under `1MB` code limit and under `128MB` memory usage limit
-- DynamoDB Global tables are [eventually consistent](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html). In a global table, data modifications are usually propagated to all replica tables within a second. It is a deal breaker for many use cases.
+- It's using low-level GraphQL.js library where schema creation is tedious; I wasn't able to deploy fully-featured [Apollo Server](https://www.apollographql.com/docs/apollo-server/), which is standard in Node.js world. It's hard to keep it under `1MB` code limit and under `128MB` memory usage limit
+- DynamoDB Global tables are [eventually consistent](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html). In a global table, data modifications are usually propagated to all replica tables within a second. It is a deal-breaker for many use cases. They also [cost](https://dynobase.dev/dynamodb-pricing-calculator/) much more because you also pay for _Replicated write request units_ and it scales linearly with the amount of table replicas.
 
+Concluding - is it useful?
 
-_In progress.._
-
-<br />
+_Might be_ for some very specific use cases. Right now, due to Lambda@Edge limitations - not really. With imposed restrictions, it disallows creating any serious logic. But, I hope these will change in the future. AWS is developing its FaaS offering very actively, continually making it better. For now, if I will need to create a Serverless GraphQL API, I'll probably stick to [AppSync](https://aws.amazon.com/appsync/).
