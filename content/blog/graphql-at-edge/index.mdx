@@ -372,10 +372,14 @@ export class GraphQLAtEdge extends cdk.Stack {
       ],
     });
 
-    (distribution.node.defaultChild as CfnDistribution).addOverride(
-      'Properties.DistributionConfig.DefaultCacheBehavior.LambdaFunctionAssociations.0.IncludeBody',
-      true
-    );
+    (distribution.node.defaultChild as CfnDistribution).addOverride([
+      'Properties',
+      'DistributionConfig',
+      'DefaultCacheBehavior',
+      'LambdaFunctionAssociations',
+      '0',
+      'IncludeBody'
+    ].join(','), true);
   }
 }
 ```
