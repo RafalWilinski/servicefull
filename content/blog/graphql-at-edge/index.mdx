@@ -23,7 +23,7 @@ Essentially, each user around the globe instead of hitting that one central endp
 
 Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to take use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/). 
 
-With CDK, provisioning something which might seem really complicated like this example, can actually be done with less than 100 lines of code. Here's the complete infrastructure code proof of concept explained step by step:
+With CDK, provisioning something which might seem really complicated like this example, can actually be done with _less than 100 lines of code_. Here's the complete infrastructure code proof of concept explained step by step:
 
 <br/>
 
@@ -103,7 +103,48 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-Next, add a Serverless function with [maximum limits](https://twitter.com/AwsTricks/status/1261950071760916486) for a Lambda@Edge with `VIEWER_REQUEST` type. Code for this Lambda will be stored inside [/src/graphql-server/]() directory. We also attach a [standard managed IAM policy](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) which allows uploading logs to CloudWatch.
+Next, add a Serverless function with [maximum limits](https://twitter.com/AwsTricks/status/1261950071760916486) for a Lambda@Edge with `VIEWER_REQUEST` type. Code for this Lambda will be stored inside [/src/graphql-server/](https://github.com/RafalWilinski/edge-graphql-dynamodb-api/tree/master/src/graphql-server) directory. We also attach a [standard managed IAM policy](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) which allows uploading logs to CloudWatch.
+
+```jsx 16
+export class GraphQLAtEdge extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const table = new Table(this, 'globdynamodb', {
+      partitionKey: { name: 'hashKey', type: AttributeType.STRING },
+      replicationRegions,
+    });
+
+    const bucket = new Bucket(this, 'bucket', {
+      publicReadAccess: true,
+      websiteIndexDocument: 'playground.html',
+    });
+
+    const graphql = new NodejsFunction(this, 'lambda', {
+      entry: './src/graphql-server/dist/function.js',
+      handler: 'handler',
+      memorySize: 128, // Max
+      minify: true, // To fit below 1MB code limit
+      timeout: Duration.millis(5000), // Max
+      role: new Role(this, 'AllowLambdaServiceToAssumeRole', {
+        assumedBy: new CompositePrincipal(
+          new ServicePrincipal('lambda.amazonaws.com'),
+          new ServicePrincipal('edgelambda.amazonaws.com')
+        ),
+        managedPolicies: [
+          ManagedPolicy.fromManagedPolicyArn(
+            this,
+            'gql-server-managed-policy',
+            'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+          ),
+        ],
+      }),
+    });
+  }
+}
+```
+
+One weird thing that you may notice here is that I'm using `dist/function.js` as the the `entry` parameter of the function. This is because as the time I'm writing this, there's a [bug in `NodejsFunction` construct](https://github.com/aws/aws-cdk/issues/8031) which packages dependencies incorrectly.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
@@ -146,7 +187,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-We also grant full access to the table created in step 1.
+Out of the box, our Lambda function does not have sufficient permissions to read and write from DynamoDB table. To fix that, we can use `grantFullAccess` which permits all DynamoDB operations (`"dynamodb:*"`) to an IAM principal. This one liner is much more convinient than specifying a custom IAM Role/Policy which interates through the list of provisioned tables.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
@@ -194,7 +235,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 ```
 
 
-To make deploying faster, we're deploying the function only if `sha256` of the code has changed.
+To make deploying faster, we're can tell CDK to update the function only if `sha256` of its source code has changed.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
@@ -264,15 +305,101 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-Provision CloudFront CDN taking S3 bucket as an origin and a function from the previous step as an interceptor of viewer requests.
+The last step is to provision CloudFront CDN with S3 bucket as an origin and a function from the previous step as an interceptor of viewer requests.
+
+```jsx
+export class GraphQLAtEdge extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const table = new Table(this, 'globdynamodb', {
+      partitionKey: { name: 'hashKey', type: AttributeType.STRING },
+      replicationRegions,
+    });
+
+    const bucket = new Bucket(this, 'bucket', {
+      publicReadAccess: true,
+      websiteIndexDocument: 'playground.html',
+    });
+
+    const graphql = new NodejsFunction(this, 'lambda', {
+      entry: './src/graphql-server/dist/function.js',
+      handler: 'handler',
+      memorySize: 128, // Max
+      minify: true, // To fit below 1MB code limit
+      timeout: Duration.millis(5000), // Max
+      role: new Role(this, 'AllowLambdaServiceToAssumeRole', {
+        assumedBy: new CompositePrincipal(
+          new ServicePrincipal('lambda.amazonaws.com'),
+          new ServicePrincipal('edgelambda.amazonaws.com')
+        ),
+        managedPolicies: [
+          ManagedPolicy.fromManagedPolicyArn(
+            this,
+            'gql-server-managed-policy',
+            'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+          ),
+        ],
+      }),
+    });
+
+    table.grantFullAccess(graphql);
+
+    const graphqlVersion = graphql.addVersion(
+      ':sha256:' + sha256('./src/graphql-server/function.ts')
+    );
+
+    const distribution = new CloudFrontWebDistribution(this, 'MyDistribution', {
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: bucket,
+            originAccessIdentity: new OriginAccessIdentity(this, 'cloudfront-oai'),
+          },
+          behaviors: [
+            {
+              isDefaultBehavior: true,
+              allowedMethods: CloudFrontAllowedMethods.ALL,
+              lambdaFunctionAssociations: [
+                {
+                  eventType: LambdaEdgeEventType.VIEWER_REQUEST,
+                  lambdaFunction: graphqlVersion,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    (distribution.node.defaultChild as CfnDistribution).addOverride(
+      'Properties.DistributionConfig.DefaultCacheBehavior.LambdaFunctionAssociations.0.IncludeBody',
+      true
+    );
+  }
+}
+```
+
+Actually, there's _one more thing_. Because as I'm writing this, `LambdaFunctionAssociation` does not support `includeBody` parameter. We need to use CDK's [escape hatch](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html) to modify synthesized CloudFormation template manually. This is really useful if we want to use some CFN functionality which hasn't been added to the CDK yet.
 
 </CodeWave>
 
-<br />
+> If you don't like this animation, checkout full source at [Github](https://github.com/RafalWilinski/edge-graphql-dynamodb-api/blob/master/lib/serverless-global-graphql-api-dynamodb-stack.ts). You can play with it using mentioned [GraphQL Playground here](https://d1pc7a0vu5q5b3.cloudfront.net/playground).
 
-If you don't like this animation, checkout full source at [Github](https://github.com/RafalWilinski/edge-graphql-dynamodb-api/blob/master/lib/serverless-global-graphql-api-dynamodb-stack.ts).
+What's great about this solution is:
 
-<br />
+- It's completely _Serverless_. Costs me nothing if it's not used. I'm billed on data stored, read and transferred basis
+- It's fast, apart from [cold-starts](https://lumigo.io/blog/how-to-improve-aws-lambda-cold-start-performance/)
+- Thanks to CDK and [jsii](https://github.com/aws/jsii), application code and infrastructure definition is written in one language. This reduces amount of context shifts and reduces cognitive load on devs. You can do that with C#, Java and Python too because [CDK supports all of them](https://docs.aws.amazon.com/cdk/latest/guide/multiple_languages.html) 
+
+
+But not it's definitely **not** ideal, there are some very important cons:
+
+- Your ~~server~~ GraphQL endpoint must be lightweight. Minified Lambda@Edge code must be less than 1 MB. Moreover, it is restricted to `128MB` of memory and `5000ms` of execution time for `VIEWER_REQUEST` integration type. Definitely not usable for heavy computation because [Lambda computing power is scaling with allocated memory](https://engineering.opsgenie.com/how-does-proportional-cpu-allocation-work-with-aws-lambda-41cd44da3cac?gi=9a8c6fdb9ff0)
+- Cannot use environment variables with Lambda@Edge
+- It's using low-level GraphQL.js library where schema creation is tedious, I wasn't able to deploy fully featured [Apollo Server](https://www.apollographql.com/docs/apollo-server/), which is standard in Node.js world. It's hard to keep it under `1MB` code limit and under `128MB` memory usage limit
+- DynamoDB Global tables are [eventually consistent](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html). In a global table, data modifications are usually propagated to all replica tables within a second. It is a deal breaker for many use cases.
+
 
 _In progress.._
 

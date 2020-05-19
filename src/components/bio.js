@@ -25,7 +25,7 @@ function Bio() {
               >
                 {author}
               </a>{' '}
-              - Serverless Consultant and Founder of{' '}
+              - Serverless Consultant, Founder of{' '}
               <a
                 target="_blank"
                 rel="noopener"
