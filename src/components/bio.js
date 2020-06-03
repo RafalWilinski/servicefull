@@ -20,6 +20,7 @@ function Bio() {
           style={{ fontWeight: '600' }}
           href="https://dynobase.dev"
           target="_blank"
+          rel="noreferrer noopener"
         >
           Dynobase
         </ColorExternalLink>
@@ -29,6 +30,7 @@ function Bio() {
       <ColorExternalLink
         href="https://twitter.com/rafalwilinski"
         target="_blank"
+        rel="noreferrer noopener"
       >
         @rafalwilinski on Twitter
       </ColorExternalLink>

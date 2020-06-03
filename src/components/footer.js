@@ -23,13 +23,25 @@ const Footer = () => (
       marginTop: '5em',
     }}
   >
-    <HeaderLink target="_blank" href={`https://github.com/RafalWilinski`}>
+    <HeaderLink
+      target="_blank"
+      rel="noreferrer noopener"
+      href={`https://github.com/RafalWilinski`}
+    >
       Github
     </HeaderLink>
-    <HeaderLink target="_blank" href={`https://twitter.com/rafalwilinski`}>
+    <HeaderLink
+      target="_blank"
+      rel="noreferrer noopener"
+      href={`https://twitter.com/rafalwilinski`}
+    >
       Twitter
     </HeaderLink>
-    <HeaderLink target="_blank" href={`https://instagram.com/rwilinski`}>
+    <HeaderLink
+      target="_blank"
+      rel="noreferrer noopener"
+      href={`https://instagram.com/rwilinski`}
+    >
       Instagram
     </HeaderLink>
     {/* <HeaderLink

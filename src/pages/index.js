@@ -184,6 +184,7 @@ class BlogIndex extends React.Component {
           style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
           href="https://github.com/RafalWilinski"
           target="_blank"
+          rel="noreferrer noopener"
         >
           View all projects on Github
         </ColorExternalLink>
