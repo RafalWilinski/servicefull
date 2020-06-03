@@ -18,14 +18,11 @@ const Footer = () => (
   <div
     style={{
       display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
       width: '100%',
       flexWrap: 'wrap',
       marginTop: '5em',
     }}
   >
-    <HeaderLink href={`/`}>Rafal Wilinski</HeaderLink>
     <HeaderLink target="_blank" href={`https://github.com/RafalWilinski`}>
       Github
     </HeaderLink>
@@ -35,12 +32,18 @@ const Footer = () => (
     <HeaderLink target="_blank" href={`https://instagram.com/rwilinski`}>
       Instagram
     </HeaderLink>
-    <HeaderLink
-      target="_blank"
-      href={`https://rwilinski.me/consulting/index.html`}
+    {/* <HeaderLink
+      href={`/`}
+      style={{
+        marginLeft: '450px',
+        textAlign: 'right',
+        marginRight: '-220px',
+        color: '#333',
+      }}
+      className="big-only"
     >
-      Consulting
-    </HeaderLink>
+      © 2020 Rafal Wilinski
+    </HeaderLink> */}
   </div>
 )
 
