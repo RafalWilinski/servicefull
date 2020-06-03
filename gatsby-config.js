@@ -1,10 +1,10 @@
 module.exports = {
   siteMetadata: {
-    title: 'Servicefull',
+    title: 'Rafal Wilinski',
     author: 'Rafal Wilinski',
     description:
       'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more',
-    siteUrl: 'https://servicefull.cloud/',
+    siteUrl: 'https://rwilinski.me/',
     social: {
       twitter: 'RafalWilinski',
     },
@@ -15,32 +15,13 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-robots-txt',
       options: {
-        host: 'https://servicefull.cloud',
-        sitemap: 'https://servicefull.cloud/sitemap.xml',
+        host: 'https://rwilinski.me',
+        sitemap: 'https://rwilinski.me/sitemap.xml',
         policy: [{ userAgent: '*', allow: '/' }],
       },
     },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        trackingId: 'UA-66843658-7',
-        head: false,
-        anonymize: false,
-        respectDNT: true,
-        sampleRate: 100,
-        siteSpeedSampleRate: 10,
-        cookieDomain: 'servicefull.cloud',
-      },
-    },
+    'gatsby-plugin-preact',
     `gatsby-plugin-styled-components`,
-    {
-      resolve: 'gatsby-plugin-web-font-loader',
-      options: {
-        typekit: {
-          id: 'srd8xkt',
-        },
-      },
-    },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     `gatsby-remark-copy-linked-files`,
@@ -70,6 +51,12 @@ module.exports = {
       options: {
         path: `${__dirname}/content/assets`,
         name: 'assets',
+      },
+    },
+    {
+      resolve: `gatsby-plugin-typography`,
+      options: {
+        pathToConfigModule: `src/typography`,
       },
     },
     `gatsby-plugin-react-helmet`,

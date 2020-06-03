@@ -1,74 +1,41 @@
 import React from 'react'
-import { StaticQuery, graphql } from 'gatsby'
-import { Text, Avatar, BioWrapper, ColorLink, StyledLink } from '../theme'
+import { ColorExternalLink } from '../theme'
 
 function Bio() {
   return (
-    <StaticQuery
-      query={bioQuery}
-      render={data => {
-        const { author, social } = data.site.siteMetadata
-        return (
-          <BioWrapper>
-            <Avatar
-              fixed={data.avatar.childImageSharp.fixed}
-              alt={author}
-              style={{ marginLeft: 0 }}
-            />
-            <Text style={{ fontSize: 16 }}>
-              Written by{' '}
-              <a
-                href="https://twitter.com/RafalWilinski"
-                target="_blank"
-                rel="noopener"
-                style={{ textDecoration: 'underline', color: 'rgb(45,200,58)' }}
-              >
-                {author}
-              </a>{' '}
-              - Serverless Consultant, Founder of{' '}
-              <a
-                target="_blank"
-                rel="noopener"
-                href={`https://dynobase.dev`}
-                style={{ color: 'rgb(45, 200, 58)' }}
-              >
-                Dynobase
-              </a>{' '}
-              and Certified AWS Architect.{' '}
-              <a
-                target="_blank"
-                rel="noopener"
-                href={`https://rwilinski.me/consulting/`}
-                style={{ color: 'rgb(45, 200, 58)' }}
-              >
-                Hire me!
-              </a>
-            </Text>
-          </BioWrapper>
-        )
-      }}
-    />
+    <div>
+      <h1
+        style={{
+          fontWeight: 800,
+          fontSize: '3em',
+          marginTop: '1em',
+          letterSpacing: '-2.5px',
+        }}
+      >
+        Hello, I'm Rafal
+      </h1>
+      <p style={{ marginBottom: '0.7em' }}>
+        I'm a cloud-native software engineer, AWS consultant and founder of{' '}
+        <ColorExternalLink
+          style={{ fontWeight: '600' }}
+          href="https://dynobase.dev"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          Dynobase
+        </ColorExternalLink>
+        . After hours, I'm big supporter of Serverless paradigm, wannabe
+        generative artist, cyclist and calisthenics fan.
+      </p>
+      <ColorExternalLink
+        href="https://twitter.com/rafalwilinski"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        @rafalwilinski on Twitter
+      </ColorExternalLink>
+    </div>
   )
 }
-
-const bioQuery = graphql`
-  query BioQuery {
-    avatar: file(absolutePath: { regex: "/profile-pic.jpg/" }) {
-      childImageSharp {
-        fixed(width: 50, height: 50) {
-          ...GatsbyImageSharpFixed
-        }
-      }
-    }
-    site {
-      siteMetadata {
-        author
-        social {
-          twitter
-        }
-      }
-    }
-  }
-`
 
 export default Bio

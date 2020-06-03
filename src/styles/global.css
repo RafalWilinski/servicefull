@@ -1,5 +1,6 @@
-code {
-
+::selection {
+  background-color: rgb(45, 200, 58);
+  color: white;
 }
 
 blockquote {
@@ -20,41 +21,20 @@ blockquote:before {
   width: 100%;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: neue-haas-grotesk-display, sans-serif;
+.hover-shadow {
+  transition: 0.25s box-shadow;
 }
 
-p {
-  font-family: neue-haas-grotesk-text, sans-serif;
-  font-size: 18px;
+.hover-shadow:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0.3rem 0.8rem  !important;
 }
 
-/* .token-number,
-.token-boolean {
-  color: #005cc5 !important;
+@media screen and (max-width: 1050px) {
+  .big-only {
+    display: none !important;
+  }
 }
 
-.token-string {
-  color: #032f62 !important;
-}
-
-.token-keyword {
-  color: #d73a49 !important;
-}
-
-.token-comment {
-  color: #6a737db6 !important;
-}
-
-.token-function {
-  color: #6f42c1 !important;
-} */
-
-code.cs-scaled-content > div {
-  /* transition: height 0.1s linear; */
+.big-only {
+  display: inline-block;
 }

@@ -3,7 +3,7 @@ import { graphql } from 'gatsby'
 import MDXRenderer from 'gatsby-mdx/mdx-renderer'
 import { MDXProvider } from '@mdx-js/react'
 
-import Bio from '../components/bio'
+import Discuss from '../components/discuss'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import {
@@ -48,13 +48,13 @@ class BlogPostTemplate extends React.Component {
         <MDXProvider components={components}>
           <MDXRenderer>{post.code.body}</MDXRenderer>
         </MDXProvider>
-        {/* <p />
+        <p />
 
         <Discuss url={this.props.data.mdx.fields.slug} />
 
-        <p /> */}
+        <p />
         <hr />
-        <Bio />
+
         <PrevNextNav next={next} previous={previous} />
         <p />
       </Layout>

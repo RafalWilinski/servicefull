@@ -1,32 +1,61 @@
 import React from 'react'
-import { ColorExternalLink } from '../theme'
+import styled from 'styled-components'
+import { THEME_COLOR } from '../theme'
+
+const HeaderLink = styled.a`
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: black;
+  margin-right: 15px;
+  transition: 0.2s color;
+  &:hover {
+    color: ${THEME_COLOR};
+  }
+`
 
 const Footer = () => (
   <div
     style={{
       display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
       width: '100%',
       flexWrap: 'wrap',
+      marginTop: '5em',
     }}
   >
-    <ColorExternalLink href={`/`}>Home</ColorExternalLink>
-    <span style={{ margin: 10 }}>/</span>
-    <ColorExternalLink
+    <HeaderLink
       target="_blank"
-      href={`https://rwilinski.me/consulting/index.html`}
+      rel="noreferrer noopener"
+      href={`https://github.com/RafalWilinski`}
     >
-      Consulting
-    </ColorExternalLink>
-    <span style={{ margin: 10 }}>/</span>
-    <ColorExternalLink target="_blank" href={`https://rwilinski.me/`}>
-      About Me
-    </ColorExternalLink>
-    <span style={{ margin: 10 }}>/</span>
-    <ColorExternalLink href={`https://servicefull.cloud/rss.xml`}>
-      RSS
-    </ColorExternalLink>
+      Github
+    </HeaderLink>
+    <HeaderLink
+      target="_blank"
+      rel="noreferrer noopener"
+      href={`https://twitter.com/rafalwilinski`}
+    >
+      Twitter
+    </HeaderLink>
+    <HeaderLink
+      target="_blank"
+      rel="noreferrer noopener"
+      href={`https://instagram.com/rwilinski`}
+    >
+      Instagram
+    </HeaderLink>
+    {/* <HeaderLink
+      href={`/`}
+      style={{
+        marginLeft: '450px',
+        textAlign: 'right',
+        marginRight: '-220px',
+        color: '#333',
+      }}
+      className="big-only"
+    >
+      © 2020 Rafal Wilinski
+    </HeaderLink> */}
   </div>
 )
 
