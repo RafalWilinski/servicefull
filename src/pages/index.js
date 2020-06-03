@@ -3,7 +3,12 @@ import { graphql } from 'gatsby'
 import Bio from '../components/bio'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
-import { Subtitle, ColorLink, ColorExternalLink } from '../theme'
+import {
+  Subtitle,
+  ColorLink,
+  ColorExternalLink,
+  ColorInternalLink,
+} from '../theme'
 
 const ossProjects = [
   {
@@ -145,12 +150,12 @@ class BlogIndex extends React.Component {
             )
           })}
 
-        <ColorExternalLink
+        <ColorInternalLink
           style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
-          href="/blog"
+          to="/blog"
         >
           View all posts
-        </ColorExternalLink>
+        </ColorInternalLink>
 
         <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
           Recent OSS Projects and Contirbutions
@@ -206,12 +211,12 @@ class BlogIndex extends React.Component {
             <ColorLink to={project.href}>{project.name}</ColorLink>
           </div>
         ))}
-        <ColorExternalLink
+        <ColorInternalLink
           style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
-          href="/about"
+          to="/about"
         >
           More about me
-        </ColorExternalLink>
+        </ColorInternalLink>
       </Layout>
     )
   }

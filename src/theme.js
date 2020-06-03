@@ -18,7 +18,10 @@ const Title = styled.h1`
   margin-bottom: 0;
 `
 
-const Subtitle = styled.h2``
+const Subtitle = styled.h2`
+  font-size: 1.25em;
+  font-weight: 800;
+`
 
 const Subsubtitle = styled.h3`
   margin-block-start: 1.2em;
@@ -80,6 +83,13 @@ const ColorExternalLink = styled.a`
   text-decoration: underline;
 `
 
+const ColorInternalLink = styled(Link)`
+  box-shadow: none;
+  color: ${THEME_COLOR};
+  cursor: pointer;
+  text-decoration: underline;
+`
+
 const Avatar = styled(Image)`
   min-height: 50px;
   width: 50px;
@@ -122,5 +132,6 @@ export {
   BioWrapper,
   HiddenExternalLink,
   ColorExternalLink,
+  ColorInternalLink,
   THEME_COLOR,
 }
