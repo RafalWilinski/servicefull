@@ -20,6 +20,7 @@ module.exports = {
         policy: [{ userAgent: '*', allow: '/' }],
       },
     },
+    'gatsby-plugin-preact',
     `gatsby-plugin-styled-components`,
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
