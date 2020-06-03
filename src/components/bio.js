@@ -16,13 +16,22 @@ function Bio() {
       </h1>
       <p style={{ marginBottom: '0.7em' }}>
         I'm a cloud-native software engineer, AWS consultant and founder of{' '}
-        <ColorExternalLink style={{ fontWeight: '600' }}>
+        <ColorExternalLink
+          style={{ fontWeight: '600' }}
+          href="https://dynobase.dev"
+          target="_blank"
+        >
           Dynobase
         </ColorExternalLink>
         . After hours, I'm big supporter of Serverless paradigm, wannabe
         generative artist, cyclist and calisthenics fan.
       </p>
-      <ColorExternalLink>@rafalwilinski on Twitter</ColorExternalLink>
+      <ColorExternalLink
+        href="https://twitter.com/rafalwilinski"
+        target="_blank"
+      >
+        @rafalwilinski on Twitter
+      </ColorExternalLink>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Link } from 'gatsby'
 import Image from 'gatsby-image'
 
-const THEME_COLOR = 'rgb(45, 200, 58)'
+const THEME_COLOR = 'rgb(45, 200, 50)'
 
 const Container = styled.div`
   margin: 3rem auto;
@@ -70,6 +70,7 @@ const HiddenExternalLink = styled.a`
 const ColorLink = styled(Link)`
   box-shadow: none;
   color: ${THEME_COLOR};
+  font-weight: 500;
 `
 
 const ColorExternalLink = styled.a`

@@ -1,11 +1,8 @@
 {
-  "name": "servicefull.cloud",
+  "name": "rwilinski.me",
   "description": "Because you know that Serverless has servers, right?",
   "version": "1.0.0",
   "author": "Rafal Wilinski <raf.wilinski@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby-starter-blog/issues"
-  },
   "dependencies": {
     "@mdx-js/mdx": "^1.0.21",
     "@mdx-js/react": "1.0.21",
@@ -46,7 +43,7 @@
     "eslint-plugin-react": "7.13.0",
     "prettier": "1.18.2"
   },
-  "homepage": "https://servicefull.cloud/",
+  "homepage": "https://rwilinski.me",
   "keywords": [
     "serverless",
     "blog",

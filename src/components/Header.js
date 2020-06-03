@@ -8,6 +8,7 @@ const HeaderLink = styled.a`
   font-weight: 600;
   color: black;
   margin-right: 15px;
+  transition: 0.2s color;
   &:hover {
     color: ${THEME_COLOR};
   }
