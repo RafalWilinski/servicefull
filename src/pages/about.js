@@ -23,6 +23,7 @@ export default props => (
     >
       About Me
     </h1>
+    <p>To be added...</p>
   </Layout>
 )
 

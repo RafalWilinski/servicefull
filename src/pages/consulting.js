@@ -2,6 +2,7 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
+import { ColorExternalLink } from '../theme'
 
 export default props => (
   <Layout
@@ -57,11 +58,19 @@ export default props => (
       thoughts on my blog.
     </p>
     <p>
-      Recently, I've also started Dynobase, a professional GUI Client for
-      DynamoDB with mission to onboard thousands of developers to Cloud-native
-      and Serverless world.
+      Recently, I've also started{' '}
+      <ColorExternalLink href="https://dynobase.dev">
+        Dynobase
+      </ColorExternalLink>
+      , a professional GUI Client for DynamoDB with mission to onboard thousands
+      of developers to Cloud-native and Serverless world.
     </p>
-    <p>For more information, please email me at raf.wilinski@gmail.com</p>
+    <p>
+      For more information, please email me at{' '}
+      <ColorExternalLink href="mailto:raf.wilinski@gmail.com">
+        raf.wilinski@gmail.com
+      </ColorExternalLink>
+    </p>
   </Layout>
 )
 

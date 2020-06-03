@@ -24,6 +24,7 @@ export default props => (
     >
       Blog
     </h1>
+    <p>My recent thoughts about AWS, Serverless, DynamoDB and more...</p>
     {props.data.allMdx.edges.map(({ node }) => {
       const title = node.frontmatter.title || node.fields.slug
       return (

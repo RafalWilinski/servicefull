@@ -21,6 +21,14 @@ blockquote:before {
   width: 100%;
 }
 
+.hover-shadow {
+  transition: 0.25s box-shadow;
+}
+
+.hover-shadow:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0.3rem 0.8rem  !important;
+}
+
 @media screen and (max-width: 1050px) {
   .big-only {
     display: none !important;

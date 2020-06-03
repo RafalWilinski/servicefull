@@ -139,7 +139,7 @@ class BlogIndex extends React.Component {
                     marginLeft: '-170px',
                     textAlign: 'right',
                     marginRight: '10px',
-                    color: '#666',
+                    color: '#999',
                   }}
                   className="big-only"
                 >
@@ -157,7 +157,7 @@ class BlogIndex extends React.Component {
           View all posts
         </ColorInternalLink>
 
-        <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
+        <Subtitle style={{ marginBottom: '1em', marginTop: '3em' }}>
           Recent OSS Projects and Contirbutions
         </Subtitle>
         {ossProjects.map(project => (
@@ -171,7 +171,7 @@ class BlogIndex extends React.Component {
                 marginLeft: '-170px',
                 textAlign: 'right',
                 marginRight: '10px',
-                color: '#666',
+                color: '#999',
               }}
               className="big-only"
             >
@@ -189,7 +189,7 @@ class BlogIndex extends React.Component {
           View all projects on Github
         </ColorExternalLink>
 
-        <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
+        <Subtitle style={{ marginBottom: '1em', marginTop: '3em' }}>
           Highlights
         </Subtitle>
         {highlights.map(project => (
@@ -203,7 +203,7 @@ class BlogIndex extends React.Component {
                 marginLeft: '-170px',
                 textAlign: 'right',
                 marginRight: '10px',
-                color: '#666',
+                color: '#999',
               }}
               className="big-only"
             >
