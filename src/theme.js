@@ -15,30 +15,24 @@ const Container = styled.div`
 `
 
 const Title = styled.h1`
-  font-family: neue-haas-grotesk-display, sans-serif;
   margin-bottom: 0;
 `
 
-const Subtitle = styled.h2`
-  font-family: neue-haas-grotesk-display, sans-serif;
-`
+const Subtitle = styled.h2``
 
 const Subsubtitle = styled.h3`
   margin-block-start: 1.2em;
   margin-block-end: 0.8em;
-  font-family: neue-haas-grotesk-display, sans-serif;
 `
 
 const Meta = styled.p`
-  font-family: neue-haas-grotesk-display, sans-serif;
-  margin: 10px 0 -15px;
+  margin: 10px 0 0;
   color: #666;
   font-size: 0.8em;
 `
 
 const Text = styled.p`
   width: 100%;
-  font-family: neue-haas-grotesk-text, sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #303030;
@@ -74,15 +68,15 @@ const HiddenExternalLink = styled.a`
 `
 
 const ColorLink = styled(Link)`
-  font-family: neue-haas-grotesk-text, sans-serif;
   box-shadow: none;
   color: ${THEME_COLOR};
 `
 
 const ColorExternalLink = styled.a`
-  font-family: neue-haas-grotesk-text, sans-serif;
   box-shadow: none;
   color: ${THEME_COLOR};
+  cursor: pointer;
+  text-decoration: underline;
 `
 
 const Avatar = styled(Image)`
@@ -127,4 +121,5 @@ export {
   BioWrapper,
   HiddenExternalLink,
   ColorExternalLink,
+  THEME_COLOR,
 }

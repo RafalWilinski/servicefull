@@ -72,6 +72,12 @@ module.exports = {
         name: 'assets',
       },
     },
+    {
+      resolve: `gatsby-plugin-typography`,
+      options: {
+        pathToConfigModule: `src/typography`,
+      },
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-plugin-feed`,

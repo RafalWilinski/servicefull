@@ -5,7 +5,13 @@ import Bio from '../components/bio'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import Footer from '../components/footer'
-import { Text, Subtitle, StyledLink, Meta } from '../theme'
+import {
+  Text,
+  Subtitle,
+  StyledLink,
+  ColorLink,
+  ColorExternalLink,
+} from '../theme'
 
 class BlogIndex extends React.Component {
   render() {
@@ -20,30 +26,47 @@ class BlogIndex extends React.Component {
         title={siteTitle}
         description={siteDescription}
       >
-        <link rel="stylesheet" href="https://use.typekit.net/srd8xkt.css" />
         <SEO
           title="Servicefull"
           keywords={['blog', 'aws', 'javascript', 'serverless', 'typescript']}
         />
         <Bio />
-        {posts.map(({ node }) => {
-          const title = node.frontmatter.title || node.fields.slug
-          return (
-            <div key={node.fields.slug} style={{ marginBottom: '20px' }}>
-              <Meta>
-                {node.frontmatter.date} / {node.frontmatter.length} /{' '}
-                {node.frontmatter.categories}
-              </Meta>
-              <Subtitle style={{ marginBottom: '10px' }}>
-                <StyledLink to={node.fields.slug}>{title}</StyledLink>
-              </Subtitle>
-              <Text
-                dangerouslySetInnerHTML={{ __html: node.excerpt }}
-                style={{ marginTop: 0 }}
-              />
-            </div>
-          )
-        })}
+        <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
+          Recent Blog Posts
+        </Subtitle>
+        {posts
+          .filter((n, i) => i < 5)
+          .map(({ node }) => {
+            const title = node.frontmatter.title || node.fields.slug
+            return (
+              <div
+                key={node.fields.slug}
+                style={{ marginBottom: '20px', fontSize: '1em' }}
+              >
+                <span
+                  style={{
+                    width: '160px',
+                    marginLeft: '-170px',
+                    textAlign: 'right',
+                    marginRight: '10px',
+                    color: '#666',
+                  }}
+                  className="big-only"
+                >
+                  {node.frontmatter.date}
+                </span>
+                <ColorLink to={node.fields.slug}>{title}</ColorLink>
+              </div>
+            )
+          })}
+
+        <ColorExternalLink style={{ fontWeight: '600', fontSize: '1em' }}>
+          View all posts
+        </ColorExternalLink>
+
+        <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
+          Recent Open Source Projects
+        </Subtitle>
       </Layout>
     )
   }
