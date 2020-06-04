@@ -65,7 +65,6 @@ const projects = [
       'Instrument your Typescript code with AWS X-Ray using elegant decorators',
     tags: ['Node.js', 'Lambda', 'Typescript', 'AWS'],
   },
-
   {
     url: 'https://github.com/RafalWilinski/edge-graphql-dynamodb-api',
     name: 'GraphQL@Edge + Global DynamoDB Boilerplate',
@@ -78,6 +77,12 @@ const projects = [
     description:
       'Playbook for setting up & deploying AWS Beanstalk Applications on Docker with 1 command',
     tags: ['Docker', 'AWS', 'Terraform'],
+  },
+  {
+    url: 'https://github.com/RafalWilinski/aws-lambda-golang-cdk',
+    name: 'AWS Lambda Golang CDK',
+    description: 'Higher level CDK construct for Golang Lambda functions',
+    tags: ['AWS', 'Serverless', 'Golang'],
   },
   {
     url: 'https://github.com/RafalWilinski/serverless-puppeteer-layers',
