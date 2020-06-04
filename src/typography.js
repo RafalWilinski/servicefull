@@ -8,7 +8,7 @@ const typography = new Typography({
   googleFonts: [
     {
       name: 'Manrope',
-      styles: ['400', '500', '600', '700', '800'],
+      styles: ['400', '600', '800'],
     },
   ],
 })

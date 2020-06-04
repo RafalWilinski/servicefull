@@ -166,12 +166,10 @@ export default props => (
             style={{
               color: colors[tag],
               borderRadius: '6px',
-              // padding: '4px 10px',
               marginRight: '15px',
               display: 'inline',
               fontSize: '0.75em',
-              fontWeight: '700',
-              // backgroundColor: LightenDarkenColor(colors[tag], 150),
+              fontWeight: '600',
             }}
           >
             #{tag}
