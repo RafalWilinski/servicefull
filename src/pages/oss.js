@@ -54,7 +54,7 @@ const projects = [
   },
   {
     url: 'https://github.com/serverless/serverless',
-    name: 'Serverless Framework',
+    name: 'Serverless Framework (Core Contributor)',
     description:
       'Serverless Framework – Build web, mobile and IoT applications with serverless architectures using AWS Lambda',
     tags: ['Node.js', 'Serverless', 'AWS', 'Lambda'],
