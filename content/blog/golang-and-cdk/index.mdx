@@ -1,0 +1,77 @@
+---
+title: Creating Golang functions in AWS CDK
+categories: '#AWS #Golang #Lambda #CDK'
+keywords: aws,golang with cdk,golang functions with cdk,cdk with golang,cloud development kit
+date: '2020-06-05T22:12:03.284Z'
+length: 2 minutes
+---
+
+import { CodeWave } from 'gatsby-theme-waves'
+
+Go, known also as Golang, despite [being the language of the cloud](https://thenewstack.io/go-the-programming-language-of-the-cloud/) still is [not having proper support in CDK](https://github.com/aws/aws-cdk/issues/547) (Cloud Development Kit):
+
+![Github feature request for Go (golang) language support](./golang-not-supported-by-cdk.png 'Github feature request for Go (golang) language support')
+
+Over 500 programmers expressed the interest, however, it's not there yet. I suppose that's because of the fact that CDK team is rather small and has a lot of other issues to tackle (there are [over 1120 of them](https://github.com/aws/aws-cdk/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) as I'm writing this article).
+
+As I believe in Open Source, I decided to solve this issue. I pulled the source of aws-cdk and decided to replicate the functionality of [NodejsFunction](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-lambda-nodejs-readme.html) but for Go.
+
+The result of my work is here: [aws-lambda-golang-cdk on Github](https://github.com/RafalWilinski/aws-lambda-golang-cdk)
+
+![AWS CDK Golang Construct](./aws-lambda-golang.png 'AWS CDK Golang Lambda Function Construct')
+
+Usage of Golang construct in CDK is very simple:
+
+<CodeWave>
+
+```ts
+import * as cdk from '@aws-cdk/core'
+import * as apigateway from '@aws-cdk/aws-apigateway'
+
+export class GolangAPI extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props)
+
+    const api = new apigateway.LambdaRestApi(this, 'goapi', {
+      proxy: false,
+    })
+
+    const items = api.root.addResource('items')
+    items.addMethod('GET')
+  }
+}
+```
+
+First, we define a very simple CDK-powered Stack - a Rest API using API Gateway.
+
+```ts
+import * as golang from 'aws-lambda-golang' // Import aws-lambda-golang module
+import * as cdk from '@aws-cdk/core'
+import * as apigateway from '@aws-cdk/aws-apigateway'
+
+export class GolangAPI extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props)
+
+    // Define function. Source code should be located in ./test-function/main.go
+    const backend = new golang.GolangFunction(this, 'test-function')
+    const api = new apigateway.LambdaRestApi(this, 'goapi', {
+      handler: backend,
+      proxy: false,
+    })
+
+    const items = api.root.addResource('items')
+    items.addMethod('GET')
+  }
+}
+```
+
+Then, import `aws-lambda-golang` construct, define a new function using it and plug to API Gateway. And that's it!
+
+</CodeWave>
+
+> If you don't like this animation, head to project [Readme](https://github.com/RafalWilinski/aws-lambda-golang-cdk)
+
+Now, all you need to do is define your Golang function inside `test-function` directory.
+
+Special kudos go to [Matthew Bonig](https://twitter.com/mattbonig). He not onlt wrote an article about [creating CDK constructs](https://www.matthewbonig.com/2020/01/11/creating-constructs/) which helped me to figure out the JSII part, which made this module compatible with Python, .NET and Java stacks, but also provided a lot of feedback personally.
