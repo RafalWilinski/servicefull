@@ -7,14 +7,14 @@ const PrevNextNav = ({ next, previous }) => (
       padding: 0,
     }}
   >
-    <div>
+    <div style={{ fontSize: '0.85em' }}>
       {previous && (
         <ColorLink to={previous.fields.slug} rel="prev">
           ← {previous.frontmatter.title}
         </ColorLink>
       )}
     </div>
-    <div style={{ marginTop: '10px' }}>
+    <div style={{ marginTop: '10px', fontSize: '0.85em' }}>
       {next && (
         <ColorLink to={next.fields.slug} rel="next">
           {next.frontmatter.title} →
