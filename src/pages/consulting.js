@@ -1,5 +1,6 @@
 import React from 'react'
 import { graphql } from 'gatsby'
+import { RoughNotation } from 'react-rough-notation'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import { ColorExternalLink } from '../theme'
@@ -29,14 +30,31 @@ export default props => (
       Cloud and go fully Serverless.
     </p>
     <p>
-      I’ve been working in IT for over 7 years, and for over 4 years, I was
-      working with Amazon Web Services cloud, delivering scalable, secure,
-      highly-available, and cost-effective solutions for my partners.
+      I’ve been working in{' '}
+      <RoughNotation
+        type="highlight"
+        show={true}
+        animationDelay={1000}
+        color="rgba(45,200,50, 0.2)"
+      >
+        IT for over 7 years
+      </RoughNotation>
+      , and for over 4 years, I was working with Amazon Web Services cloud,
+      delivering scalable, secure, highly-available, and cost-effective
+      solutions for my partners.
     </p>
     <p>
-      Moreover, <b>I’m a certified AWS Architect</b> using Terraform, Serverless
-      Framework, and AWS CDK daily to create fully reproducible infrastructures
-      as a code.
+      Moreover,{' '}
+      <RoughNotation
+        type="highlight"
+        show={true}
+        animationDelay={2000}
+        color="rgba(45,200,50, 0.2)"
+      >
+        I’m a certified AWS Architect
+      </RoughNotation>{' '}
+      using Terraform, Serverless Framework, and AWS CDK daily to create fully
+      reproducible infrastructures as a code.
     </p>
     <p>
       Even though understanding businesses, creating migration strategies, and

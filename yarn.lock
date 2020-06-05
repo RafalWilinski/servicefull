@@ -14395,6 +14395,13 @@ react-remove-scroll@^2.3.0:
     use-callback-ref "^1.2.3"
     use-sidecar "^1.0.1"
 
+react-rough-notation@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/react-rough-notation/-/react-rough-notation-0.0.8.tgz#3700cea3c22a477a42725d1acf6aa20bba77d4a0"
+  integrity sha512-5WrRteytYNAATfXazr8OckF3JVgEgh82o5Xlp3FPYXxzTLH9jI2uFD7W0U6E/k9Y7mt7n7owXnQC8fFYPYmsnA==
+  dependencies:
+    rough-notation "^0.2.0"
+
 react-side-effect@^1.1.0:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.1.5.tgz#f26059e50ed9c626d91d661b9f3c8bb38cd0ff2d"
@@ -15268,6 +15275,11 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
+
+rough-notation@^0.2.0:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/rough-notation/-/rough-notation-0.2.2.tgz#90f5978d6fb21e067ced5c349c3d5e37d5cbbb13"
+  integrity sha512-bs7UCrfR0l0E0mYLzw+zAdr/0Fk/NwA6o300oJdcntpCicdNo8/Ktiy+cTF8FPyA/kmxvC8aynBgFQd0jMlgZw==
 
 rss@^1.2.2:
   version "1.2.2"

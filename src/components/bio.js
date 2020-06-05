@@ -1,4 +1,5 @@
 import React from 'react'
+import { RoughNotation, RoughNotationGroup } from 'react-rough-notation'
 import { ColorExternalLink } from '../theme'
 
 function Bio() {
@@ -15,7 +16,16 @@ function Bio() {
         Hello, I'm Rafal
       </h1>
       <p style={{ marginBottom: '0.7em' }}>
-        I'm a cloud-native software engineer, AWS consultant and founder of{' '}
+        I'm a{' '}
+        <RoughNotation
+          type="highlight"
+          show={true}
+          animationDelay={1000}
+          color="rgba(45,200,50, 0.2)"
+        >
+          cloud-native software engineer
+        </RoughNotation>
+        , AWS consultant and founder of{' '}
         <ColorExternalLink
           style={{ fontWeight: '600' }}
           href="https://dynobase.dev"
@@ -24,8 +34,16 @@ function Bio() {
         >
           Dynobase
         </ColorExternalLink>
-        . After hours, I'm big supporter of Serverless paradigm, wannabe
-        generative artist, cyclist and calisthenics fan.
+        . After hours, I'm big supporter of{' '}
+        <RoughNotation
+          type="highlight"
+          show={true}
+          animationDelay={2000}
+          color="rgba(45,200,50, 0.2)"
+        >
+          Serverless
+        </RoughNotation>{' '}
+        paradigm, wannabe generative artist, cyclist and calisthenics fan.
       </p>
       <ColorExternalLink
         href="https://twitter.com/rafalwilinski"

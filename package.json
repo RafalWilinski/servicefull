@@ -36,6 +36,7 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-helmet": "5.2.1",
+    "react-rough-notation": "^0.0.8",
     "react-typography": "^0.16.19",
     "styled-components": "4.4.1",
     "theme-ui": "^0.3.1",
