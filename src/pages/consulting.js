@@ -12,7 +12,7 @@ export default props => (
     description={props.data.site.siteMetadata.description}
   >
     <SEO
-      title="Consulting - Rafal Wilinski"
+      title="Cloud Native Consulting"
       keywords={['blog', 'aws', 'javascript', 'serverless', 'typescript']}
     />
     <h1

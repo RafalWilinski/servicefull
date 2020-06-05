@@ -117,8 +117,18 @@ class BlogIndex extends React.Component {
         description={siteDescription}
       >
         <SEO
-          title="Rafal Wilinski"
-          keywords={['blog', 'aws', 'javascript', 'serverless', 'typescript']}
+          title="Cloud Native Engineer"
+          keywords={[
+            'blog',
+            'aws',
+            'javascript',
+            'serverless',
+            'typescript',
+            'consulting',
+            'serverless consulting',
+            'aws consulting',
+            'cdk',
+          ]}
         />
         <Bio />
         <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>

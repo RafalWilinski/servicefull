@@ -3,6 +3,7 @@ import { graphql } from 'gatsby'
 import MDXRenderer from 'gatsby-mdx/mdx-renderer'
 import { MDXProvider } from '@mdx-js/react'
 
+import Signature from '../components/signature'
 import Discuss from '../components/discuss'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
@@ -48,15 +49,9 @@ class BlogPostTemplate extends React.Component {
         <MDXProvider components={components}>
           <MDXRenderer>{post.code.body}</MDXRenderer>
         </MDXProvider>
-        <p />
-
-        <Discuss url={this.props.data.mdx.fields.slug} />
-
-        <p />
-        <hr />
-
+        <Signature />
+        <br />
         <PrevNextNav next={next} previous={previous} />
-        <p />
       </Layout>
     )
   }
