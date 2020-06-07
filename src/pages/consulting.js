@@ -31,14 +31,14 @@ export default props => (
     </p>
     <p>
       I’ve been working in{' '}
-      <RoughNotation
+      <Annotation
         type="highlight"
         show={true}
         animationDelay={1000}
         color="rgba(45,200,50, 0.2)"
       >
         IT for over 7 years
-      </RoughNotation>
+      </Annotation>
       , and for over 4 years, I was working with Amazon Web Services cloud,
       delivering scalable, secure, highly-available, and cost-effective
       solutions for my partners.
