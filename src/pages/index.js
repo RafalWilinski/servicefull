@@ -219,7 +219,12 @@ class BlogIndex extends React.Component {
             >
               {project.date}
             </span>
-            <ColorLink to={project.href}>{project.name}</ColorLink>
+            <ColorLink
+              to={project.href}
+              style={{ color: project.href ? 'rgb(45, 200, 50)' : 'black' }}
+            >
+              {project.name}
+            </ColorLink>
           </div>
         ))}
         <ColorInternalLink

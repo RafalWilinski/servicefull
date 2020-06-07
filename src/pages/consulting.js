@@ -35,7 +35,7 @@ export default props => (
         type="highlight"
         show={true}
         animationDelay={1000}
-        color="rgba(45,200,50, 0.2)"
+        color="rgba(45,200,50, 0.33)"
       >
         IT for over 7 years
       </Annotation>
@@ -49,7 +49,7 @@ export default props => (
         type="highlight"
         show={true}
         animationDelay={2000}
-        color="rgba(45,200,50, 0.2)"
+        color="rgba(45,200,50, 0.33)"
       >
         I’m a certified AWS Architect
       </Annotation>{' '}
@@ -72,8 +72,7 @@ export default props => (
     <p>
       I am a big proponent of the Open Source, having over 50 projects available
       on my GitHub downloaded thousands of times per day,{' '}
-      <b>and one of the main Serverless Framework contributors</b>. I share my
-      thoughts on my blog.
+      <b>and one of the main Serverless Framework contributors</b>.
     </p>
     <p>
       Recently, I've also started{' '}

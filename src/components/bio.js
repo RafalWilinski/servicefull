@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from 'gatsby'
 import { Annotation } from '../components/Annotation'
-import { ColorExternalLink } from '../theme'
+import { ColorExternalLink, THEME_COLOR } from '../theme'
 
 function Bio() {
   return (
@@ -21,7 +22,7 @@ function Bio() {
           type="highlight"
           show={true}
           animationDelay={1000}
-          color="rgba(45,200,50, 0.2)"
+          color="rgba(45,200,50, 0.33)"
         >
           cloud-native software engineer
         </Annotation>
@@ -39,19 +40,35 @@ function Bio() {
           type="highlight"
           show={true}
           animationDelay={2000}
-          color="rgba(45,200,50, 0.2)"
+          color="rgba(45,200,50, 0.33)"
         >
           Serverless
         </Annotation>{' '}
         paradigm, wannabe generative artist, cyclist and calisthenics fan.
+        <br style={{ marginTop: '20px' }} />
       </p>
-      <ColorExternalLink
+      <p>
+        I can help you{' '}
+        <Link
+          to="/consulting"
+          style={{
+            color: THEME_COLOR,
+            cursor: 'pointer',
+            textDecoration: 'underline',
+            fontWeight: 600,
+          }}
+        >
+          move your business to the AWS cloud
+        </Link>
+        .
+      </p>
+      {/* <ColorExternalLink
         href="https://twitter.com/rafalwilinski"
         target="_blank"
         rel="noreferrer noopener"
       >
         @rafalwilinski on Twitter
-      </ColorExternalLink>
+      </ColorExternalLink> */}
     </div>
   )
 }
