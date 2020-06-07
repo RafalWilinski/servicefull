@@ -1,6 +1,6 @@
 import React from 'react'
 import { graphql } from 'gatsby'
-import { RoughNotation } from 'react-rough-notation'
+import { Annotation } from '../components/Annotation'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import { ColorExternalLink } from '../theme'
@@ -45,14 +45,14 @@ export default props => (
     </p>
     <p>
       Moreover,{' '}
-      <RoughNotation
+      <Annotation
         type="highlight"
         show={true}
         animationDelay={2000}
         color="rgba(45,200,50, 0.2)"
       >
         I’m a certified AWS Architect
-      </RoughNotation>{' '}
+      </Annotation>{' '}
       using Terraform, Serverless Framework, and AWS CDK daily to create fully
       reproducible infrastructures as a code.
     </p>
