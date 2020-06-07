@@ -12,15 +12,15 @@ Go, known also as Golang, despite [being the language of the cloud](https://then
 
 ![Github feature request for Go (golang) language support](./golang-not-supported-by-cdk.png 'Github feature request for Go (golang) language support')
 
-Over 500 programmers expressed the interest, however, it's not there yet. I suppose that's because of the fact that CDK team is rather small and has a lot of other issues to tackle (there are [over 1120 of them](https://github.com/aws/aws-cdk/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) as I'm writing this article).
+Over 500 programmers expressed the interest, however, it's not there yet. Don't get me wrong, I'm not mad, CDK team is doing **amazing** job and just I suppose that's because of the fact that their team is rather small and has a lot of other issues to tackle (there are [over 1120 of them](https://github.com/aws/aws-cdk/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) as I'm writing this article).
 
 As I believe in Open Source, I decided to solve this issue. I pulled the source of aws-cdk and decided to replicate the functionality of [NodejsFunction](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-lambda-nodejs-readme.html) but for Go.
 
-The result of my work is here: [aws-lambda-golang-cdk on Github](https://github.com/RafalWilinski/aws-lambda-golang-cdk)
+The result of my work is here: [aws-lambda-golang-cdk on Github](https://github.com/RafalWilinski/aws-lambda-golang-cdk) What does it do? It compiles Golang based Lambda functions as a part of CDK synth process.
 
 ![AWS CDK Golang Construct](./aws-lambda-golang.png 'AWS CDK Golang Lambda Function Construct')
 
-Usage of Golang construct in CDK is very simple:
+Usage of Lambda Golang construct in CDK is very simple:
 
 <CodeWave>
 
