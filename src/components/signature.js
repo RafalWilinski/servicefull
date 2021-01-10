@@ -10,10 +10,8 @@ const Signature = () => (
     <ColorExternalLink href="https://twitter.com/RafalWilinski">
       Rafal Wilinski
     </ColorExternalLink>
-    . Cloud-native AWS Consultant -{' '}
-    <ColorExternalLink href="mailto:raf.wilinski@gmail.com">
-      Hire me!
-    </ColorExternalLink>
+    . Founder of
+    <ColorExternalLink href="https://dynobase.dev">Dynobase</ColorExternalLink>
   </p>
 )
 
