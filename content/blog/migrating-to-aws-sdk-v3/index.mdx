@@ -1,0 +1,154 @@
+---
+title: Upgrading Javascript AWS-SDK to v3
+categories: '#AWS #DynamoDB #NoSQL #GraphQL #Serverless'
+keywords: aws,dynamodb,aws lambda,graphql,dynamodb table,nosql,cloud,amazon web services,dynamodb with graphql,serverless dynamodb
+date: '2021-03-14T22:12:03.284Z'
+length: 5 minutes
+image: https://servicefull.cloud/static/23834a52d9f9306278d544d872fe7d40/17fa4/overview.png
+---
+
+import { CodeWave } from 'gatsby-theme-waves'
+
+In December 2020, [AWS released AWS SDK v3 for Javascript](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-sdk-javascript-version-3-generally-available/). It promises to be modular, easier to bundle and tree-shake, and as a result, faster and more performant. This is especially important, if you're interacting with AWS resources inside Lambda functions. AWS SDK often contributed the most to the artifact size. With new SDK, this should be much better. Unfortunately, migration isn't straightforward. The signature of new v3 calls is completely new, some functions are gone and some are replaced with new modules.
+
+In this blogpost, I show upgrading strategies from AWS SDK V2 to V3 for a few most common use cases in Serverless.
+
+### DynamoDB
+
+The most frequent complaint regarding to the new DynamoDB client from AWS SDK V3 was a lack of `DocumentClient` library. Instead, we were forced to call `marshall()` / `unmarshall()` whenever inserting, putting or getting items from DynamoDB. This was introducing a lot of unnecessary complexity and caused code to be harder to follow and test.
+
+Fortunately, [AWS DynamoDB Document Client has been recently added to the V3](https://github.com/aws/aws-sdk-js-v3/pull/2097).
+
+<CodeWave>
+
+```ts
+import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+const ddb = new DocumentClient()
+
+const TableName = 'my-table'
+const Item = {
+  id: '1',
+  name: 'Dynobase',
+}
+
+await ddb
+  .put({
+    TableName,
+    Item,
+  })
+  .promise()
+```
+
+In V2, once we had our `DocumentClient` constructed, interaction with DynamoDB was super simple using methods like `get`, `put`, `scan` or `query`.
+
+```ts
+// New - V3
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
+
+const client = new DynamoDBClient({})
+const ddbDocClient = DynamoDBDocumentClient.from(client)
+
+await ddbDocClient.send(
+  new PutCommand({
+    TableName,
+    Item,
+  })
+)
+```
+
+In V3, `DocumentClient` is imported from a different package and instantiated using `.from()` method.
+Moreover, you can call the document client operations using [Command objects](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/classes/_aws_sdk_lib_dynamodb.getcommand-1.html).
+
+```ts
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
+
+const client = new DynamoDBClient({})
+const ddbDocClient = DynamoDBDocument.from(client)
+
+await ddbDocClient.put({
+  TableName,
+  Item,
+})
+```
+
+If you don't like this new style, you can still use old `.put()` method too. However, in this case you need to import `DynamoDBDocument` instead of `DynamoDBDocumentClient`.
+
+</CodeWave>
+
+<br />
+
+### S3
+
+Interacting with Simple Storage from Lambdas is a very common pattern. Let's talk about uploading, downloading and preparing presigned URLs.
+
+##### Uploading files
+
+<CodeWave>
+
+```ts
+import { S3 } from 'aws-sdk'
+const s3 = new S3()
+
+const bucket = 'my-bucket'
+const key = 'cat.png'
+const fileContent = fs.readFileSync('path-to-file.jpg')
+
+await s3
+  .upload({
+    Bucket: bucket,
+    Key: key,
+    Body: fileContent,
+  })
+  .promise()
+```
+
+The complexity of uploading large files to S3 in V2 is hidden inside `upload` method. It takes care of initiating the multipart upload, uploading parts and calculating checksums. There's also famous `.promise()` call at the end to _promisify_ the call.
+
+```ts
+import { S3 } from 'aws-sdk'
+const s3 = new S3()
+
+const bucket = 'my-bucket'
+const key = 'cat.png'
+const fileContent = fs.readFileSync('path-to-file.jpg')
+
+await s3
+  .upload({
+    Bucket: bucket,
+    Key: key,
+    Body: fileContent,
+  })
+  .promise()
+
+// New - V3
+import { S3Client } from '@aws-sdk/client-s3'
+import { Upload } from '@aws-sdk/lib-storage'
+
+const buffer = fs.readFileSync('path-to-file.jpg')
+const multipartUpload = new Upload({
+  client: new S3Client({}),
+  params: { Bucket: bucket', Key: key, Body: buffer },
+})
+
+await multipartUpload.done();
+```
+
+In V3, we are not only forced to import SDK in a modular way, but also we have to import two packages: `client-s3` - responsible for communicating with AWS S3, and `lib-storage` which is a high-level helper library containing classes like `Upload` which now take care of multipart upload orchestration.
+
+</CodeWave>
+
+##### Downloading files
+
+##### Generating presigned URLs
+
+### Lambda
+
+##### Invoking functions
+
+### SSO
+
+### Other problems
+
+- Lack of XRay support

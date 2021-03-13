@@ -1,12 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'gatsby'
-import styled from 'styled-components'
-import { RoughNotation } from 'react-rough-notation'
 
 const HeaderLink = ({ children, style, to }) => {
-  const [isHovering, setHovering] = useState(false)
-
-  const L = () => (
+  return (
     <Link
       to={to}
       className="header-link"
@@ -17,22 +13,6 @@ const HeaderLink = ({ children, style, to }) => {
       {children}
     </Link>
   )
-
-  if (isHovering) {
-    return (
-      <RoughNotation
-        type="underline"
-        show={true}
-        color="rgb(45,200,50)"
-        strokeWidth={2}
-        animationDuration={400}
-      >
-        <L />
-      </RoughNotation>
-    )
-  }
-
-  return <L />
 }
 
 const Header = () => {
@@ -53,8 +33,7 @@ const Header = () => {
         Rafal Wilinski
       </HeaderLink>
       <HeaderLink to="/blog">Blog</HeaderLink>
-      <HeaderLink to="/oss">OSS</HeaderLink>
-      <HeaderLink to="/about">About</HeaderLink>
+      {/* <HeaderLink to="/oss">OSS</HeaderLink> */}
       <HeaderLink to="/consulting">Consulting</HeaderLink>
     </div>
   )

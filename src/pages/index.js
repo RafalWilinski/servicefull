@@ -10,35 +10,17 @@ import {
   ColorInternalLink,
 } from '../theme'
 
-const ossProjects = [
-  {
-    name: 'Serverless OpenGraph Image Generator',
-    href: 'https://github.com/Dynobase/serverless-opengraph-image-generator',
-    date: 'May 26, 2020',
-  },
-  {
-    name: 'Express Status Monitor',
-    href: 'https://github.com/RafalWilinski/express-status-monitor',
-    date: 'May 25, 2020',
-  },
-  {
-    name: 'Graph@Edge with Global DynamoDB Tables boilerplate',
-    href: 'https://github.com/RafalWilinski/edge-graphql-dynamodb-api',
-    date: 'May 16, 2020',
-  },
-  {
-    name: 'AWS X-Ray Typescript Decorator',
-    href: 'https://github.com/RafalWilinski/aws-xray-ts-decorator',
-    date: 'May 04, 2020',
-  },
-  {
-    name: 'Serverless Framework',
-    href: 'https://github.com/serverless/serverless',
-    date: 'March 16, 2019',
-  },
-]
-
 const highlights = [
+  {
+    date: '2021',
+    name: 'Dynobase crosses 10k MRR mark',
+    href: 'https://dynobase.dev',
+  },
+  {
+    date: '2020',
+    name: 'Joined Stedi as Serverless Engineer',
+    href: 'https://stedi.com',
+  },
   {
     date: '2020',
     name: 'Started Dynobase',
@@ -89,11 +71,6 @@ const highlights = [
   {
     date: '2014',
     name: 'Landed my first "real" Software Engineering job',
-    href: undefined,
-  },
-  {
-    date: '2013',
-    name: 'Decided to major in computer science',
     href: undefined,
   },
   {
@@ -166,38 +143,6 @@ class BlogIndex extends React.Component {
         >
           View all posts
         </ColorInternalLink>
-
-        <Subtitle style={{ marginBottom: '1em', marginTop: '3em' }}>
-          Recent OSS Projects and Contirbutions
-        </Subtitle>
-        {ossProjects.map(project => (
-          <div
-            key={project.name}
-            style={{ marginBottom: '15px', fontSize: '1em' }}
-          >
-            <span
-              style={{
-                width: '160px',
-                marginLeft: '-170px',
-                textAlign: 'right',
-                marginRight: '10px',
-                color: '#999',
-              }}
-              className="big-only"
-            >
-              {project.date}
-            </span>
-            <ColorLink to={project.href}>{project.name}</ColorLink>
-          </div>
-        ))}
-        <ColorExternalLink
-          style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
-          href="https://github.com/RafalWilinski"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          View all projects on Github
-        </ColorExternalLink>
 
         <Subtitle style={{ marginBottom: '1em', marginTop: '3em' }}>
           Highlights
