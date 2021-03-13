@@ -9,7 +9,7 @@ image: https://servicefull.cloud/static/23834a52d9f9306278d544d872fe7d40/17fa4/o
 
 import { CodeWave } from 'gatsby-theme-waves'
 
-In December 2020, [AWS released AWS SDK v3 for Javascript](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-sdk-javascript-version-3-generally-available/). It promises to be modular, easier to bundle and tree-shake, and as a result, faster and more performant. This is especially important, if you're interacting with AWS resources inside Lambda functions. AWS SDK often contributed the most to the artifact size. With new SDK, this should be much better. Unfortunately, migration isn't straightforward. The signature of new v3 calls is completely new, some functions are gone and some are replaced with new modules.
+In December 2020, [AWS released AWS SDK v3 for Javascript](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-sdk-javascript-version-3-generally-available/). It promises to be smaller, thanks to the modular and tree-shakeable structure, and as a result, faster. This is especially important, if you're interacting with AWS resources inside Lambda functions. AWS SDK often contributed the most to the artifact size. With new SDK, this should be much better. Unfortunately, migration isn't straightforward. The signature of new v3 calls is completely new, some functions are gone and some are replaced with new modules.
 
 In this blogpost, I show upgrading strategies from AWS SDK V2 to V3 for a few most common use cases in Serverless.
 
@@ -83,7 +83,7 @@ If you don't like this new style, you can still use old `.put()` method too. How
 
 Interacting with Simple Storage from Lambdas is a very common pattern. Let's talk about uploading, downloading and preparing presigned URLs.
 
-##### Uploading files
+#### Uploading files
 
 <CodeWave>
 
@@ -139,9 +139,9 @@ In V3, we are not only forced to import SDK in a modular way, but also we have t
 
 </CodeWave>
 
-##### Downloading files
+#### Downloading files
 
-##### Generating presigned URLs
+#### Generating presigned URLs
 
 Presigned URLs are useful when you need to expose some data to the client in a secure way or allow them to upload files from the client directly to the S3. In such scenario, client requests backend for a presigned URL, backend sends it back to the client, and the client initiates uploading procedure to the S3 directly using provided URL.
 
@@ -179,14 +179,20 @@ In V3, there's only one option - asynchronous one. Moreover, it requires you to 
 
 ### Lambda
 
-##### Invoking functions
+#### Invoking functions
 
-### SSO
+Even though [invoking functions from functions is considered as an antipattern](https://twitter.com/hichaelmart/status/1282647858920009728) by some, I believe that's not the case if you know what you're doing.
 
 ### Other problems
 
-- Lack of XRay support
+#### Using SSO-based credentials
 
-```
+Up to version 3.7.0, using SSO credentials was impossible. The workaround was to copy & paste credentials provided by the SSO as environment variables. Luckily, [this issue is now solved](https://github.com/aws/aws-sdk-js-v3/pull/2055).
 
-```
+#### Lack of XRay support
+
+As I'm writing this, AWS SDK V3 is not working correctly with X-Ray which is a showstopper for many of us. This is due to the new middleware architecture which is incompatible with how the X-Ray SDK hooks into the version 2.x. But, there's a pull request already revieved as [☑️, waiting to be merged](https://github.com/aws/aws-xray-sdk-node/pull/386)
+
+#### Lack of `ChainableTemporaryCredentials`
+
+Currently, [AWS SDK V3 is not supporting this](https://github.com/aws/aws-sdk-js-v3/issues/1796). This is especially useful in multi-tenant SaaS environments where your Lambdas/Containers/VMs have to assume a dynamic role based on runtime input/context.
