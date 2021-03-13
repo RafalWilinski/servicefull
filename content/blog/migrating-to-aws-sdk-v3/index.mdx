@@ -143,6 +143,40 @@ In V3, we are not only forced to import SDK in a modular way, but also we have t
 
 ##### Generating presigned URLs
 
+Presigned URLs are useful when you need to expose some data to the client in a secure way or allow them to upload files from the client directly to the S3. In such scenario, client requests backend for a presigned URL, backend sends it back to the client, and the client initiates uploading procedure to the S3 directly using provided URL.
+
+<CodeWave>
+
+```ts
+import { S3 } from 'aws-sdk'
+const s3 = new S3()
+
+const params = { Bucket: 'bucket', Key: 'key' }
+const url = s3.getSignedUrl('getObject', params) // or getSignedUrlPromise
+```
+
+In V2, you had two options to generate pre-signed URLs - synchronously and asynchronously.
+
+```ts
+import { S3 } from 'aws-sdk'
+const s3 = new S3()
+
+const params = { Bucket: 'bucket', Key: 'key' }
+const url = s3.getSignedUrl('getObject', params) // or getSignedUrlPromise
+
+// New - V3
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
+
+const client = new S3Client()
+const command = new GetObjectCommand(params)
+const url = await getSignedUrl(client, command, { expiresIn: 3600 })
+```
+
+In V3, there's only one option - asynchronous one. Moreover, it requires you to import `@aws-sdk/s3-request-presigner` package and call `getSignedUrl` on the Command object.
+
+</CodeWave>
+
 ### Lambda
 
 ##### Invoking functions
@@ -152,3 +186,7 @@ In V3, we are not only forced to import SDK in a modular way, but also we have t
 ### Other problems
 
 - Lack of XRay support
+
+```
+
+```
