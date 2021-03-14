@@ -11,7 +11,7 @@ import { CodeWave } from 'gatsby-theme-waves'
 
 In December 2020, [AWS released AWS SDK v3 for Javascript](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-sdk-javascript-version-3-generally-available/). It promises to be smaller, thanks to the modular and tree-shakeable structure, and as a result, faster. This is especially important, if you're interacting with AWS resources inside Lambda functions. AWS SDK often contributed the most to the artifact size. With new SDK, this should be much better. Unfortunately, migration isn't straightforward. The signature of new v3 calls is completely new, some functions are gone and some are replaced with new modules.
 
-In this blogpost, I show upgrading strategies from AWS SDK V2 to V3 for a few most common use cases in Serverless.
+In this blogpost, I show upgrading strategies from AWS SDK V2 to V3 for a few most common use cases in Serverless. Official docs are describing [three migration paths](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/migrating-to-v3.html) but for the purpose of this article, we'll focus only on the 3rd Path - the proper one using the Command objects and fully `async/await` based approach.
 
 ### DynamoDB
 
@@ -39,7 +39,7 @@ await ddb
   .promise()
 ```
 
-In V2, once we had our `DocumentClient` constructed, interaction with DynamoDB was super simple using methods like `get`, `put`, `scan` or `query`.
+In V2, once we had our `DocumentClient` constructed, interaction with DynamoDB in Node.js was boiling down to using [methods like `get`, `put`, `scan` or `query`](https://dynobase.dev/dynamodb-nodejs/).
 
 ```ts
 // New - V3
@@ -57,7 +57,7 @@ await ddbDocClient.send(
 )
 ```
 
-In V3, `DocumentClient` is imported from a different package and instantiated using `.from()` method.
+In V3, `DocumentClient` is imported from a different package and created using `.from()` method.
 Moreover, you can call the document client operations using [Command objects](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/classes/_aws_sdk_lib_dynamodb.getcommand-1.html).
 
 ```ts
@@ -139,8 +139,6 @@ In V3, we are not only forced to import SDK in a modular way, but also we have t
 
 </CodeWave>
 
-#### Downloading files
-
 #### Generating presigned URLs
 
 Presigned URLs are useful when you need to expose some data to the client in a secure way or allow them to upload files from the client directly to the S3. In such scenario, client requests backend for a presigned URL, backend sends it back to the client, and the client initiates uploading procedure to the S3 directly using provided URL.
@@ -173,7 +171,7 @@ const command = new GetObjectCommand(params)
 const url = await getSignedUrl(client, command, { expiresIn: 3600 })
 ```
 
-In V3, there's only one option - asynchronous one. Moreover, it requires you to import `@aws-sdk/s3-request-presigner` package and call `getSignedUrl` on the Command object.
+In V3, there's only one option - asynchronous one. Moreover, it requires you to import `@aws-sdk/s3-request-presigner` package and call `getSignedUrl` using the client and the Command object.
 
 </CodeWave>
 
@@ -183,7 +181,53 @@ In V3, there's only one option - asynchronous one. Moreover, it requires you to 
 
 Even though [invoking functions from functions is considered as an antipattern](https://twitter.com/hichaelmart/status/1282647858920009728) by some, I believe that's not the case if you know what you're doing.
 
-### Other problems
+<CodeWave>
+
+```ts
+import { Lambda } from 'aws-sdk'
+const lambda = new Lambda()
+
+const params = {
+  FunctionName: 'Lambda_B',
+  InvocationType: 'RequestResponse',
+  LogType: 'Tail',
+  Payload: '{ "name" : "Alex" }',
+}
+await lambda.invoke(params)
+```
+
+In V2, invoking Lambda asynchronously or synchronously, required just the `FunctionName`. Optional parameter like `LogType: 'Tail'` are helpful if we want to forward up to 4KB of logs from the invoked Lambda to the caller.
+
+```ts
+import { Lambda } from 'aws-sdk'
+const lambda = new Lambda()
+
+const params = {
+  FunctionName: 'Lambda_B',
+  InvocationType: 'RequestResponse',
+  LogType: 'Tail',
+  Payload: '{ "name" : "Alex" }',
+}
+await lambda.invoke(params)
+
+// New - V3
+import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda'
+const lambda = new LambdaClient({})
+
+const params = new InvokeCommand({
+  FunctionName: 'Lambda_B',
+  InvocationType: 'RequestResponse',
+  LogType: 'tail',
+  Payload: Buffer.from('{ "name" : "Alex" }'), // Uint8Array
+})
+await lambda.send(params)
+```
+
+In V3, signature is almost identical. The difference is in the `Payload` parameter. While V2 accepted `string`, V3 accepts only `Uint8Array`. Since in Node.js `Buffer` instances are also [`Uint8Array` instances](https://nodejs.org/api/buffer.html#buffer_buffers_and_typedarrays), we can use them instead.
+
+</CodeWave>
+
+### Other notes / problems
 
 #### Using SSO-based credentials
 
@@ -196,3 +240,7 @@ As I'm writing this, AWS SDK V3 is not working correctly with X-Ray which is a s
 #### Lack of `ChainableTemporaryCredentials`
 
 Currently, [AWS SDK V3 is not supporting this](https://github.com/aws/aws-sdk-js-v3/issues/1796). This is especially useful in multi-tenant SaaS environments where your Lambdas/Containers/VMs have to assume a dynamic role based on runtime input/context.
+
+#### Reusing HTTP connections
+
+In V2, there was this famous _Keep-Alive_ trick which forced AWS SDK to [reuse HTTP connections](https://theburningmonk.com/2019/02/lambda-optimization-tip-enable-http-keep-alive/). This reduced the amount of HTTP handshakes performed and improved overall Lambda performance. In V3, this is [happening automatically](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/node-reusing-connections.html).
