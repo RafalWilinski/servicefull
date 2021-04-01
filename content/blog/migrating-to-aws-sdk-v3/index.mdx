@@ -9,9 +9,9 @@ image: https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?ixid=MXwxMjA
 
 import { CodeWave } from 'gatsby-theme-waves'
 
-In December 2020, [AWS released AWS SDK v3 for Javascript](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-sdk-javascript-version-3-generally-available/). It promises to be smaller, thanks to the modular and tree-shakeable structure, and as a result, faster. This is especially important, if you're interacting with AWS resources inside Lambda functions. AWS SDK often contributed the most to the artifact size. With new SDK, this should be much better. Unfortunately, migration isn't straightforward. The signature of new v3 calls is completely new, some functions are gone and some are replaced with new modules.
+In December 2020, [AWS released AWS SDK v3 for Javascript](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-sdk-javascript-version-3-generally-available/). It promises to be modular and have more tree-shakeable structure, resulting in smaller artifact sizes. This is especially important, if you're interacting with AWS resources inside Lambda functions where each KB of code affects your cold-start time and \$\$\$. Unfortunately, migration isn't straightforward. The signature of new V3 calls is new - some functions are gone and some are replaced with new modules.
 
-In this blogpost, I show upgrading strategies from AWS SDK V2 to V3 for a few most common use cases in Serverless. Official docs are describing [three migration paths](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/migrating-to-v3.html) but for the purpose of this article, we'll focus only on the 3rd Path - the proper one using the Command objects and fully `async/await` based approach.
+In this blogpost, I show upgrading strategies from AWS SDK V2 to V3 for a few most common use cases in Serverless, at least for me. Official docs are describing [three migration paths](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/migrating-to-v3.html) but for the purpose of this article, we'll focus only on the 3rd Path - the proper one using the Command objects and fully `async/await` based approach.
 
 ### DynamoDB
 
@@ -39,7 +39,7 @@ await ddb
   .promise()
 ```
 
-In V2, once we had our `DocumentClient` constructed, interaction with DynamoDB in Node.js was boiling down to using [methods like `get`, `put`, `scan` or `query`](https://dynobase.dev/dynamodb-nodejs/).
+In V2, once we had our `DocumentClient` constructed, interaction with DynamoDB in Node.js was boiling down to using [methods like `get`, `put`, `scan` or `query`](https://dynobase.dev/dynamodb-nodejs/) and ending them with `.promise()` call.
 
 ```ts
 // New - V3
@@ -57,7 +57,7 @@ await ddbDocClient.send(
 )
 ```
 
-In V3, `DocumentClient` is imported from a different package and created using `.from()` method.
+In V3, `DocumentClient` is imported from a different package and created using `DynamoDBDocumentClient.from()` method.
 Moreover, you can call the document client operations using [Command objects](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/classes/_aws_sdk_lib_dynamodb.getcommand-1.html).
 
 ```ts
