@@ -13,7 +13,7 @@ I'm seeing an interesting juxtaposition lately. While many people claim we're ob
 
 We are trying to bridge this gap by ~~throwing money~~ using solutions like [Vercel](https://vercel.com/), [Netlify](https://netlify.com/) or [CloudFlare](https://cloudflare.com/), which deploys our websites to the globally available CDNs to fix the latency problem, but oftentimes speed of these websites is limited by the slowness of related APIs or specifically, how far our requests have to travel through the internet to reach the public endpoint. Paradigms like [JAMStack](https://jamstack.org/), which try to eliminate the need to interact with APIs, are definitely step in the right direction. However, they are not a remedy. Some use cases just [won't fit that model](https://medium.com/front-end-weekly/the-issues-with-jamstack-you-might-need-a-backend-d101791de36a), you might still need a classical backend.
 
-I wanted to explore that problem and see if I can reduce the latency between the end-user and API by deploying a Serverless GraphQL _"server"_ to the each of the [CloudFront CDN edge locations](https://aws.amazon.com/cloudfront/features/) using [Lambda@Edge](https://aws.amazon.com/lambda/edge/) and make that work with [globally replicated DynamoDB](https://dynobase.dev/dynamodb/) table.
+I wanted to explore that problem and see if I can reduce the latency between the end-user and API by deploying a Serverless GraphQL _"server"_ to the each of the [CloudFront CDN edge locations](https://aws.amazon.com/cloudfront/features/) using [Lambda@Edge](https://aws.amazon.com/lambda/edge/) and make that work with [globally replicated DynamoDB](https://dynobase.dev/dynamodb-global-tables/) table.
 
 Here's how I imagined it:
 
@@ -42,7 +42,7 @@ export class GraphQLAtEdge extends cdk.Stack {
 }
 ```
 
-First, we provision a DynamoDB table with `replicationRegions` parameter. This creates a multi-master NoSQL database with replicas located in desired regions. For the sake of example, I will be using table with simple `string` partition key called just `hashKey`.
+First, we provision a [DynamoDB]((https://dynobase.dev/dynamodb/) table with `replicationRegions` parameter. This creates a multi-master NoSQL database with replicas located in desired regions. For the sake of example, I will be using table with simple `string` partition key called just `hashKey`.
 
 ```ts
 export class GraphQLAtEdge extends cdk.Stack {
@@ -404,8 +404,9 @@ But not it's definitely **not** ideal, there are some very important cons:
 - Your ~~server~~ GraphQL endpoint must be lightweight. Minified Lambda@Edge code must be less than 1 MB. Moreover, it is restricted to `128MB` of memory and `5000ms` of execution time for `VIEWER_REQUEST` integration type. Definitely not usable for heavy computation because [Lambda computing power is scaling with allocated memory](https://engineering.opsgenie.com/how-does-proportional-cpu-allocation-work-with-aws-lambda-41cd44da3cac?gi=9a8c6fdb9ff0)
 - Cannot use environment variables with Lambda@Edge
 - It's using low-level GraphQL.js library where schema creation is tedious; I wasn't able to deploy fully-featured [Apollo Server](https://www.apollographql.com/docs/apollo-server/), which is standard in Node.js world. It's hard to keep it under `1MB` code limit and under `128MB` memory usage limit
-- DynamoDB Global tables are [eventually consistent](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html). In a global table, data modifications are usually propagated to all replica tables within a second. It is a deal-breaker for many use cases. They also [cost](https://dynobase.dev/dynamodb-pricing-calculator/) much more because you also pay for _Replicated write request units_ and it scales linearly with the amount of table replicas.
+- [DynamoDB Global tables](https://dynobase.dev/dynamodb-global-tables/) are [eventually consistent](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html). In a global table, data modifications are usually propagated to all replica tables within a second. It is a deal-breaker for many use cases. They also [cost](https://dynobase.dev/dynamodb-pricing-calculator/) much more because you also pay for _Replicated write request units_ and it scales linearly with the amount of table replicas.
 
 Concluding - is it useful?
 
 _Might be_ for some very specific use cases. Right now, due to Lambda@Edge limitations - not really. With imposed restrictions, it disallows creating any serious logic. But, I hope these will change in the future. AWS is developing its FaaS offering very actively, continually making it better. For now, if I will need to create a Serverless GraphQL API, I'll probably stick to [AppSync](https://aws.amazon.com/appsync/).
+
