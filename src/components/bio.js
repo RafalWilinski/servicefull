@@ -29,7 +29,7 @@ function Bio() {
         , AWS consultant and founder of{' '}
         <ColorExternalLink
           style={{ fontWeight: '600' }}
-          href="https://dynobase.dev"
+          href="https://dynobase.com"
           target="_blank"
           rel="noreferrer noopener"
         >
