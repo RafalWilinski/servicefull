@@ -6,9 +6,7 @@ import { ColorExternalLink } from '../src/theme'
 
 export default props => (
   <Layout
-    location={props.location}
-    title={props.data.site.siteMetadata.title}
-    description={props.data.site.siteMetadata.description}
+
   >
     <SEO
       title="Cloud Native Consulting"
