@@ -13,6 +13,11 @@ const withMDX = require("@next/mdx")({
 })
 
 module.exports = withMDX({
+  experimental: {
+    images: {
+      unoptimized: true,
+    },
+  },
   pageExtensions: [
     "ts", "tsx", "js", 
     "jsx", "md", "mdx"
