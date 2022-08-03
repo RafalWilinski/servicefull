@@ -1,8 +1,20 @@
 import React from 'react'
+import { getPosts } from '../../lib/getPosts'
 import SEO from '../../src/components/seo'
 import { Meta, Subtitle, Text } from '../../src/theme'
 
-export default props => (
+export function getStaticProps() {
+  const posts = getPosts();
+
+  return {
+    props: {
+      posts
+    }
+  }
+}
+
+export default ({posts}) => {
+  return (
   <div>
     <SEO
       title="Cloud Native Blog"
@@ -19,24 +31,24 @@ export default props => (
       Blog
     </h1>
     <p>My recent thoughts about AWS, Serverless, DynamoDB and more...</p>
-    {/* {props.data.allMdx.edges.map(({ node }) => {
-      const title = node.frontmatter.title || node.fields.slug
+    {posts.map((post) => {
+      const title = post.data.title
       return (
-        <div key={node.fields.slug} style={{ marginBottom: '20px' }}>
+        <div key={post.slug} style={{ marginBottom: '20px' }}>
           <Meta>
-            {node.frontmatter.date} / {node.frontmatter.length} /{' '}
-            {node.frontmatter.categories}
+            {post.data.date} / {post.data.length} /{' '}
+            {post.data.categories}
           </Meta>
           <Subtitle style={{ marginBottom: '10px' }}>
-            <a to={node.fields.slug}>{title}</a>
+            <a to={post.slug}>{title}</a>
           </Subtitle>
           <Text
-            dangerouslySetInnerHTML={{ __html: node.excerpt }}
+            dangerouslySetInnerHTML={{ __html: post.content }}
             style={{ marginTop: 0 }}
           />
         </div>
       )
-    })} */}
+    })}
   </div>
-)
+) }
 

@@ -49,25 +49,11 @@ function Bio() {
       </p>
       <p>
         I can help you{' '}
-        <span
-          style={{
-            color: THEME_COLOR,
-            cursor: 'pointer',
-            textDecoration: 'underline',
-            fontWeight: 600,
-          }}
-        >
-          <a href="/consulting">move your business to the AWS cloud</a>
-        </span>
+        <Link href="/consulting">
+          <ColorExternalLink href="/consulting">move your business to the AWS cloud</ColorExternalLink>
+        </Link>
         .
       </p>
-      {/* <ColorExternalLink
-        href="https://twitter.com/rafalwilinski"
-        target="_blank"
-        rel="noreferrer noopener"
-      >
-        @rafalwilinski on Twitter
-      </ColorExternalLink> */}
     </div>
   )
 }

@@ -1,18 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
 import { THEME_COLOR } from '../theme'
 
-const HeaderLink = styled.a`
-  text-decoration: none;
-  cursor: pointer;
-  font-weight: 600;
-  color: black;
-  margin-right: 15px;
-  transition: 0.2s color;
-  &:hover {
-    color: ${THEME_COLOR};
+const HeaderLink = ({children}) => <a style={{
+  textDecoration: 'none',
+  cursor: 'pointer',
+  fontWeight: '600',
+  color: 'black',
+  marginRight: '15px',
+  transition: '0.2s color',
+  "&:hover": {
+    color: THEME_COLOR,
   }
-`
+}}>{children}</a>
 
 const Footer = () => (
   <div
@@ -44,18 +43,6 @@ const Footer = () => (
     >
       Instagram
     </HeaderLink>
-    {/* <HeaderLink
-      href={`/`}
-      style={{
-        marginLeft: '450px',
-        textAlign: 'right',
-        marginRight: '-220px',
-        color: '#333',
-      }}
-      className="big-only"
-    >
-      © 2020 Rafal Wilinski
-    </HeaderLink> */}
   </div>
 )
 

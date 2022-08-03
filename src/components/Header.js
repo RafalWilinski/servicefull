@@ -3,14 +3,14 @@ import Link from 'next/link'
 
 const HeaderLink = ({ children, style, to }) => {
   return (
-    <div
+    <Link
+      href={to || '/'}
       className="header-link"
-      style={style}
       // onMouseLeave={() => setHovering(false)}
       // onMouseOver={() => setHovering(true)}
     >
-      <a href={to || '/'}>{children}</a>
-    </div>
+      <a className="header-link" style={style}>{children}</a>
+    </Link>
   )
 }
 
@@ -32,7 +32,6 @@ const Header = () => {
         Rafal Wilinski
       </HeaderLink>
       <HeaderLink to="/blog">Blog</HeaderLink>
-      {/* <HeaderLink to="/oss">OSS</HeaderLink> */}
       <HeaderLink to="/consulting">Consulting</HeaderLink>
     </div>
   )

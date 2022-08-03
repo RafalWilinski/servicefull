@@ -13,46 +13,46 @@ const Container = ({children}) => <div style={{
   padding: '0 10px',
 }}>{children}</div>
 
-const Title = styled.h1`
-  margin-bottom: 0;
-`
+const Title = ({children}) => <h1 style={{
+  marginBottom: '0',
+}}>{children}</h1>
 
-const Subtitle = styled.h2`
-  font-size: 1.25em;
-  font-weight: 800;
-`
+const Subtitle = ({children}) => <h2 style={{
+  fontSize: '1.25em',
+  fontWeight: '800',
+}}>{children}</h2>
 
-const Subsubtitle = styled.h3`
-  margin-block-start: 1.2em;
-  margin-block-end: 0.8em;
-`
+const Subsubtitle = ({children}) => <h2 style={{
+  marginBlockStart: '1.2em',
+  marginBlockEnd: '0.8em',
+}}>{children}</h2>
 
-const Meta = styled.p`
-  margin: 10px 0 0;
-  color: #666;
-  font-size: 0.8em;
-`
+const Meta = ({children}) => <div style={{
+  margin: '10px 0 0',
+  color: '#666',
+  fontSize: '0.8em',
+}}>{children}</div>
 
-const Text = styled.p`
-  width: 100%;
-  font-size: 16px;
-  font-weight: 400;
-  color: #303030;
-  line-height: 1.7;
-`
+const Text = ({children}) => <p style={{
+  width: '100%',
+  fontSize: '16px',
+  fontWeight: '400',
+  color: '#303030',
+  lineHeight: '1.7',
+}}>{children}</p>
 
 const Point = styled(Text)`
   display: list-item;
 `
 
-const Line = styled.hr`
-  background-color: black;
-  height: 3px;
-  content: ' ';
-  width: 100%;
-  margin: 0;
-  border-style: none;
-`
+const Line = () => <hr style={{
+  backgroundColor: 'black',
+  height: '3px',
+  content: '',
+  width: '100%',
+  margin: '0',
+  borderStyle: 'none',
+}}/>
 
 
 const HiddenExternalLink = styled.a`
@@ -64,18 +64,19 @@ const HiddenExternalLink = styled.a`
   }
 `
 
-const ColorLink = styled.a`
-  box-shadow: none;
-  color: ${THEME_COLOR};
-  font-weight: 500;
-`
+const ColorLink = ({children}) => <a style={{
+  boxShadow: 'none',
+  color: THEME_COLOR,
+  fontWeight: '500',
+}}>{children}</a>
 
-const ColorExternalLink = styled.a`
-  box-shadow: none;
-  color: ${THEME_COLOR};
-  cursor: pointer;
-  text-decoration: underline;
-`
+const ColorExternalLink = ({children, href}) => <a href={href} style={{
+  boxShadow: 'none',
+  color: THEME_COLOR,
+  cursor: 'pointer',
+  textDecoration: 'underline',
+}}>{children}</a>
+
 
 const ColorInternalLink = styled.a`
   box-shadow: none;
@@ -84,20 +85,21 @@ const ColorInternalLink = styled.a`
   text-decoration: underline;
 `
 
-const Avatar = styled.img`
-  min-height: 50px;
-  width: 50px;
-  height: 50px;
-  min-width: 50px;
-  margin: 10px;
-  border-radius: 100%;
-`
+const Avatar = () => <img style={{
+  minHeight: '50px',
+  width: '50px',
+  height: '50px',
+  minWidth: '50px',
+  margin: '10px',
+  borderRadius: '100%',
+}} />
 
-const Description = styled.div`
-  flex: 1;
-  margin-left: 18px;
-  padding: 12px;
-`
+const Description = ({children}) => <div style={{
+  flex: '1',
+  marginLeft: '18px',
+  padding: '12px',
+}}>{children}</div>
+
 const BioWrapper = styled.div`
   display: flex;
   align-items: center;

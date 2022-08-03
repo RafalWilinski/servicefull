@@ -1,10 +1,22 @@
 import React from 'react'
+import { getPosts } from '../lib/getPosts'
 import Bio from '../src/components/bio'
-import Layout from '../src/components/layout'
+import Link from 'next/link'
 import SEO from '../src/components/seo'
 import {
+  ColorExternalLink,
   Subtitle,
 } from '../src/theme'
+
+export function getStaticProps() {
+  const posts = getPosts();
+
+  return {
+    props: {
+      posts
+    }
+  }
+}
 
 const highlights = [
   {
@@ -71,16 +83,12 @@ const highlights = [
   },
 ]
 
-function BlogIndex (props) {
-  console.log(props)
+function BlogIndex ({ posts }) {
   const siteTitle = 'Rafal Wilinski'
   const siteDescription = 'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more'
 
     return (
-      <Layout
-        title={siteTitle}
-        description={siteDescription}
-      >
+      <>
         <SEO
           title="Cloud Native Engineer"
           keywords={[
@@ -99,13 +107,13 @@ function BlogIndex (props) {
         <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
           Recent Blog Posts
         </Subtitle>
-        {[]
+        {posts
           .filter((n, i) => i < 5)
-          .map(({ node }) => {
-            const title = node.frontmatter.title || node.fields.slug
+          .map((node) => {
+            const title = node.data.title
             return (
               <div
-                key={node.fields.slug}
+                key={node.slug}
                 style={{ marginBottom: '20px', fontSize: '1em' }}
               >
                 <span
@@ -118,19 +126,19 @@ function BlogIndex (props) {
                   }}
                   className="big-only"
                 >
-                  {node.frontmatter.date}
+                  {node.data.date}
                 </span>
-                <a to={node.fields.slug}>{title}</a>
+                <Link href={`/blog/${node.slug}`}><ColorExternalLink href={`/blog/${node.slug}`}>{title}</ColorExternalLink></Link>
               </div>
             )
           })}
 
-        <a
+        <Link
           style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
-          to="/blog"
+          href="/blog"
         >
-          View all posts
-        </a>
+          <ColorExternalLink href="/blog">View all posts</ColorExternalLink>
+        </Link>
 
         <Subtitle style={{ marginBottom: '1em', marginTop: '3em' }}>
           Highlights
@@ -166,7 +174,7 @@ function BlogIndex (props) {
         >
           More about me
         </a>
-      </Layout>
+        </>
     )
 }
 
