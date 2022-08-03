@@ -1,9 +1,8 @@
 import React from 'react'
-import { graphql } from 'gatsby'
-import { Annotation } from '../components/Annotation'
-import Layout from '../components/layout'
-import SEO from '../components/seo'
-import { ColorExternalLink } from '../theme'
+import { Annotation } from '../src/components/Annotation'
+import Layout from '../src/components/layout'
+import SEO from '../src/components/seo'
+import { ColorExternalLink } from '../src/theme'
 
 export default props => (
   <Layout
@@ -90,14 +89,3 @@ export default props => (
     </p>
   </Layout>
 )
-
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-        description
-      }
-    }
-  }
-`

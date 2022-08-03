@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { Annotation } from '../components/Annotation'
 import { ColorExternalLink, THEME_COLOR } from '../theme'
 
@@ -49,8 +49,7 @@ function Bio() {
       </p>
       <p>
         I can help you{' '}
-        <Link
-          to="/consulting"
+        <span
           style={{
             color: THEME_COLOR,
             cursor: 'pointer',
@@ -58,8 +57,8 @@ function Bio() {
             fontWeight: 600,
           }}
         >
-          move your business to the AWS cloud
-        </Link>
+          <a href="/consulting">move your business to the AWS cloud</a>
+        </span>
         .
       </p>
       {/* <ColorExternalLink

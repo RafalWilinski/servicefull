@@ -1,20 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import { StaticQuery, graphql } from 'gatsby'
 
 function SEO({ description, lang, meta, keywords, title, image, url }) {
-  return (
-    <StaticQuery
-      query={detailsQuery}
-      render={data => {
-        const metaDescription =
-          description || data.site.siteMetadata.description
+
+  const metaDescription =
+          description || 'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more'
 
         let titleTemplate =
           title === 'Servicefull'
             ? 'Servicefull - AWS, Serverless, FaaS, Containers and Services Blog'
-            : `%s | ${data.site.siteMetadata.title}`
+            : `%s | something`
 
         return (
           <Helmet
@@ -90,11 +86,7 @@ function SEO({ description, lang, meta, keywords, title, image, url }) {
                   : []
               )
               .concat(meta)}
-          />
-        )
-      }}
-    />
-  )
+         />)
 }
 
 SEO.defaultProps = {
@@ -123,14 +115,4 @@ SEO.propTypes = {
 
 export default SEO
 
-const detailsQuery = graphql`
-  query DefaultSEOQuery {
-    site {
-      siteMetadata {
-        title
-        description
-        author
-      }
-    }
-  }
-`
+

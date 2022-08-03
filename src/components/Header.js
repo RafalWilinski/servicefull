@@ -1,17 +1,16 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 
 const HeaderLink = ({ children, style, to }) => {
   return (
-    <Link
-      to={to}
+    <div
       className="header-link"
       style={style}
       onMouseLeave={() => setHovering(false)}
       onMouseOver={() => setHovering(true)}
     >
-      {children}
-    </Link>
+      <a href={to || '/'}>{children}</a>
+    </div>
   )
 }
 

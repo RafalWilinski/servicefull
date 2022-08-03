@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { Link } from 'gatsby'
-import Image from 'gatsby-image'
+import Image from 'next/image'
 
 const THEME_COLOR = 'rgb(45, 200, 50)'
 
@@ -55,11 +54,6 @@ const Line = styled.hr`
   border-style: none;
 `
 
-const StyledLink = styled(Link)`
-  box-shadow: none;
-  text-decoration: none;
-  color: inherit;
-`
 
 const HiddenExternalLink = styled.a`
   text-decoration: none;
@@ -70,7 +64,7 @@ const HiddenExternalLink = styled.a`
   }
 `
 
-const ColorLink = styled(Link)`
+const ColorLink = styled.a`
   box-shadow: none;
   color: ${THEME_COLOR};
   font-weight: 500;
@@ -83,14 +77,14 @@ const ColorExternalLink = styled.a`
   text-decoration: underline;
 `
 
-const ColorInternalLink = styled(Link)`
+const ColorInternalLink = styled.a`
   box-shadow: none;
   color: ${THEME_COLOR};
   cursor: pointer;
   text-decoration: underline;
 `
 
-const Avatar = styled(Image)`
+const Avatar = styled.img`
   min-height: 50px;
   width: 50px;
   height: 50px;
@@ -122,7 +116,6 @@ export {
   Container,
   Title,
   Point,
-  StyledLink,
   Subtitle,
   Subsubtitle,
   Text,

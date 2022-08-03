@@ -1,10 +1,7 @@
 import React from 'react'
-import { graphql } from 'gatsby'
-import MDXRenderer from 'gatsby-mdx/mdx-renderer'
 import { MDXProvider } from '@mdx-js/react'
 
 import Signature from '../components/signature'
-import Discuss from '../components/discuss'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import {
@@ -58,32 +55,3 @@ class BlogPostTemplate extends React.Component {
 }
 
 export default BlogPostTemplate
-
-export const pageQuery = graphql`
-  query BlogPostBySlug($id: String) {
-    site {
-      siteMetadata {
-        title
-        author
-      }
-    }
-    mdx(id: { eq: $id }) {
-      id
-      excerpt(pruneLength: 200)
-      code {
-        body
-      }
-      fields {
-        slug
-      }
-      frontmatter {
-        title
-        date(formatString: "MMMM DD, YYYY")
-        categories
-        length
-        keywords
-        image
-      }
-    }
-  }
-`

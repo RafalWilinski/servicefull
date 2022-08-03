@@ -1,14 +1,10 @@
 import React from 'react'
-import { graphql } from 'gatsby'
-import Bio from '../components/bio'
-import Layout from '../components/layout'
-import SEO from '../components/seo'
+import Bio from '../src/components/bio'
+import Layout from '../src/components/layout'
+import SEO from '../src/components/seo'
 import {
   Subtitle,
-  ColorLink,
-  ColorExternalLink,
-  ColorInternalLink,
-} from '../theme'
+} from '../src/theme'
 
 const highlights = [
   {
@@ -69,27 +65,19 @@ const highlights = [
     href: 'https://www.fandom.com/',
   },
   {
-    date: '2014',
-    name: 'Landed my first "real" Software Engineering job',
-    href: undefined,
-  },
-  {
     date: '2012',
     name: 'Released Voxel Rush, game downloaded over 2 million times',
     href: 'https://www.riotgames.com/en',
   },
 ]
 
-class BlogIndex extends React.Component {
-  render() {
-    const { data } = this.props
-    const siteTitle = data.site.siteMetadata.title
-    const siteDescription = data.site.siteMetadata.description
-    const posts = data.allMdx.edges
+function BlogIndex (props) {
+  console.log(props)
+  const siteTitle = 'Rafal Wilinski'
+  const siteDescription = 'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more'
 
     return (
       <Layout
-        location={this.props.location}
         title={siteTitle}
         description={siteDescription}
       >
@@ -111,7 +99,7 @@ class BlogIndex extends React.Component {
         <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
           Recent Blog Posts
         </Subtitle>
-        {posts
+        {[]
           .filter((n, i) => i < 5)
           .map(({ node }) => {
             const title = node.frontmatter.title || node.fields.slug
@@ -132,17 +120,17 @@ class BlogIndex extends React.Component {
                 >
                   {node.frontmatter.date}
                 </span>
-                <ColorLink to={node.fields.slug}>{title}</ColorLink>
+                <a to={node.fields.slug}>{title}</a>
               </div>
             )
           })}
 
-        <ColorInternalLink
+        <a
           style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
           to="/blog"
         >
           View all posts
-        </ColorInternalLink>
+        </a>
 
         <Subtitle style={{ marginBottom: '1em', marginTop: '3em' }}>
           Highlights
@@ -164,50 +152,22 @@ class BlogIndex extends React.Component {
             >
               {project.date}
             </span>
-            <ColorLink
-              to={project.href}
+            <a
+              to={project.href || '#'}
               style={{ color: project.href ? 'rgb(45, 200, 50)' : 'black' }}
             >
               {project.name}
-            </ColorLink>
+            </a>
           </div>
         ))}
-        <ColorInternalLink
+        <a
           style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
           to="/about"
         >
           More about me
-        </ColorInternalLink>
+        </a>
       </Layout>
     )
-  }
 }
 
 export default BlogIndex
-
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-        description
-      }
-    }
-    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
-      edges {
-        node {
-          excerpt(pruneLength: 240)
-          fields {
-            slug
-          }
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            title
-            length
-            categories
-          }
-        }
-      }
-    }
-  }
-`

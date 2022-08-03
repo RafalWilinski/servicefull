@@ -7,8 +7,6 @@ length: 5 minutes
 image: https://servicefull.cloud/static/23834a52d9f9306278d544d872fe7d40/17fa4/overview.png
 ---
 
-import { CodeWave } from "gatsby-theme-waves"
-
 I'm seeing an interesting juxtaposition lately. While many people claim we're observing a [downfall of the software quality and speed](https://tonsky.me/blog/disenchantment/), it is also a well-known fact that optimizing your website speed is crucial for your business' success. Just a second of delay [affects user engagement](https://blog.pusher.com/how-latency-affects-user-engagement/) and lowers your business KPIs significantly. There's a big contrast between what's delivered and what's expected. 
 
 We are trying to bridge this gap by ~~throwing money~~ using solutions like [Vercel](https://vercel.com/), [Netlify](https://netlify.com/) or [CloudFlare](https://cloudflare.com/), which deploys our websites to the globally available CDNs to fix the latency problem, but oftentimes speed of these websites is limited by the slowness of related APIs or specifically, how far our requests have to travel through the internet to reach the public endpoint. Paradigms like [JAMStack](https://jamstack.org/), which try to eliminate the need to interact with APIs, are definitely step in the right direction. However, they are not a remedy. Some use cases just [won't fit that model](https://medium.com/front-end-weekly/the-issues-with-jamstack-you-might-need-a-backend-d101791de36a), you might still need a classical backend.
@@ -26,8 +24,6 @@ Since I'm not a big fan of AWS Console, [just like many people](https://news.yco
 With CDK, provisioning something which might seem complicated like this example, can actually be done with _less than 100 lines of code_. Here's the complete infrastructure code proof of concept explained step by step:
 
 <br/>
-
-<CodeWave>
 
 ```ts
 export class GraphQLAtEdge extends cdk.Stack {
@@ -385,8 +381,6 @@ export class GraphQLAtEdge extends cdk.Stack {
 ```
 
 Actually, there's _one more thing_. Because as I'm writing this, `LambdaFunctionAssociation` does not support `includeBody` parameter. We need to use CDK's [escape hatch](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html) to modify synthesized CloudFormation template manually. This is really useful if we want to use some CFN functionality that hasn't been added to the CDK yet.
-
-</CodeWave>
 
 > If you don't like this animation, checkout full source at [Github](https://github.com/RafalWilinski/edge-graphql-dynamodb-api/blob/master/lib/serverless-global-graphql-api-dynamodb-stack.ts). You can play with it using mentioned [GraphQL Playground here](https://d1pc7a0vu5q5b3.cloudfront.net/playground).
 

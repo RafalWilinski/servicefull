@@ -1,7 +1,6 @@
 import React from 'react'
-import { graphql } from 'gatsby'
-import Layout from '../components/layout'
-import SEO from '../components/seo'
+import Layout from '../src/components/layout'
+import SEO from '../src/components/seo'
 import { Meta, Subtitle, StyledLink, Text } from '../theme'
 
 export default props => (
@@ -34,7 +33,7 @@ export default props => (
             {node.frontmatter.categories}
           </Meta>
           <Subtitle style={{ marginBottom: '10px' }}>
-            <StyledLink to={node.fields.slug}>{title}</StyledLink>
+            <a to={node.fields.slug}>{title}</a>
           </Subtitle>
           <Text
             dangerouslySetInnerHTML={{ __html: node.excerpt }}
@@ -46,29 +45,3 @@ export default props => (
   </Layout>
 )
 
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-        description
-      }
-    }
-    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
-      edges {
-        node {
-          excerpt(pruneLength: 240)
-          fields {
-            slug
-          }
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            title
-            length
-            categories
-          }
-        }
-      }
-    }
-  }
-`

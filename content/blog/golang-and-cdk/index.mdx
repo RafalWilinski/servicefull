@@ -6,8 +6,6 @@ date: '2020-06-05T22:12:03.284Z'
 length: 2 minutes
 ---
 
-import { CodeWave } from 'gatsby-theme-waves'
-
 Go, known also as Golang, despite [being the language of the cloud](https://thenewstack.io/go-the-programming-language-of-the-cloud/) still is [not having proper support in CDK](https://github.com/aws/aws-cdk/issues/547) (Cloud Development Kit):
 
 ![Github feature request for Go (golang) language support](./golang-not-supported-by-cdk.png 'Github feature request for Go (golang) language support')
@@ -21,8 +19,6 @@ The result of my work is here: [aws-lambda-golang-cdk on Github](https://github.
 ![AWS CDK Golang Construct](./aws-lambda-golang.png 'AWS CDK Golang Lambda Function Construct')
 
 Usage of Lambda Golang construct in CDK is very simple:
-
-<CodeWave>
 
 ```ts
 import * as cdk from '@aws-cdk/core'
@@ -67,8 +63,6 @@ export class GolangAPI extends cdk.Stack {
 ```
 
 Then, import `aws-lambda-golang` construct, define a new function using it and plug to API Gateway. And that's it!
-
-</CodeWave>
 
 > If you don't like this animation, head to project [Readme](https://github.com/RafalWilinski/aws-lambda-golang-cdk)
 

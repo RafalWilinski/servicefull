@@ -7,8 +7,6 @@ length: 5 minutes
 image: https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1020&q=80
 ---
 
-import { CodeWave } from 'gatsby-theme-waves'
-
 In December 2020, [AWS released AWS SDK v3 for Javascript](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-sdk-javascript-version-3-generally-available/). It promises to be modular and has a more tree-shakeable structure, resulting in smaller artifact sizes. This is especially important if you're interacting with AWS resources inside Lambda functions where each KB of code affects your cold-start time and 💸. Unfortunately, migration isn't straightforward. The signature of new V3 calls is new - some functions are gone, and some are replaced with new modules.
 
 In this blog post, I show upgrading strategies from AWS SDK V2 to V3 for a few most common use cases in Serverless, at least for me. Official docs are describing [three migration paths](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/migrating-to-v3.html), but for the purpose of this article, we'll focus only on the 3rd Path - the proper one using the Command objects and fully `async/await` based approach.
@@ -19,7 +17,6 @@ The most frequent complaint regarding the new DynamoDB client from AWS SDK V3 wa
 
 Fortunately, [AWS DynamoDB Document Client has been recently added to the V3](https://github.com/aws/aws-sdk-js-v3/pull/2097).
 
-<CodeWave>
 
 ```ts
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
@@ -75,7 +72,7 @@ await ddbDocClient.put({
 
 If you don't like this new style, you can still use the old `.put()` method too. However, in this case, you need to import `DynamoDBDocument` instead of `DynamoDBDocumentClient`.
 
-</CodeWave>
+
 
 <br />
 
@@ -85,7 +82,7 @@ Interacting with Simple Storage from Lambdas is a widespread pattern. Let's talk
 
 #### Uploading files
 
-<CodeWave>
+
 
 ```ts
 import { S3 } from 'aws-sdk'
@@ -137,13 +134,12 @@ await multipartUpload.done();
 
 In V3, we are not only forced to import SDK in a modular way, but also we have to import two packages: `client-s3` - responsible for communicating with AWS S3, and `lib-storage`, which is a high-level helper library containing classes like `Upload` which now take care of multipart upload orchestration.
 
-</CodeWave>
 
 #### Generating presigned URLs
 
 Pre-signed URLs are useful when you need to expose some data to the client in a secure way or allow them to upload files from the client directly to the S3. In such a scenario, the client requests a backend for a pre-signed URL, the backend sends it back to the client, and the client initiates uploading procedure to the S3 directly using provided URL.
 
-<CodeWave>
+
 
 ```ts
 import { S3 } from 'aws-sdk'
@@ -173,7 +169,6 @@ const url = await getSignedUrl(client, command, { expiresIn: 3600 })
 
 In V3, there's only one option - asynchronous one. Moreover, it requires you to import `@aws-sdk/s3-request-presigner` package and call `getSignedUrl` using the client and the Command object.
 
-</CodeWave>
 
 ### Lambda
 
@@ -181,7 +176,6 @@ In V3, there's only one option - asynchronous one. Moreover, it requires you to 
 
 Even though [invoking functions from functions is considered as an antipattern](https://twitter.com/hichaelmart/status/1282647858920009728) by some, I believe that's not the case if you know what you're doing.
 
-<CodeWave>
 
 ```ts
 import { Lambda } from 'aws-sdk'
@@ -225,7 +219,6 @@ await lambda.send(params)
 
 In V3, the signature is almost identical. The difference is in the `Payload` parameter. While V2 accepted `string`, V3 accepts only `Uint8Array`. Since in Node.js `Buffer` instances are also [`Uint8Array` instances](https://nodejs.org/api/buffer.html#buffer_buffers_and_typedarrays), we can use them instead.
 
-</CodeWave>
 
 ### Other notes / problems
 
