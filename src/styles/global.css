@@ -1,3 +1,13 @@
+html {
+  font-family: 'Inter', 'system-ui';
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: 'Inter var', 'system-ui';
+  }
+}
+
 ::selection {
   background-color: rgb(45, 200, 58);
   color: white;

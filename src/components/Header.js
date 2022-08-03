@@ -6,8 +6,8 @@ const HeaderLink = ({ children, style, to }) => {
     <div
       className="header-link"
       style={style}
-      onMouseLeave={() => setHovering(false)}
-      onMouseOver={() => setHovering(true)}
+      // onMouseLeave={() => setHovering(false)}
+      // onMouseOver={() => setHovering(true)}
     >
       <a href={to || '/'}>{children}</a>
     </div>

@@ -3,15 +3,15 @@ import Image from 'next/image'
 
 const THEME_COLOR = 'rgb(45, 200, 50)'
 
-const Container = styled.div`
-  margin: 3rem auto;
-  max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-  padding: 0 10px;
-`
+const Container = ({children}) => <div style={{
+  margin: '3rem auto',
+  maxWidth: '700px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'start',
+  justifyContent: 'center',
+  padding: '0 10px',
+}}>{children}</div>
 
 const Title = styled.h1`
   margin-bottom: 0;
