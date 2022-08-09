@@ -2,9 +2,10 @@
 title: Lessons learned using Single-table design with DynamoDB and GraphQL in production
 categories: '#AWS #DynamoDB #NoSQL #GraphQL'
 keywords: aws,dynamodb,aws lambda,graphql,dynamodb table,nosql,cloud,amazon web services,dynamodb with graphql,serverless dynamodb
-date: '2019-11-29T22:12:03.284Z'
+date: '2019-11-29'
 length: 8 minutes
 image: https://servicefull.cloud/images/template-servicefull.png
+excerpt: DynamoDB is a powerful yet tricky beast. While it enables insane scalability , it has some stringent limitations that you need to be aware of. It is also impossible to go with such a NoSQL database with an RDBMS mindset. Change in thinking…
 ---
 
 DynamoDB is a powerful yet tricky beast. While it enables [insane scalability](https://aws.amazon.com/blogs/aws/amazon-prime-day-2019-powered-by-aws/), it has some stringent limitations that you need to be aware of. It is also impossible to go with such a NoSQL database with an RDBMS mindset. Change in thinking is necessary, and that process is laborious. After almost a year of developing a fully serverless GraphQL API and shipping it to the production with thousands of users, I present you my learnings from this endeavor.
@@ -132,4 +133,3 @@ A common trick to prevent from your table from consuming too much WCU (Write Cap
 ## Use better GUI for DynamoDB
 
 During the development, we found working with AWS Console for DynamoDB quite cumbersome. Because of this frustration, I decided to start my own project which aims to solve all the problems I had: lack of bookmarks, multiple tabs, code generation and so on. The result of that effort is [Dynobase](https://dynobase.dev/) - modern, flexible and fast DynamoDB editor.
-

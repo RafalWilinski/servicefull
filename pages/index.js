@@ -3,18 +3,15 @@ import { getPosts } from '../lib/getPosts'
 import Bio from '../src/components/bio'
 import Link from 'next/link'
 import SEO from '../src/components/seo'
-import {
-  ColorExternalLink,
-  Subtitle,
-} from '../src/theme'
+import { ColorExternalLink, Subtitle } from '../src/theme'
 
 export function getStaticProps() {
-  const posts = getPosts();
+  const posts = getPosts()
 
   return {
     props: {
-      posts
-    }
+      posts,
+    },
   }
 }
 
@@ -37,13 +34,7 @@ const highlights = [
   {
     date: '2019',
     name: 'Became Certified AWS Architect Professional',
-    href:
-      'https://www.youracclaim.com/badges/025a2b45-2792-4a3a-8d8d-24fc95f18157/public_url',
-  },
-  {
-    date: '2019',
-    name: 'Worked on XHQ.com as Backend Lead',
-    href: 'https://xhq.com',
+    href: 'https://www.youracclaim.com/badges/025a2b45-2792-4a3a-8d8d-24fc95f18157/public_url',
   },
   {
     date: '2017',
@@ -62,13 +53,7 @@ const highlights = [
   },
   {
     date: '2016',
-    name: 'Got my first AWS Architect certification',
-    href:
-      'https://www.youracclaim.com/badges/355f7d52-9071-46f9-8986-1a45bfe3cd7f/public_url',
-  },
-  {
-    date: '2016',
-    name: 'Released Express-status-monitor',
+    name: 'Released Express-status-monitor, NPM module downloaded over million times',
     href: 'https://github.com/RafalWilinski/express-status-monitor',
   },
   {
@@ -78,104 +63,103 @@ const highlights = [
   },
   {
     date: '2012',
-    name: 'Released Voxel Rush, game downloaded over 2 million times',
+    name: 'Released Voxel Rush, a mobile game downloaded over 2 million times',
     href: 'https://www.riotgames.com/en',
   },
 ]
 
-function BlogIndex ({ posts }) {
+function BlogIndex({ posts }) {
   const siteTitle = 'Rafal Wilinski'
-  const siteDescription = 'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more'
+  const siteDescription =
+    'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more'
 
-    return (
-      <>
-        <SEO
-          title="Cloud Native Engineer"
-          keywords={[
-            'blog',
-            'aws',
-            'javascript',
-            'serverless',
-            'typescript',
-            'consulting',
-            'serverless consulting',
-            'aws consulting',
-            'cdk',
-          ]}
-        />
-        <Bio />
-        <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
-          Recent Blog Posts
-        </Subtitle>
-        {posts
-          .filter((n, i) => i < 5)
-          .map((node) => {
-            const title = node.data.title
-            return (
-              <div
-                key={node.slug}
-                style={{ marginBottom: '20px', fontSize: '1em' }}
+  return (
+    <>
+      <SEO
+        title="Cloud Native Engineer"
+        keywords={[
+          'blog',
+          'aws',
+          'javascript',
+          'serverless',
+          'typescript',
+          'consulting',
+          'serverless consulting',
+          'aws consulting',
+          'cdk',
+        ]}
+      />
+      <Bio />
+      <Subtitle style={{ marginBottom: '1em', marginTop: '2em' }}>
+        Recent Blog Posts
+      </Subtitle>
+      {posts
+        .filter((n, i) => i < 5)
+        .map((node) => {
+          const title = node.data.title
+          return (
+            <div
+              key={node.slug}
+              style={{ marginBottom: '20px', fontSize: '1em' }}
+            >
+              <span
+                style={{
+                  width: '160px',
+                  marginLeft: '-170px',
+                  textAlign: 'right',
+                  marginRight: '10px',
+                  color: '#999',
+                }}
+                className="big-only"
               >
-                <span
-                  style={{
-                    width: '160px',
-                    marginLeft: '-170px',
-                    textAlign: 'right',
-                    marginRight: '10px',
-                    color: '#999',
-                  }}
-                  className="big-only"
-                >
-                  {node.data.date}
-                </span>
-                <Link href={`/blog/${node.slug}`}><ColorExternalLink href={`/blog/${node.slug}`}>{title}</ColorExternalLink></Link>
-              </div>
-            )
-          })}
+                {node.data.date}
+              </span>
+              <Link href={`/blog/${node.slug}`}>
+                <ColorExternalLink href={`/blog/${node.slug}`}>
+                  {title}
+                </ColorExternalLink>
+              </Link>
+            </div>
+          )
+        })}
 
-        <Link
-          style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
-          href="/blog"
+      <Link
+        style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
+        href="/blog"
+      >
+        <ColorExternalLink href="/blog">View all posts</ColorExternalLink>
+      </Link>
+
+      <Subtitle style={{ marginBottom: '1em', marginTop: '3em' }}>
+        Highlights
+      </Subtitle>
+      {highlights.map((project) => (
+        <div
+          key={project.name}
+          style={{ marginBottom: '15px', fontSize: '1em' }}
         >
-          <ColorExternalLink href="/blog">View all posts</ColorExternalLink>
-        </Link>
-
-        <Subtitle style={{ marginBottom: '1em', marginTop: '3em' }}>
-          Highlights
-        </Subtitle>
-        {highlights.map(project => (
-          <div
-            key={project.name}
-            style={{ marginBottom: '15px', fontSize: '1em' }}
+          <span
+            style={{
+              width: '160px',
+              marginLeft: '-170px',
+              textAlign: 'right',
+              marginRight: '10px',
+              color: '#999',
+            }}
+            className="big-only"
           >
-            <span
-              style={{
-                width: '160px',
-                marginLeft: '-170px',
-                textAlign: 'right',
-                marginRight: '10px',
-                color: '#999',
-              }}
-              className="big-only"
-            >
-              {project.date}
-            </span>
-            <a
-              to={project.href || '#'}
-              style={{ color: project.href ? 'rgb(45, 200, 50)' : 'black' }}
-            >
-              {project.name}
-            </a>
-          </div>
-        ))}
-        <a
-          style={{ fontWeight: '600', fontSize: '1em', marginTop: '1em' }}
-          to="/about"
-        >
-          More about me
-        </a>
-        </>
-    )
+            {project.date}
+          </span>
+          <a
+            to={project.href || '#'}
+            style={{ color: project.href ? 'rgb(45, 200, 50)' : 'black' }}
+          >
+            {project.name}
+          </a>
+        </div>
+      ))}
+    </>
+  )
 }
 
 export default BlogIndex

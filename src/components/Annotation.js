@@ -1,5 +1,5 @@
 import React from 'react'
-import { RoughNotation } from 'react-rough-notation'
+// import { RoughNotation } from 'react-rough-notation'
 
 export const Annotation = ({ children, props }) => {
   const [hydrated, setHydrated] = React.useState(false)
@@ -8,5 +8,5 @@ export const Annotation = ({ children, props }) => {
   if (!hydrated) {
     return children
   }
-  return <RoughNotation {...props}>{children}</RoughNotation>
+  return children
 }

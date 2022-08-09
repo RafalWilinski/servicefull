@@ -1,9 +1,10 @@
 ---
 title: Comparison of AWS Cloud Development Kit with Terraform by building 2-tier Web App
-date: '2019-06-30T22:12:03.284Z'
+date: '2019-06-30'
 length: 8 minutes
 categories: '#AWS #CDK #Terraform #Cloud'
 keywords: aws,cdk,terraform,cdk vs terraform,cloud,amazon web service,iac,iaac,infrastructure as a code,ecs,cluster,docker
+excerpt: As AWS Architect my day-to-day job includes writing a lot of Terraform code in HCL. While I really like TF, in few places it's really verbose and some quirks of HCL are frustrating. So, I decided to take AWS Cloud Development Kit for a…
 ---
 
 import ComparisonTable from '../../../src/components/comparisonTable.js'
@@ -65,9 +66,9 @@ In CDK nomenclature "Modules" are called "Constructs". Unlike Terraform, CDK com
 
 Using the same language for both code, configuration and infrastructure makes whole process of development really seamless. Also, when writing in a language with type completion and properly configurated IDE, it just feels super nice, all the parts "fit" like lego.
 
-<br/>
-<Gif src="https://media.giphy.com/media/KeE15IBkvmhQff8A05/giphy.gif"/>
-<br/>
+<br />
+<Gif src="https://media.giphy.com/media/KeE15IBkvmhQff8A05/giphy.gif" />
+<br />
 
 Really refreshing comparing to writing huge YAML or JSON files. However, going with Python where there is no static typing I couldn't see big benefit. Plus, Troposphere is with us already for a moment.
 
@@ -82,7 +83,7 @@ Also the amount of code is much less in CDK:
 516
 ```
 
-<br/>
-<br/>
+<br />
+<br />
 
 If you're interested in final result, [you can find the repo with code here!](https://github.com/RafalWilinski/terraform-vs-cdk). After pulling it, simply execute `./build-and-push.sh` to create an AWS Elastic Container Registry, build the Docker image and push it to the cloud. It will be used by both infras.

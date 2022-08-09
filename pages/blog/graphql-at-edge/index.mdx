@@ -2,12 +2,13 @@
 title: GraphQL@Edge with globally replicated DynamoDB, AWS Lambda and Cloudfront CDN
 categories: '#AWS #DynamoDB #NoSQL #GraphQL #Serverless'
 keywords: aws,dynamodb,aws lambda,graphql,dynamodb table,nosql,cloud,amazon web services,dynamodb with graphql,serverless dynamodb
-date: '2020-05-29T22:12:03.284Z'
+date: '2020-05-29'
 length: 5 minutes
 image: https://servicefull.cloud/static/23834a52d9f9306278d544d872fe7d40/17fa4/overview.png
+excerpt: I'm seeing an interesting juxtaposition lately. While many people claim we're observing a downfall of the software quality and speed , it is also a well-known fact that optimizing your website speed is crucial for your business' success…
 ---
 
-I'm seeing an interesting juxtaposition lately. While many people claim we're observing a [downfall of the software quality and speed](https://tonsky.me/blog/disenchantment/), it is also a well-known fact that optimizing your website speed is crucial for your business' success. Just a second of delay [affects user engagement](https://blog.pusher.com/how-latency-affects-user-engagement/) and lowers your business KPIs significantly. There's a big contrast between what's delivered and what's expected. 
+I'm seeing an interesting juxtaposition lately. While many people claim we're observing a [downfall of the software quality and speed](https://tonsky.me/blog/disenchantment/), it is also a well-known fact that optimizing your website speed is crucial for your business' success. Just a second of delay [affects user engagement](https://blog.pusher.com/how-latency-affects-user-engagement/) and lowers your business KPIs significantly. There's a big contrast between what's delivered and what's expected.
 
 We are trying to bridge this gap by ~~throwing money~~ using solutions like [Vercel](https://vercel.com/), [Netlify](https://netlify.com/) or [CloudFlare](https://cloudflare.com/), which deploys our websites to the globally available CDNs to fix the latency problem, but oftentimes speed of these websites is limited by the slowness of related APIs or specifically, how far our requests have to travel through the internet to reach the public endpoint. Paradigms like [JAMStack](https://jamstack.org/), which try to eliminate the need to interact with APIs, are definitely step in the right direction. However, they are not a remedy. Some use cases just [won't fit that model](https://medium.com/front-end-weekly/the-issues-with-jamstack-you-might-need-a-backend-d101791de36a), you might still need a classical backend.
 
@@ -19,21 +20,21 @@ Here's how I imagined it:
 
 Essentially, each user around the globe instead of hitting that one central endpoint in `us-east-1` would be routed to the one of the closest GraphQL _"servers"_ and that _"server"_ would fetch the data from closest globally replicated DynamoDB table using the optimized route.
 
-Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to make use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/). 
+Since I'm not a big fan of AWS Console, [just like many people](https://news.ycombinator.com/item?id=20901800), I decided to make use of AWS' new way of provisioning infrastructure, the [Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/).
 
 With CDK, provisioning something which might seem complicated like this example, can actually be done with _less than 100 lines of code_. Here's the complete infrastructure code proof of concept explained step by step:
 
-<br/>
+<br />
 
 ```ts
 export class GraphQLAtEdge extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     const table = new Table(this, 'globdynamodb', {
       partitionKey: { name: 'hashKey', type: AttributeType.STRING },
       replicationRegions,
-    });
+    })
   }
 }
 ```
@@ -43,17 +44,17 @@ First, we provision a [DynamoDB]((https://dynobase.dev/dynamodb/) table with `re
 ```ts
 export class GraphQLAtEdge extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     const table = new Table(this, 'globdynamodb', {
       partitionKey: { name: 'hashKey', type: AttributeType.STRING },
       replicationRegions,
-    });
+    })
 
     const bucket = new Bucket(this, 'bucket', {
       publicReadAccess: true,
       websiteIndexDocument: 'playground.html',
-    });
+    })
   }
 }
 ```
@@ -63,17 +64,17 @@ Then, provision an , which will be an origin for CloudFront distribution and wil
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     const table = new Table(this, 'globdynamodb', {
       partitionKey: { name: 'hashKey', type: AttributeType.STRING },
       replicationRegions,
-    });
+    })
 
     const bucket = new Bucket(this, 'bucket', {
       publicReadAccess: true,
       websiteIndexDocument: 'playground.html',
-    });
+    })
 
     const graphql = new NodejsFunction(this, 'lambda', {
       entry: './src/graphql-server/dist/function.js',
@@ -94,7 +95,7 @@ export class GraphQLAtEdge extends cdk.Stack {
           ),
         ],
       }),
-    });
+    })
   }
 }
 ```
@@ -104,17 +105,17 @@ Next, add a Serverless function with [maximum limits](https://twitter.com/AwsTri
 ```jsx 16
 export class GraphQLAtEdge extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     const table = new Table(this, 'globdynamodb', {
       partitionKey: { name: 'hashKey', type: AttributeType.STRING },
       replicationRegions,
-    });
+    })
 
     const bucket = new Bucket(this, 'bucket', {
       publicReadAccess: true,
       websiteIndexDocument: 'playground.html',
-    });
+    })
 
     const graphql = new NodejsFunction(this, 'lambda', {
       entry: './src/graphql-server/dist/function.js',
@@ -135,7 +136,7 @@ export class GraphQLAtEdge extends cdk.Stack {
           ),
         ],
       }),
-    });
+    })
   }
 }
 ```
@@ -145,17 +146,17 @@ One weird thing that you may notice here is that I'm using `dist/function.js` as
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     const table = new Table(this, 'globdynamodb', {
       partitionKey: { name: 'hashKey', type: AttributeType.STRING },
       replicationRegions,
-    });
+    })
 
     const bucket = new Bucket(this, 'bucket', {
       publicReadAccess: true,
       websiteIndexDocument: 'playground.html',
-    });
+    })
 
     const graphql = new NodejsFunction(this, 'lambda', {
       entry: './src/graphql-server/dist/function.js',
@@ -176,9 +177,9 @@ export class GraphQLAtEdge extends cdk.Stack {
           ),
         ],
       }),
-    });
+    })
 
-    table.grantFullAccess(graphql);
+    table.grantFullAccess(graphql)
   }
 }
 ```
@@ -188,17 +189,17 @@ Out of the box, our Lambda function does not have sufficient permissions to read
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     const table = new Table(this, 'globdynamodb', {
       partitionKey: { name: 'hashKey', type: AttributeType.STRING },
       replicationRegions,
-    });
+    })
 
     const bucket = new Bucket(this, 'bucket', {
       publicReadAccess: true,
       websiteIndexDocument: 'playground.html',
-    });
+    })
 
     const graphql = new NodejsFunction(this, 'lambda', {
       entry: './src/graphql-server/dist/function.js',
@@ -219,34 +220,33 @@ export class GraphQLAtEdge extends cdk.Stack {
           ),
         ],
       }),
-    });
+    })
 
-    table.grantFullAccess(graphql);
+    table.grantFullAccess(graphql)
 
     const graphqlVersion = graphql.addVersion(
       ':sha256:' + sha256('./src/graphql-server/function.ts')
-    );
+    )
   }
 }
 ```
-
 
 To make deploying faster, we can tell CDK to update the function only if `sha256` of its source code has changed.
 
 ```jsx
 export class GraphQLAtEdge extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     const table = new Table(this, 'globdynamodb', {
       partitionKey: { name: 'hashKey', type: AttributeType.STRING },
       replicationRegions,
-    });
+    })
 
     const bucket = new Bucket(this, 'bucket', {
       publicReadAccess: true,
       websiteIndexDocument: 'playground.html',
-    });
+    })
 
     const graphql = new NodejsFunction(this, 'lambda', {
       entry: './src/graphql-server/dist/function.js',
@@ -267,20 +267,23 @@ export class GraphQLAtEdge extends cdk.Stack {
           ),
         ],
       }),
-    });
+    })
 
-    table.grantFullAccess(graphql);
+    table.grantFullAccess(graphql)
 
     const graphqlVersion = graphql.addVersion(
       ':sha256:' + sha256('./src/graphql-server/function.ts')
-    );
+    )
 
     const distribution = new CloudFrontWebDistribution(this, 'MyDistribution', {
       originConfigs: [
         {
           s3OriginSource: {
             s3BucketSource: bucket,
-            originAccessIdentity: new OriginAccessIdentity(this, 'cloudfront-oai'),
+            originAccessIdentity: new OriginAccessIdentity(
+              this,
+              'cloudfront-oai'
+            ),
           },
           behaviors: [
             {
@@ -296,7 +299,7 @@ export class GraphQLAtEdge extends cdk.Stack {
           ],
         },
       ],
-    });
+    })
   }
 }
 ```
@@ -392,7 +395,6 @@ What's great about this solution is:
 - Thanks to CDK and [jsii](https://github.com/aws/jsii), application code and infrastructure definition is written in one language. This reduces the amount of context shifts and reduces the cognitive load on devs. You can do that with C#, Java, and Python too, because [CDK supports all of them](https://docs.aws.amazon.com/cdk/latest/guide/multiple_languages.html)
 - Maintaining or modifying it is a _breeze_. Creating the same solution using CloudFormation or Terraform would take x5 amount of code
 
-
 But not it's definitely **not** ideal, there are some very important cons:
 
 - Your ~~server~~ GraphQL endpoint must be lightweight. Minified Lambda@Edge code must be less than 1 MB. Moreover, it is restricted to `128MB` of memory and `5000ms` of execution time for `VIEWER_REQUEST` integration type. Definitely not usable for heavy computation because [Lambda computing power is scaling with allocated memory](https://engineering.opsgenie.com/how-does-proportional-cpu-allocation-work-with-aws-lambda-41cd44da3cac?gi=9a8c6fdb9ff0)
@@ -403,4 +405,3 @@ But not it's definitely **not** ideal, there are some very important cons:
 Concluding - is it useful?
 
 _Might be_ for some very specific use cases. Right now, due to Lambda@Edge limitations - not really. With imposed restrictions, it disallows creating any serious logic. But, I hope these will change in the future. AWS is developing its FaaS offering very actively, continually making it better. For now, if I will need to create a Serverless GraphQL API, I'll probably stick to [AppSync](https://aws.amazon.com/appsync/).
-

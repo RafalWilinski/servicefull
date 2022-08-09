@@ -18,11 +18,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-helmet": "6.1.0",
-    "react-rough-notation": "^1.0.3",
     "react-typography": "^0.16.20",
     "styled-components": "5.3.5",
-    "theme-ui": "^0.14.7",
-    "to-style": "^1.3.3",
     "typography": "^0.16.21"
   },
   "devDependencies": {

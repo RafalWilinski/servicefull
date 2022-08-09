@@ -24,9 +24,9 @@ function Bio() {
           animationDelay={1000}
           color="rgba(45,200,50, 0.33)"
         >
-          cloud-native software engineer
-        </Annotation>
-        , AWS consultant and founder of{' '}
+          Software Engineer
+        </Annotation>{' '}
+        and Founder of{' '}
         <ColorExternalLink
           style={{ fontWeight: '600' }}
           href="https://dynobase.com"
@@ -35,22 +35,19 @@ function Bio() {
         >
           Dynobase
         </ColorExternalLink>
-        . After hours, I'm big supporter of{' '}
-        <Annotation
-          type="highlight"
-          show={true}
-          animationDelay={2000}
-          color="rgba(45,200,50, 0.33)"
-        >
-          Serverless
-        </Annotation>{' '}
-        paradigm, wannabe generative artist, cyclist and calisthenics fan.
+        . My main focus is <b>Amazon Web Services (AWS)</b> and{' '}
+        <b>Serverless</b> technologies. <br />
+        <br />
+        After hours, I'm a wannabe generative artist, whisk<i>(e)</i>y
+        aficionado, avid cyclist, and climber.
         <br style={{ marginTop: '20px' }} />
       </p>
       <p>
         I can help you{' '}
         <Link href="/consulting">
-          <ColorExternalLink href="/consulting">move your business to the AWS cloud</ColorExternalLink>
+          <ColorExternalLink href="/consulting">
+            move your business to the AWS cloud
+          </ColorExternalLink>
         </Link>
         .
       </p>

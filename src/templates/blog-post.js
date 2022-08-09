@@ -10,7 +10,6 @@ import {
   Meta,
   Point,
   Subsubtitle,
-  Code,
   ColorExternalLink,
 } from '../theme'
 import PrevNextNav from '../components/prevNextNav'
@@ -19,7 +18,7 @@ const components = {
   h1: Subsubtitle,
   p: Text,
   li: Point,
-  // pre: Code,
+
   a: ColorExternalLink,
 }
 

@@ -3,90 +3,88 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
 function SEO({ description, lang, meta, keywords, title, image, url }) {
-
   const metaDescription =
-          description || 'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more'
+    description ||
+    'Because Serverless is a terrible name. Blog about AWS Cloud, Serverless and more'
 
-        let titleTemplate =
-          title === 'Servicefull'
-            ? 'Servicefull - AWS, Serverless, FaaS, Containers and Services Blog'
-            : `%s | something`
+  let titleTemplate = 'Rafal Wilinski - Software Engineer'
 
-        return (
-          <Helmet
-            htmlAttributes={{
-              lang,
-            }}
-            title={title}
-            titleTemplate={titleTemplate}
-            meta={[
-              {
-                name: 'description',
-                content: metaDescription,
-              },
-              {
-                property: 'og:title',
-                content: title,
-              },
-              {
-                property: 'og:description',
-                content: metaDescription,
-              },
-              {
-                property: 'og:type',
-                content: 'website',
-              },
-              {
-                property: 'og:url',
-                content: `https://servicefull.cloud${url}`,
-              },
-              {
-                property: 'og:image',
-                content: image,
-              },
-              {
-                property: 'twitter:image',
-                content: image,
-              },
-              {
-                property: 'og:image:width',
-                content: '1366',
-              },
-              {
-                property: 'og:image:height',
-                content: '786',
-              },
-              {
-                name: 'twitter:card',
-                content: 'summary_large_image',
-              },
-              {
-                name: 'twitter:creator',
-                content: '@RafalWilinski',
-              },
-              {
-                name: 'twitter:site',
-                content: '@RafalWilinski',
-              },
-              {
-                name: 'twitter:title',
-                content: title,
-              },
-              {
-                name: 'twitter:description',
-                content: metaDescription,
-              },
-            ]
-              .concat(
-                keywords.length > 0
-                  ? {
-                      name: 'keywords',
-                      content: keywords.join(', '),
-                    }
-                  : []
-              )
-              .concat(meta)}
-         />)
+  return (
+    <Helmet
+      htmlAttributes={{
+        lang,
+      }}
+      title={title}
+      titleTemplate={titleTemplate}
+      meta={[
+        {
+          name: 'description',
+          content: metaDescription,
+        },
+        {
+          property: 'og:title',
+          content: title,
+        },
+        {
+          property: 'og:description',
+          content: metaDescription,
+        },
+        {
+          property: 'og:type',
+          content: 'website',
+        },
+        {
+          property: 'og:url',
+          content: `https://servicefull.cloud${url}`,
+        },
+        {
+          property: 'og:image',
+          content: image,
+        },
+        {
+          property: 'twitter:image',
+          content: image,
+        },
+        {
+          property: 'og:image:width',
+          content: '1366',
+        },
+        {
+          property: 'og:image:height',
+          content: '786',
+        },
+        {
+          name: 'twitter:card',
+          content: 'summary_large_image',
+        },
+        {
+          name: 'twitter:creator',
+          content: '@RafalWilinski',
+        },
+        {
+          name: 'twitter:site',
+          content: '@RafalWilinski',
+        },
+        {
+          name: 'twitter:title',
+          content: title,
+        },
+        {
+          name: 'twitter:description',
+          content: metaDescription,
+        },
+      ]
+        .concat(
+          keywords.length > 0
+            ? {
+                name: 'keywords',
+                content: keywords.join(', '),
+              }
+            : []
+        )
+        .concat(meta)}
+    />
+  )
 }
 
 SEO.defaultProps = {
@@ -114,5 +112,3 @@ SEO.propTypes = {
 }
 
 export default SEO
-
-
