@@ -1,4 +1,5 @@
 import React from 'react'
+import { format } from 'date-fns'
 import { getPosts } from '../lib/getPosts'
 import Bio from '../src/components/bio'
 import Link from 'next/link'
@@ -94,6 +95,7 @@ function BlogIndex({ posts }) {
         Recent Blog Posts
       </Subtitle>
       {posts
+        .sort((a, b) => new Date(b.data.date) - new Date(a.data.date))
         .filter((n, i) => i < 5)
         .map((node) => {
           const title = node.data.title
@@ -104,15 +106,15 @@ function BlogIndex({ posts }) {
             >
               <span
                 style={{
-                  width: '160px',
-                  marginLeft: '-170px',
+                  width: '170px',
+                  marginLeft: '-180px',
                   textAlign: 'right',
                   marginRight: '10px',
                   color: '#999',
                 }}
                 className="big-only"
               >
-                {node.data.date}
+                {format(new Date(node.data.date), 'PPP')}
               </span>
               <Link href={`/blog/${node.slug}`}>
                 <ColorExternalLink href={`/blog/${node.slug}`}>

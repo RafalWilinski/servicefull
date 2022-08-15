@@ -1,17 +1,26 @@
 import React from 'react'
 import { THEME_COLOR } from '../theme'
 
-const HeaderLink = ({children}) => <a style={{
-  textDecoration: 'none',
-  cursor: 'pointer',
-  fontWeight: '600',
-  color: 'black',
-  marginRight: '15px',
-  transition: '0.2s color',
-  "&:hover": {
-    color: THEME_COLOR,
-  }
-}}>{children}</a>
+const FooterLink = ({ children, href }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noreferrer noopener"
+    style={{
+      textDecoration: 'none',
+      cursor: 'pointer',
+      fontWeight: '600',
+      color: 'black',
+      marginRight: '15px',
+      transition: '0.2s color',
+      '&:hover': {
+        color: THEME_COLOR,
+      },
+    }}
+  >
+    {children}
+  </a>
+)
 
 const Footer = () => (
   <div
@@ -22,27 +31,27 @@ const Footer = () => (
       marginTop: '5em',
     }}
   >
-    <HeaderLink
+    <FooterLink
       target="_blank"
       rel="noreferrer noopener"
       href={`https://github.com/RafalWilinski`}
     >
       Github
-    </HeaderLink>
-    <HeaderLink
+    </FooterLink>
+    <FooterLink
       target="_blank"
       rel="noreferrer noopener"
       href={`https://twitter.com/rafalwilinski`}
     >
       Twitter
-    </HeaderLink>
-    <HeaderLink
+    </FooterLink>
+    <FooterLink
       target="_blank"
       rel="noreferrer noopener"
       href={`https://instagram.com/rwilinski`}
     >
       Instagram
-    </HeaderLink>
+    </FooterLink>
   </div>
 )
 
