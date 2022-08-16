@@ -1,9 +1,7 @@
 import React from 'react'
 import { MDXProvider } from '@mdx-js/react'
-
-import Signature from '../components/signature'
-import Layout from '../components/layout'
-import SEO from '../components/seo'
+import Layout from '../../src/components/layout'
+import SEO from '../../src/components/seo'
 import {
   Text,
   Subtitle,
@@ -11,8 +9,8 @@ import {
   Point,
   Subsubtitle,
   ColorExternalLink,
-} from '../theme'
-import PrevNextNav from '../components/prevNextNav'
+} from '../../src/theme'
+import PrevNextNav from '../../src/components/prevNextNav'
 
 const components = {
   h1: Subsubtitle,
@@ -24,6 +22,8 @@ const components = {
 
 class BlogPostTemplate extends React.Component {
   render() {
+    console.log(this.props)
+
     const post = this.props.data.mdx
     const siteTitle = this.props.data.site.siteMetadata.title
     const { previous, next } = this.props.pageContext
@@ -41,11 +41,11 @@ class BlogPostTemplate extends React.Component {
           {post.frontmatter.date} / {post.frontmatter.length} /{' '}
           {post.frontmatter.categories}
         </Meta>
-        <Subtitle>{post.frontmatter.title}</Subtitle>
+        {/* <Subtitle>{post.frontmatter.title}</Subtitle> */}
         <MDXProvider components={components}>
           <MDXRenderer>{post.code.body}</MDXRenderer>
         </MDXProvider>
-        <Signature />
+
         <br />
         <PrevNextNav next={next} previous={previous} />
       </Layout>

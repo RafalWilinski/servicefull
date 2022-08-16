@@ -18,6 +18,8 @@ The most frequent complaint regarding the new DynamoDB client from AWS SDK V3 wa
 
 Fortunately, [AWS DynamoDB Document Client has been recently added to the V3](https://github.com/aws/aws-sdk-js-v3/pull/2097).
 
+<CH.Scrollycoding>
+
 ```ts
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 const ddb = new DocumentClient()
@@ -38,6 +40,8 @@ await ddb
 
 In V2, once we had our `DocumentClient` constructed, interaction with DynamoDB in Node.js was boiling down to using [methods like `get`, `put`, `scan` or `query`](https://dynobase.dev/dynamodb-nodejs/) and ending them with `.promise()` call.
 
+---
+
 ```ts
 // New - V3
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
@@ -57,6 +61,8 @@ await ddbDocClient.send(
 In V3, `DocumentClient` is imported from a different package and created using `DynamoDBDocumentClient.from()` method.
 Moreover, you can call the document client operations using [Command objects](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/classes/_aws_sdk_lib_dynamodb.getcommand-1.html).
 
+---
+
 ```ts
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
@@ -72,6 +78,8 @@ await ddbDocClient.put({
 
 If you don't like this new style, you can still use the old `.put()` method too. However, in this case, you need to import `DynamoDBDocument` instead of `DynamoDBDocumentClient`.
 
+</CH.Scrollycoding>
+
 <br />
 
 ### S3
@@ -79,6 +87,8 @@ If you don't like this new style, you can still use the old `.put()` method too.
 Interacting with Simple Storage from Lambdas is a widespread pattern. Let's talk about uploading, downloading, and preparing pre-signed URLs.
 
 #### Uploading files
+
+<CH.Scrollycoding>
 
 ```ts
 import { S3 } from 'aws-sdk'
@@ -99,23 +109,9 @@ await s3
 
 The complexity of uploading large files to S3 in V2 is hidden inside the `upload` method. It takes care of initiating the multipart upload, uploading parts, and calculating checksums. There's also a famous `.promise()` call at the end to _promisify_ the call.
 
+---
+
 ```ts
-import { S3 } from 'aws-sdk'
-const s3 = new S3()
-
-const bucket = 'my-bucket'
-const key = 'cat.png'
-const fileContent = fs.readFileSync('path-to-file.jpg')
-
-await s3
-  .upload({
-    Bucket: bucket,
-    Key: key,
-    Body: fileContent,
-  })
-  .promise()
-
-// New - V3
 import { S3Client } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 
@@ -129,6 +125,8 @@ await multipartUpload.done();
 ```
 
 In V3, we are not only forced to import SDK in a modular way, but also we have to import two packages: `client-s3` - responsible for communicating with AWS S3, and `lib-storage`, which is a high-level helper library containing classes like `Upload` which now take care of multipart upload orchestration.
+
+</CH.Scrollycoding>
 
 #### Generating presigned URLs
 
@@ -145,13 +143,6 @@ const url = s3.getSignedUrl('getObject', params) // or getSignedUrlPromise
 In V2, you had two options to generate pre-signed URLs - synchronously and asynchronously.
 
 ```ts
-import { S3 } from 'aws-sdk'
-const s3 = new S3()
-
-const params = { Bucket: 'bucket', Key: 'key' }
-const url = s3.getSignedUrl('getObject', params) // or getSignedUrlPromise
-
-// New - V3
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
 

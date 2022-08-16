@@ -53,3 +53,20 @@ blockquote:before {
   margin-right: 15px;
   transition: 0.2s color;
 }
+
+.ch-codeblock {
+  height: 600px;
+}
+
+.ch-scrollycoding-step-content {
+  border-radius: 0;
+  border: 0;
+}
+
+.ch-scrollycoding-step-content[data-selected='true'] {
+  background-color: #f5f5f5;
+}
+
+code {
+  font-size: 14px;
+}

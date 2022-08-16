@@ -6,7 +6,7 @@ const Container = ({ children }) => (
   <div
     style={{
       margin: '3rem auto',
-      maxWidth: '700px',
+      maxWidth: '800px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'start',
