@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "author": "Rafal Wilinski <raf.wilinski@gmail.com>",
   "dependencies": {
+    "@babel/eslint-parser": "^7.18.9",
     "@code-hike/mdx": "^0.7.2",
     "@emotion/react": "^11.10.0",
     "@mdx-js/loader": "^2.1.2",
