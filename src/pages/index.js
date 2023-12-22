@@ -12,6 +12,16 @@ import {
 
 const highlights = [
   {
+    date: '2023',
+    name: 'Started ChatWithCloud',
+    href: 'https://chatwithcloud.ai',
+  },
+  {
+    date: '2023',
+    name: 'Became AI Tech Lead @ Vendr',
+    href: 'https://vendr.com',
+  },
+  {
     date: '2021',
     name: 'Dynobase crosses 10k MRR mark',
     href: 'https://dynobase.dev',
@@ -33,24 +43,14 @@ const highlights = [
       'https://www.youracclaim.com/badges/025a2b45-2792-4a3a-8d8d-24fc95f18157/public_url',
   },
   {
-    date: '2019',
-    name: 'Worked on XHQ.com as Backend Lead',
-    href: 'https://xhq.com',
-  },
-  {
     date: '2017',
     name: 'Worked on multiple projects for Riot Games',
     href: 'https://www.riotgames.com/en',
   },
   {
     date: '2016',
-    name: 'Worked on Serverless Framework',
+    name: 'Worked on Serverless Framework, Started AWS consulting',
     href: 'https://serverless.com',
-  },
-  {
-    date: '2016',
-    name: 'Started doing AWS consulting',
-    href: 'https://netguru.co',
   },
   {
     date: '2016',
