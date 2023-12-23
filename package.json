@@ -29,7 +29,7 @@
     "gatsby-remark-smartypants": "2.1.0",
     "gatsby-source-filesystem": "2.1.0",
     "gatsby-theme-waves": "^0.1.6",
-    "gatsby-transformer-remark": "2.5.0",
+    "gatsby-transformer-remark": "5.25.1",
     "gatsby-transformer-sharp": "2.2.0",
     "preact": "^10.4.4",
     "preact-render-to-string": "^5.1.9",
